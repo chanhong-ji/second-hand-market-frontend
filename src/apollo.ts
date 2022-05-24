@@ -5,9 +5,23 @@ import {
   makeVar,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
+import { setContext } from '@apollo/client/link/context';
 import { offsetLimitPagination } from '@apollo/client/utilities';
 
-export const LoggedInVar = makeVar(false);
+export const LoggedInVar = makeVar(Boolean(localStorage.getItem('token')));
+export const tokenVar = makeVar(localStorage.getItem('token'));
+
+export const getUserLogin = async (token: string) => {
+  LoggedInVar(true);
+  tokenVar(token);
+  await localStorage.setItem('token', token);
+};
+
+export const getUserLogout = async () => {
+  LoggedInVar(false);
+  tokenVar('');
+  await localStorage.removeItem('token');
+};
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -31,9 +45,17 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     );
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
+const authLink = setContext((_, { headers }) => {
+  return {
+    headers: {
+      ...headers,
+      token: tokenVar(),
+    },
+  };
+});
 
 const client = new ApolloClient({
-  link: errorLink.concat(httpLink),
+  link: authLink.concat(errorLink).concat(httpLink),
   cache,
 });
 

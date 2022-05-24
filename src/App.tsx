@@ -7,6 +7,7 @@ import Home from './screens/Home';
 import Layout from './screens/Layout';
 import SignUp from './screens/SignUp';
 import { GlobalStyle, theme } from './styles';
+import Login from './screens/Login';
 
 function App() {
   const LoggedIn = useReactiveVar(LoggedInVar);
@@ -21,6 +22,12 @@ function App() {
               path='/signup'
               element={
                 LoggedIn ? <Navigate to='/' replace={true} /> : <SignUp />
+              }
+            />
+            <Route
+              path='/login'
+              element={
+                LoggedIn ? <Navigate to='/' replace={true} /> : <Login />
               }
             />
           </Route>

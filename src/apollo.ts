@@ -1,5 +1,13 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  makeVar,
+} from '@apollo/client';
+import { onError } from '@apollo/client/link/error';
 import { offsetLimitPagination } from '@apollo/client/utilities';
+
+export const LoggedInVar = makeVar(false);
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -13,8 +21,19 @@ const cache = new InMemoryCache({
   },
 });
 
+const httpLink = createHttpLink({ uri: 'http://localhost:4000/graphql' });
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    );
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+});
+
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
+  link: errorLink.concat(httpLink),
   cache,
 });
 

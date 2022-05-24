@@ -36,7 +36,7 @@ function Header() {
       </Column>
       <Column>
         <Item>Login</Item>
-        <Item>Sign up</Item>
+        <Item onClick={() => navigate('/signup')}>Sign up</Item>
       </Column>
     </Wrapper>
   );

@@ -5,11 +5,14 @@ import Header from '../components/Header';
 const Wrapper = styled.div`
   position: relative;
   min-height: 100vh;
-  padding-top: ${(props) => props.theme.size.header.height}px;
-  background-color: ${(props) => props.theme.color.bg};
+  padding-top: ${(props) => props.theme.size.header.height};
+  background-color: ${(props) => props.theme.color.bg.layout};
 `;
 
-const Main = styled.main``;
+const Main = styled.main`
+  width: ${(p) => p.theme.size.main.width};
+  margin: 0 auto;
+`;
 
 function Layout() {
   return (

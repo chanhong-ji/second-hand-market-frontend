@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getUserLogout, LoggedInVar } from '../apollo';
 import getMeUser from '../hooks/getMeUser';
+import Avatar from './Avatar';
 
 const Wrapper = styled.header`
   position: fixed;
@@ -10,8 +11,9 @@ const Wrapper = styled.header`
   left: 0;
   width: 100%;
   height: ${(props) => props.theme.size.header.height};
-  background-color: ${(props) => props.theme.color.header};
+  background-color: ${(props) => props.theme.color.bg.layout};
   padding: ${(props) => props.theme.size.header.padding};
+  border-bottom: 2px solid ${(p) => p.theme.color.border};
 
   display: flex;
   justify-content: space-between;
@@ -21,7 +23,7 @@ const Column = styled.div`
   display: flex;
   align-items: center;
   :last-child {
-    div {
+    * {
       margin-left: 20px;
     }
   }
@@ -42,6 +44,10 @@ function Header() {
       </Column>
       {loggedIn ? (
         <Column>
+          <Avatar size={40} url={meData?.me?.avatar || ''} />
+          <Item onClick={() => navigate(`/profile/${meData?.me?.id}`)}>
+            My Profile
+          </Item>
           <Item onClick={getUserLogout}>Log out</Item>
         </Column>
       ) : (

@@ -8,31 +8,36 @@ import Layout from './screens/Layout';
 import SignUp from './screens/SignUp';
 import { GlobalStyle, theme } from './styles';
 import Login from './screens/Login';
+import Profile from './screens/Profile';
+import { HelmetProvider } from 'react-helmet-async';
 
 function App() {
   const LoggedIn = useReactiveVar(LoggedInVar);
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route
-              path='/signup'
-              element={
-                LoggedIn ? <Navigate to='/' replace={true} /> : <SignUp />
-              }
-            />
-            <Route
-              path='/login'
-              element={
-                LoggedIn ? <Navigate to='/' replace={true} /> : <Login />
-              }
-            />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <HelmetProvider>
+        <GlobalStyle />
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route
+                path='signup'
+                element={
+                  LoggedIn ? <Navigate to='/' replace={true} /> : <SignUp />
+                }
+              />
+              <Route
+                path='login'
+                element={
+                  LoggedIn ? <Navigate to='/' replace={true} /> : <Login />
+                }
+              />
+              <Route path='profile/:id' element={<Profile />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </HelmetProvider>
     </ThemeProvider>
   );
 }

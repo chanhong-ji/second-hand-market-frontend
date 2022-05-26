@@ -6,16 +6,17 @@ export const theme: DefaultTheme = {
     bg: {
       layout: 'whitesmoke',
     },
-    header: 'grey',
     input: 'rgba(0, 0, 0, 0.3)',
     form: 'rgba(0, 0, 0, 0.2)',
+    border: 'rgba(0, 0, 0, 0.1)',
+    accent: 'tomato',
   },
   size: {
     header: {
       height: '80px',
       padding: '20px',
     },
-    main: { width: '60%' },
+    main: { width: '50%' },
   },
 };
 

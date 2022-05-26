@@ -6,9 +6,10 @@ declare module 'styled-components' {
       bg: {
         layout: string;
       };
-      header: string;
       input: string;
       form: string;
+      border: string;
+      accent: string;
     };
     size: {
       header: {

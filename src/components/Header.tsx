@@ -29,6 +29,7 @@ const Column = styled.div`
   }
 `;
 const Item = styled.div`
+  cursor: pointer;
   font-size: 20px;
 `;
 

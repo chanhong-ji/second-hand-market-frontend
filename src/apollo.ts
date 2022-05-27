@@ -1,12 +1,8 @@
-import {
-  ApolloClient,
-  createHttpLink,
-  InMemoryCache,
-  makeVar,
-} from '@apollo/client';
+import { ApolloClient, InMemoryCache, makeVar } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
 import { offsetLimitPagination } from '@apollo/client/utilities';
+import { createUploadLink } from 'apollo-upload-client';
 
 export const LoggedInVar = makeVar(Boolean(localStorage.getItem('token')));
 export const tokenVar = makeVar(localStorage.getItem('token'));
@@ -35,7 +31,7 @@ const cache = new InMemoryCache({
   },
 });
 
-const httpLink = createHttpLink({ uri: 'http://localhost:4000/graphql' });
+const httpLink = createUploadLink({ uri: 'http://localhost:4000/graphql' });
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path }) =>

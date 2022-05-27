@@ -3,13 +3,14 @@ import { useReactiveVar } from '@apollo/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { LoggedInVar } from './apollo';
+import { HelmetProvider } from 'react-helmet-async';
+import { GlobalStyle, theme } from './styles';
 import Home from './screens/Home';
 import Layout from './screens/Layout';
 import SignUp from './screens/SignUp';
-import { GlobalStyle, theme } from './styles';
 import Login from './screens/Login';
 import Profile from './screens/Profile';
-import { HelmetProvider } from 'react-helmet-async';
+import EditProfile from './screens/EditProfile';
 
 function App() {
   const LoggedIn = useReactiveVar(LoggedInVar);
@@ -34,6 +35,7 @@ function App() {
                 }
               />
               <Route path='profile/:id' element={<Profile />} />
+              <Route path='profile/:id/edit' element={<EditProfile />} />
             </Route>
           </Routes>
         </BrowserRouter>

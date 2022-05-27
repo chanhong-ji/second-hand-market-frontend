@@ -1,5 +1,5 @@
-function ErrorMessage({ message }: { message: string }) {
-  return <div>{message}</div>;
+function ErrorMessage({ message }: { message: string | undefined }) {
+  return message == undefined ? null : <div>{message}</div>;
 }
 
 export default ErrorMessage;

@@ -1,5 +1,6 @@
 import { ApolloCache, gql, useMutation, useQuery } from '@apollo/client';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Avatar from '../components/Avatar';
 import ItemBanner from '../components/ItemBanner';
@@ -140,10 +141,11 @@ function Profile() {
     }
   };
 
+  const location: any = useLocation();
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, loading } = useQuery<seeProfile>(SEE_PROFILE_QUERY, {
-    skip: /^\d+$/.test(id || '') == false,
+    skip: !!!/^\d+$/.test(id || ''),
     variables: { id: id ? +id : null, offset: 0 },
   });
   const [toggleFollow, { loading: toggleLoading }] = useMutation<
@@ -151,6 +153,11 @@ function Profile() {
     toggleFollowVariables
   >(TOGGLE_FOLLOW_MUTATION, { update: onToggleUpdate });
 
+  useEffect(() => {
+    if (!!!/^\d+$/.test(id || '')) {
+      navigate(-1);
+    }
+  }, [id]);
   return (
     <Wrapper>
       <PageTitle title='Profile' />
@@ -158,6 +165,7 @@ function Profile() {
       {loading ? (
         <div></div>
       ) : (
+        // loading component
         <>
           <Top>
             <Avatar url={data?.seeProfile?.avatar || ''} size={80} />

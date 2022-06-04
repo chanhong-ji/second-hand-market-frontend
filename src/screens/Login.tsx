@@ -2,8 +2,9 @@ import { gql, useMutation } from '@apollo/client';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getUserLogin } from '../apollo';
+import { getUserLogin, zoneIdVar } from '../apollo';
 import ErrorMessage from '../components/ErrorMessage';
+import GetMeUser from '../hooks/getMeUser';
 import { login, loginVariables } from '../__generated__/login';
 import { AuthForm, AuthWrapper } from './SignUp';
 
@@ -42,6 +43,8 @@ function Login() {
     if (!ok)
       return setError('result', { message: error?.split(':').pop()?.trim() });
     await getUserLogin(token || '');
+    const meData = await GetMeUser();
+    zoneIdVar(meData?.me?.zone?.id);
     navigate('/');
   };
 

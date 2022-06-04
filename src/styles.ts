@@ -5,6 +5,7 @@ export const theme: DefaultTheme = {
   color: {
     bg: {
       layout: 'whitesmoke',
+      main: 'white',
     },
     input: 'rgba(0, 0, 0, 0.3)',
     form: 'rgba(0, 0, 0, 0.2)',

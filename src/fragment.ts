@@ -17,3 +17,31 @@ export const USER_FRAGMENT = gql`
     updatedAt
   }
 `;
+
+export const POST_FRAGMENT = gql`
+  fragment PostFragment on Post {
+    id
+    title
+    caption
+    dealt
+    user {
+      id
+      name
+      avatar
+    }
+    photos
+    zone {
+      id
+      name
+    }
+    category {
+      id
+      name
+    }
+    isMine
+    isInterest
+    interestsCount
+    createdAt
+    updatedAt
+  }
+`;

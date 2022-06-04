@@ -15,6 +15,7 @@ interface IProps {
 const Container = styled.div`
   width: 100%;
   overflow: hidden;
+  cursor: pointer;
   * {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -42,11 +43,13 @@ const Info = styled.div`
   ${Price} {
     font-size: 14px;
     font-weight: 600;
-    padding: 8px 0;
+    margin-bottom: 8px;
+    color: orange;
   }
   ${Zone} {
+    padding: 8px 0;
     font-size: 15px;
-    margin-bottom: 8px;
+    color: grey;
   }
   div + :last-child {
     display: flex;
@@ -67,8 +70,9 @@ function ItemBanner({
       {photos !== (undefined || null) && <Photo img={photos[0] || ''} />}
       <Info>
         <Title>{title}</Title>
-        <Price>15,000</Price>
         <Zone>{zone.name}</Zone>
+        {/* Add price data */}
+        <Price>15,000 원</Price>
         <div>
           <InterestCount>관심 {interestsCount}</InterestCount>
           <div>∙</div>

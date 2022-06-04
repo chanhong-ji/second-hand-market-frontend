@@ -141,7 +141,6 @@ function Profile() {
     }
   };
 
-  const location: any = useLocation();
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, loading } = useQuery<seeProfile>(SEE_PROFILE_QUERY, {
@@ -213,6 +212,7 @@ function Profile() {
               post?.id ? <ItemBanner {...post} key={post.id} /> : null
             )}
           </Bottom>
+          {/* dealt 구분하기 */}
         </>
       )}
     </Wrapper>

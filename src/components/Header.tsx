@@ -1,7 +1,7 @@
 import { useReactiveVar } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getUserLogout, LoggedInVar } from '../apollo';
+import { getUserLogout, LoggedInVar, zoneIdVar } from '../apollo';
 import getMeUser from '../hooks/getMeUser';
 import Avatar from './Avatar';
 

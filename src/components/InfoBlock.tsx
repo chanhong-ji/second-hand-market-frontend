@@ -9,6 +9,7 @@ const Info = styled.div`
   border-bottom: 1px solid ${(p) => p.theme.color.border};
   border-top: 1px solid ${(p) => p.theme.color.border};
   min-height: 250px;
+  position: relative;
   ${Title} {
     font-size: 20px;
     font-weight: 600;
@@ -36,7 +37,6 @@ interface IProps {
     id: number;
     name: string;
   };
-  // price
 }
 
 function InfoBlock({ title, caption, category }: IProps) {

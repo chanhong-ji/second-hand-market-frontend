@@ -23,7 +23,7 @@ const Wrapper = styled.div`
   ${Grid} {
     padding: 30px;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 30px;
   }
 `;

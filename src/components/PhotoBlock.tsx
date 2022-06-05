@@ -12,7 +12,7 @@ const Photos = styled.div<{ photo: string }>`
   background-size: cover;
   width: 100%;
   padding-bottom: 60%;
-  border-radius: 20px;
+  border-radius: 10px;
   position: relative;
   ${Indicator} {
     position: absolute;

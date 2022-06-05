@@ -15,6 +15,7 @@ interface IProps {
 
 const Container = styled.div`
   width: 100%;
+  /* min-width: 180px; */
   overflow: hidden;
   cursor: pointer;
   * {

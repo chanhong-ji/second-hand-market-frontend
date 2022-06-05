@@ -9,6 +9,7 @@ import {
   toggleInterestVariables,
 } from '../__generated__/toggleInterest';
 import { ApolloCache, gql, useMutation } from '@apollo/client';
+import { deletePost, deletePostVariables } from '../__generated__/deletePost';
 
 const Container = styled.div``;
 const Left = styled.div``;
@@ -20,6 +21,7 @@ const Interest = styled.div``;
 const Chat = styled.div``;
 const ChatBtn = styled.div``;
 const BookmarkBtn = styled.div``;
+const DeleteBtn = styled.div``;
 const Owner = styled.div`
   width: 100%;
   padding: 20px 0;
@@ -66,14 +68,23 @@ const Owner = styled.div`
       justify-content: flex-end;
 
       ${ChatBtn},
-      ${BookmarkBtn} {
+      ${BookmarkBtn},
+      ${DeleteBtn} {
         font-size: 13px;
         padding: 8px;
-        background-color: tomato;
+        background-color: ${(p) => p.theme.color.accent};
         color: white;
         border-radius: 10px;
         margin-left: 5px;
         cursor: pointer;
+      }
+      ${DeleteBtn} {
+        font-size: 10px;
+        border-radius: 5px;
+        opacity: 0.7;
+        :hover {
+          opacity: 1;
+        }
       }
     }
   }
@@ -82,6 +93,15 @@ const Owner = styled.div`
 const TOGGLE_INTEREST_MUTATION = gql`
   mutation toggleInterest($id: Int!) {
     toggleInterest(id: $id) {
+      ok
+      error
+    }
+  }
+`;
+
+const DELETE_POST_MUTATION = gql`
+  mutation deletePost($deletePostId: Int!) {
+    deletePost(id: $deletePostId) {
       ok
       error
     }
@@ -102,6 +122,7 @@ interface IProps {
   isMine: boolean;
   isInterest: boolean;
   interestsCount: number;
+  dealt: boolean;
 }
 
 function OwnerBlock({
@@ -111,6 +132,7 @@ function OwnerBlock({
   isMine,
   isInterest,
   interestsCount,
+  dealt,
 }: IProps) {
   const onToggleInterestUpdate = (cache: ApolloCache<any>, result: any) => {
     const {
@@ -139,6 +161,20 @@ function OwnerBlock({
   const [toggleInterest] = useMutation<toggleInterest, toggleInterestVariables>(
     TOGGLE_INTEREST_MUTATION,
     { update: onToggleInterestUpdate }
+  );
+  const [deletePost] = useMutation<deletePost, deletePostVariables>(
+    DELETE_POST_MUTATION,
+    {
+      variables: { deletePostId: postId },
+      onCompleted: (data) => {
+        const {
+          deletePost: { ok },
+        } = data;
+        if (!ok) return;
+        navigate('/');
+        window.location.reload();
+      },
+    }
   );
   return (
     <Owner>
@@ -172,9 +208,15 @@ function OwnerBlock({
           </Chat>
         </Row>
         <Row>
-          <ChatBtn>Send chat</ChatBtn>
-          {/* go to chat */}
-          {!isMine && <BookmarkBtn onClick={onBookmark}>Book mark</BookmarkBtn>}
+          {!isMine ? (
+            <>
+              <ChatBtn>Send chat</ChatBtn>
+              {/* go to chat */}
+              <BookmarkBtn onClick={onBookmark}>Book mark</BookmarkBtn>
+            </>
+          ) : dealt ? null : (
+            <DeleteBtn onClick={() => deletePost()}>Delete Post</DeleteBtn>
+          )}
         </Row>
       </Right>
     </Owner>

@@ -46,6 +46,7 @@ function Article() {
               interestsCount={data.seePost.interestsCount}
               isInterest={data.seePost.isInterest}
               isMine={data.seePost.isMine}
+              dealt={data.seePost.dealt}
             />
             <InfoBlock
               title={data.seePost.title}

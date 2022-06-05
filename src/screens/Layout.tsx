@@ -12,6 +12,7 @@ const Wrapper = styled.div`
 const Main = styled.main`
   width: ${(p) => p.theme.size.main.width};
   margin: 0 auto;
+  min-width: 400px;
 `;
 
 function Layout() {

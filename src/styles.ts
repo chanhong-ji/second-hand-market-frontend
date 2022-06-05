@@ -11,6 +11,9 @@ export const theme: DefaultTheme = {
     form: 'rgba(0, 0, 0, 0.2)',
     border: 'rgba(0, 0, 0, 0.1)',
     accent: 'tomato',
+    font: {
+      exp: 'rgba(0, 0, 0, 0.7)',
+    },
   },
   size: {
     header: {
@@ -18,6 +21,7 @@ export const theme: DefaultTheme = {
       padding: '20px',
     },
     main: { width: '50%' },
+    arrow: '20px',
   },
 };
 

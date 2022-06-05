@@ -23,7 +23,7 @@ export interface seeProfile_seeProfile_posts {
   __typename: "Post";
   id: number;
   title: string;
-  photos: (string | null)[] | null;
+  photos: string[];
   dealt: boolean;
   interestsCount: number;
   zone: seeProfile_seeProfile_posts_zone;

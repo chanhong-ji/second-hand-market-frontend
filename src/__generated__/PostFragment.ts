@@ -33,7 +33,7 @@ export interface PostFragment {
   caption: string;
   dealt: boolean;
   user: PostFragment_user;
-  photos: (string | null)[] | null;
+  photos: string[];
   zone: PostFragment_zone;
   category: PostFragment_category;
   isMine: boolean;

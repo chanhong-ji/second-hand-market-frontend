@@ -4,38 +4,38 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: seePosts
+// GraphQL query operation: seePost
 // ====================================================
 
-export interface seePosts_seePosts_user {
+export interface seePost_seePost_user {
   __typename: "User";
   id: number;
   name: string;
   avatar: string | null;
 }
 
-export interface seePosts_seePosts_zone {
+export interface seePost_seePost_zone {
   __typename: "Zone";
   id: number;
   name: string;
 }
 
-export interface seePosts_seePosts_category {
+export interface seePost_seePost_category {
   __typename: "Category";
   id: number;
   name: string;
 }
 
-export interface seePosts_seePosts {
+export interface seePost_seePost {
   __typename: "Post";
   id: number;
   title: string;
   caption: string;
   dealt: boolean;
-  user: seePosts_seePosts_user;
+  user: seePost_seePost_user;
   photos: string[];
-  zone: seePosts_seePosts_zone;
-  category: seePosts_seePosts_category;
+  zone: seePost_seePost_zone;
+  category: seePost_seePost_category;
   isMine: boolean;
   isInterest: boolean;
   interestsCount: number;
@@ -43,12 +43,10 @@ export interface seePosts_seePosts {
   updatedAt: string;
 }
 
-export interface seePosts {
-  seePosts: (seePosts_seePosts | null)[] | null;
+export interface seePost {
+  seePost: seePost_seePost | null;
 }
 
-export interface seePostsVariables {
-  zoneId: number;
-  categoryId?: number | null;
-  page?: number | null;
+export interface seePostVariables {
+  id: number;
 }

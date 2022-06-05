@@ -11,6 +11,9 @@ declare module 'styled-components' {
       form: string;
       border: string;
       accent: string;
+      font: {
+        exp: string;
+      };
     };
     size: {
       header: {
@@ -20,6 +23,7 @@ declare module 'styled-components' {
       main: {
         width: string;
       };
+      arrow: string;
     };
   }
 }

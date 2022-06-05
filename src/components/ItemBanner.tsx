@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface IProps {
@@ -65,8 +66,11 @@ function ItemBanner({
   interestsCount,
   zone,
 }: IProps) {
+  const goToArticle = () =>
+    navigate(`/article/${id}`, { state: { photoUrls: photos } });
+  const navigate = useNavigate();
   return (
-    <Container>
+    <Container onClick={goToArticle}>
       {photos !== (undefined || null) && <Photo img={photos[0] || ''} />}
       <Info>
         <Title>{title}</Title>

@@ -11,6 +11,8 @@ import SignUp from './screens/SignUp';
 import Login from './screens/Login';
 import Profile from './screens/Profile';
 import EditProfile from './screens/EditProfile';
+import Article from './screens/Article';
+import NotFound from './screens/NotFound';
 
 function App() {
   const LoggedIn = useReactiveVar(LoggedInVar);
@@ -36,7 +38,9 @@ function App() {
               />
               <Route path='profile/:id' element={<Profile />} />
               <Route path='profile/:id/edit' element={<EditProfile />} />
+              <Route path='article/:id' element={<Article />} />
             </Route>
+            <Route path='*' element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </HelmetProvider>

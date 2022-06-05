@@ -154,7 +154,7 @@ function Profile() {
 
   useEffect(() => {
     if (!!!/^\d+$/.test(id || '')) {
-      navigate(-1);
+      navigate('/notfound', { state: { type: 'profile' } });
     }
   }, [id]);
   return (

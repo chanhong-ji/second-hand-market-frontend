@@ -19,6 +19,8 @@ export const getUserLogout = async () => {
   LoggedInVar(false);
   tokenVar('');
   await localStorage.removeItem('token');
+  window.location.reload();
+  window.location.href = '/';
 };
 
 const cache = new InMemoryCache({

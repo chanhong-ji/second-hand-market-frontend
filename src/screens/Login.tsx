@@ -43,8 +43,6 @@ function Login() {
     if (!ok)
       return setError('result', { message: error?.split(':').pop()?.trim() });
     await getUserLogin(token || '');
-    const meData = await GetMeUser();
-    zoneIdVar(meData?.me?.zone?.id);
     navigate('/');
   };
 

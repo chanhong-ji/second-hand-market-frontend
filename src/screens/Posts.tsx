@@ -37,7 +37,7 @@ const SEE_POSTS_QUERY = gql`
   ${POST_FRAGMENT}
 `;
 
-function Home() {
+function Posts() {
   const userZoneId = useReactiveVar(zoneIdVar);
   const { data, loading } = useQuery<seePosts>(SEE_POSTS_QUERY, {
     variables: { zoneId: userZoneId ? +userZoneId : 0 },
@@ -65,4 +65,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Posts;

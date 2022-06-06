@@ -68,7 +68,7 @@ function ItemBanner({
   zone,
 }: IProps) {
   const goToArticle = () =>
-    navigate(`/article/${id}`, { state: { photoUrls: photos } });
+    navigate(`/posts/${id}`, { state: { photoUrls: photos } });
   const navigate = useNavigate();
   return (
     <Container onClick={goToArticle}>

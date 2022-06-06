@@ -22,7 +22,7 @@ const SEE_POST_QUERY = gql`
   ${POST_FRAGMENT}
 `;
 
-function Article() {
+function Post() {
   const { id } = useParams();
   const { data, loading } = useQuery<seePost>(SEE_POST_QUERY, {
     skip: !!!id || !!!/^\d+$/.test(id),
@@ -61,4 +61,4 @@ function Article() {
     </Wrapper>
   );
 }
-export default Article;
+export default Post;

@@ -182,10 +182,10 @@ function OwnerBlock({
         <Avatar
           size={40}
           url={user.avatar || null}
-          onClick={() => navigate(`/profile/${user.id}`)}
+          onClick={() => navigate(`/profiles/${user.id}`)}
         />
         <Container>
-          <Username onClick={() => navigate(`/profile/${user.id}`)}>
+          <Username onClick={() => navigate(`/profiles/${user.id}`)}>
             {user.name}
           </Username>
           <Zone>{zone.name}</Zone>

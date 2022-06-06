@@ -5,13 +5,13 @@ import { ThemeProvider } from 'styled-components';
 import { LoggedInVar } from './apollo';
 import { HelmetProvider } from 'react-helmet-async';
 import { GlobalStyle, theme } from './styles';
-import Home from './screens/Home';
+import Posts from './screens/Posts';
 import Layout from './screens/Layout';
 import SignUp from './screens/SignUp';
 import Login from './screens/Login';
 import Profile from './screens/Profile';
 import EditProfile from './screens/EditProfile';
-import Article from './screens/Article';
+import Post from './screens/Post';
 import NotFound from './screens/NotFound';
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Layout />}>
-              <Route index element={<Home />} />
+              <Route index element={<Posts />} />
               <Route
                 path='signup'
                 element={
@@ -36,11 +36,11 @@ function App() {
                   LoggedIn ? <Navigate to='/' replace={true} /> : <Login />
                 }
               />
-              <Route path='profile/:id' element={<Profile />} />
-              <Route path='profile/:id/edit' element={<EditProfile />} />
-              <Route path='article/:id' element={<Article />} />
+              <Route path='profiles/:id' element={<Profile />} />
+              <Route path='profiles/:id/edit' element={<EditProfile />} />
+              <Route path='posts/:id' element={<Post />} />
+              <Route path='*' element={<NotFound />} />
             </Route>
-            <Route path='*' element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </HelmetProvider>

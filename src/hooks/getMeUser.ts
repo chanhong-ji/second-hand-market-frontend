@@ -27,6 +27,12 @@ function GetMeUser() {
     if (data?.me === null) getUserLogout();
   }, [data]);
 
+  useEffect(() => {
+    if (data?.me) {
+      localStorage.setItem('zoneId', data?.me?.zone?.id + '');
+    }
+  }, [data]);
+
   return data;
 }
 

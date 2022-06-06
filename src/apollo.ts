@@ -3,15 +3,15 @@ import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
 import { offsetLimitPagination } from '@apollo/client/utilities';
 import { createUploadLink } from 'apollo-upload-client';
-import GetMeUser from './hooks/getMeUser';
 
 export const LoggedInVar = makeVar(Boolean(localStorage.getItem('token')));
 export const tokenVar = makeVar(localStorage.getItem('token'));
-export const zoneIdVar = makeVar(localStorage.getItem('userZoneId') ?? 1);
+export const zoneIdVar = makeVar(localStorage.getItem('zoneId') ?? 1);
 
 export const getUserLogin = async (token: string) => {
   LoggedInVar(true);
   tokenVar(token);
+  zoneIdVar(localStorage.getItem('zoneId') ?? 1);
   await localStorage.setItem('token', token);
 };
 

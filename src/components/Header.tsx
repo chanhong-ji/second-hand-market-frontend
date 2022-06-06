@@ -47,7 +47,7 @@ function Header() {
       {loggedIn ? (
         <Column>
           <Avatar size={40} url={meData?.me?.avatar || ''} />
-          <Item onClick={() => navigate(`/profile/${meData?.me?.id}`)}>
+          <Item onClick={() => navigate(`/profiles/${meData?.me?.id}`)}>
             My Profile
           </Item>
           <Item onClick={getUserLogout}>Log out</Item>

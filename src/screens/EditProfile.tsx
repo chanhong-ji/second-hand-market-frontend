@@ -48,7 +48,7 @@ function EditProfile() {
       },
     });
     alert('success');
-    navigate(`/profile/${id}`);
+    navigate(`/profiles/${id}`);
   };
 
   const onValid = ({

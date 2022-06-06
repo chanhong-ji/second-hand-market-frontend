@@ -4,22 +4,23 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: createAccount
+// GraphQL mutation operation: editPost
 // ====================================================
 
-export interface createAccount_createAccount {
+export interface editPost_editPost {
   __typename: "MutationResult";
   ok: boolean;
   error: string | null;
 }
 
-export interface createAccount {
-  createAccount: createAccount_createAccount;
+export interface editPost {
+  editPost: editPost_editPost;
 }
 
-export interface createAccountVariables {
-  name: string;
-  password: string;
-  phone: number;
-  zoneId: number;
+export interface editPostVariables {
+  id: number;
+  title?: string | null;
+  caption?: string | null;
+  photos?: (any | null)[] | null;
+  categoryId?: number | null;
 }

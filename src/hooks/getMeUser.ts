@@ -11,8 +11,8 @@ const ME_QUERY = gql`
       phone
       avatar
       followingCount
+      zoneId
       zone {
-        id
         name
       }
     }
@@ -29,7 +29,7 @@ function GetMeUser() {
 
   useEffect(() => {
     if (data?.me) {
-      localStorage.setItem('zoneId', data?.me?.zone?.id + '');
+      localStorage.setItem('zoneId', data?.me.zoneId + '');
     }
   }, [data]);
 

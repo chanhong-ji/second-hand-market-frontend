@@ -1,59 +1,51 @@
-import { ApolloCache, gql, useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import ErrorMessage from '../components/ErrorMessage';
+import { AuthForm, AuthWrapper, IForm, Input } from '../components/shared';
+import ZoneBlock from '../components/ZoneBlock';
 import GetMeUser from '../hooks/getMeUser';
 import {
   editProfile,
   editProfileVariables,
 } from '../__generated__/editProfile';
-import { AuthForm, AuthWrapper } from './SignUp';
 
 const EDIT_PROFILE = gql`
-  mutation editProfile($name: String, $password: String, $avatar: Upload) {
-    editProfile(name: $name, password: $password, avatar: $avatar) {
+  mutation editProfile(
+    $name: String
+    $password: String
+    $avatar: Upload
+    $zoneId: Int!
+  ) {
+    editProfile(
+      name: $name
+      password: $password
+      avatar: $avatar
+      zoneId: $zoneId
+    ) {
       ok
       error
     }
   }
 `;
 
-const Input = styled.input`
-  border: none;
-  background-color: ${(p) => p.theme.color.input};
-  width: 100%;
-  height: 50px;
-  margin-bottom: 20px;
-`;
-
-interface IForm {
-  passwordConfirm: string;
-  result: string;
-}
-
 function EditProfile() {
-  const onUpdateProfile = (cache: ApolloCache<any>, { data }: any) => {
-    const { ok, error } = data.editProfile;
+  const onCompleted = (data: editProfile) => {
+    const { ok } = data.editProfile;
     if (!ok) {
       alert('error');
     }
-
-    const { name, avatar } = getValues();
-    cache.modify({
-      id: `User:${id}`,
-      fields: {
-        ...(name && { name: () => name }),
-      },
-    });
     alert('success');
     navigate(`/profiles/${id}`);
+    window.location.reload();
   };
 
   const onValid = ({
     name,
     avatar,
+    first,
+    second,
     password,
     passwordConfirm,
   }: editProfileVariables & IForm) => {
@@ -63,11 +55,14 @@ function EditProfile() {
         { message: 'Password confirm wrong' },
         { shouldFocus: true }
       );
+    const secondZoneCode = second.padStart(2, '0');
+    const zoneId = +(first + secondZoneCode);
     editProfile({
       variables: {
         name,
         ...(avatar.length > 0 && { avatar: avatar[0] }),
         password,
+        zoneId,
       },
     });
   };
@@ -75,16 +70,18 @@ function EditProfile() {
   const { id } = useParams();
   const meData = GetMeUser();
   const navigate = useNavigate();
+
   const [editProfile, { loading }] = useMutation<
     editProfile,
     editProfileVariables
-  >(EDIT_PROFILE, { update: onUpdateProfile });
+  >(EDIT_PROFILE, { onCompleted });
+
   const {
     register,
     handleSubmit,
     setError,
-    getValues,
     formState: { errors, isValid },
+    clearErrors,
   } = useForm<editProfileVariables & IForm>({ mode: 'onChange' });
 
   useEffect(() => {
@@ -110,6 +107,11 @@ function EditProfile() {
           id='passwordConfirm'
           placeholder='passwordConfirm'
           {...register('passwordConfirm')}
+        />
+        <ZoneBlock
+          register={register}
+          clearErrors={clearErrors}
+          defaultValue={meData?.me?.zoneId + ''}
         />
         <label htmlFor='avatar'>avatar</label>
         <Input

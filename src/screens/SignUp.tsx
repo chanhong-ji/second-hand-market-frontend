@@ -1,43 +1,33 @@
 import { gql, useMutation } from '@apollo/client';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import ErrorMessage from '../components/ErrorMessage';
+import {
+  AuthForm,
+  AuthWrapper,
+  IForm,
+  Input,
+  Zone,
+} from '../components/shared';
+import ZoneBlock from '../components/ZoneBlock';
 import {
   createAccount,
   createAccountVariables,
 } from '../__generated__/createAccount';
 
-export const AuthWrapper = styled.div`
-  width: 500px;
-  height: 600px;
-  margin: 0 auto;
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: ${(p) => p.theme.color.form};
-`;
-export const AuthForm = styled.div`
-  width: 80%;
-  padding-top: 30px;
-`;
-const Input = styled.input`
-  border: none;
-  background-color: ${(p) => p.theme.color.input};
-  width: 100%;
-  height: 50px;
-  margin-bottom: 20px;
-`;
-
-interface IForm {
-  passwordConfirm: string;
-  result: string;
-}
-
 const CREATE_ACCOUNT_MUTATION = gql`
-  mutation createAccount($name: String!, $password: String!, $phone: Int!) {
-    createAccount(name: $name, password: $password, phone: $phone) {
+  mutation createAccount(
+    $name: String!
+    $password: String!
+    $phone: Int!
+    $zoneId: Int!
+  ) {
+    createAccount(
+      name: $name
+      password: $password
+      phone: $phone
+      zoneId: $zoneId
+    ) {
       ok
       error
     }
@@ -61,6 +51,8 @@ function SignUp() {
     name,
     password,
     passwordConfirm,
+    first,
+    second,
   }) => {
     if (loading) return;
     if (password !== passwordConfirm)
@@ -71,7 +63,11 @@ function SignUp() {
           shouldFocus: true,
         }
       );
-    createAccount({ variables: { phone: +phone, name, password } });
+    const secondZoneCode = second.padStart(2, '0');
+    const zoneId = +(first + secondZoneCode);
+    createAccount({
+      variables: { phone: +phone, name, password, zoneId },
+    });
   };
 
   const navigate = useNavigate();
@@ -94,7 +90,9 @@ function SignUp() {
   return (
     <AuthWrapper>
       <AuthForm onSubmit={handleSubmit(onValid)}>
+        <label htmlFor='phone'>Phone</label>
         <Input
+          id='phone'
           {...register('phone', { required: 'phone is required' })}
           placeholder='phone'
           type='number'
@@ -104,7 +102,9 @@ function SignUp() {
           <ErrorMessage message={errors.phone.message || ''} />
         )}
 
+        <label htmlFor='name'>Name</label>
         <Input
+          id='name'
           {...register('name', { required: 'name is required' })}
           placeholder='name'
           type='text'
@@ -113,7 +113,13 @@ function SignUp() {
         {errors?.name?.message && (
           <ErrorMessage message={errors.name.message || ''} />
         )}
+
+        <label htmlFor='zoneId'>Zone</label>
+
+        <ZoneBlock register={register} clearErrors={clearErrors} />
+        <label htmlFor='password'>Password</label>
         <Input
+          id='password'
           {...register('password', { required: 'password is required' })}
           type='password'
           placeholder='password'
@@ -122,7 +128,10 @@ function SignUp() {
         {errors?.password?.message && (
           <ErrorMessage message={errors.password.message || ''} />
         )}
+
+        <label htmlFor='passwordConfirm'>Password Confirm</label>
         <Input
+          id='passwordConfirm'
           {...register('passwordConfirm', {
             required: 'passwordConfirm is required',
           })}
@@ -133,6 +142,7 @@ function SignUp() {
         {errors?.passwordConfirm?.message && (
           <ErrorMessage message={errors.passwordConfirm.message || ''} />
         )}
+
         <Input
           type='submit'
           value='Sign up'

@@ -2,19 +2,10 @@ import { gql, useMutation } from '@apollo/client';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getUserLogin, zoneIdVar } from '../apollo';
+import { getUserLogin } from '../apollo';
 import ErrorMessage from '../components/ErrorMessage';
-import GetMeUser from '../hooks/getMeUser';
+import { AuthForm, AuthWrapper, Input } from '../components/shared';
 import { login, loginVariables } from '../__generated__/login';
-import { AuthForm, AuthWrapper } from './SignUp';
-
-const Input = styled.input`
-  border: none;
-  background-color: ${(p) => p.theme.color.input};
-  width: 100%;
-  height: 50px;
-  margin-bottom: 20px;
-`;
 
 interface IForm {
   result: string;

@@ -21,4 +21,5 @@ export interface editProfileVariables {
   name?: string | null;
   password?: string | null;
   avatar?: any | null;
+  zoneId: number;
 }

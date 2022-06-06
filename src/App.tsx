@@ -13,6 +13,7 @@ import Profile from './screens/Profile';
 import EditProfile from './screens/EditProfile';
 import Post from './screens/Post';
 import NotFound from './screens/NotFound';
+import EditPost from './screens/EditPost';
 
 function App() {
   const LoggedIn = useReactiveVar(LoggedInVar);
@@ -39,6 +40,7 @@ function App() {
               <Route path='profiles/:id' element={<Profile />} />
               <Route path='profiles/:id/edit' element={<EditProfile />} />
               <Route path='posts/:id' element={<Post />} />
+              <Route path='posts/:id/edit' element={<EditPost />} />
               <Route path='*' element={<NotFound />} />
             </Route>
           </Routes>

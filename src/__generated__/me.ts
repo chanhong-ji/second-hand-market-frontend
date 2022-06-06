@@ -9,7 +9,6 @@
 
 export interface me_me_zone {
   __typename: "Zone";
-  id: number;
   name: string;
 }
 
@@ -20,7 +19,8 @@ export interface me_me {
   phone: number;
   avatar: string | null;
   followingCount: number;
-  zone: me_me_zone | null;
+  zoneId: number;
+  zone: me_me_zone;
 }
 
 export interface me {

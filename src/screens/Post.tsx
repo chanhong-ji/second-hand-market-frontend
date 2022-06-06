@@ -49,6 +49,7 @@ function Post() {
               dealt={data.seePost.dealt}
             />
             <InfoBlock
+              postId={data.seePost.id}
               title={data.seePost.title}
               caption={data.seePost.caption}
               category={data.seePost.category}

@@ -21,6 +21,5 @@ export interface editPostVariables {
   id: number;
   title?: string | null;
   caption?: string | null;
-  photos?: (any | null)[] | null;
   categoryId?: number | null;
 }

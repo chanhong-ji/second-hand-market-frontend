@@ -39,8 +39,9 @@ function App() {
               />
               <Route path='profiles/:id' element={<Profile />} />
               <Route path='profiles/:id/edit' element={<EditProfile />} />
-              <Route path='posts/:id' element={<Post />} />
-              <Route path='posts/:id/edit' element={<EditPost />} />
+              <Route path='posts/:id' element={<Post />}>
+                <Route path='edit' element={<EditPost />} />
+              </Route>
               <Route path='*' element={<NotFound />} />
             </Route>
           </Routes>

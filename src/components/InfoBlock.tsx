@@ -1,7 +1,8 @@
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { AnimatePresence } from 'framer-motion';
 
 const Title = styled.div``;
 const Category = styled.div``;
@@ -56,9 +57,10 @@ interface IProps {
     id: number;
     name: string;
   };
+  photos: string[];
 }
 
-function InfoBlock({ postId, title, caption, category }: IProps) {
+function InfoBlock({ postId, title, caption, category, photos }: IProps) {
   const navigate = useNavigate();
   return (
     <Info>
@@ -67,10 +69,13 @@ function InfoBlock({ postId, title, caption, category }: IProps) {
       {/* <Price>{price}</Price> */}
       <Price>15,000원</Price>
       <Exp>{`${caption}`}</Exp>
-      <EditBtn onClick={() => navigate('edit', { state: { postId } })}>
-        <span>Edit Post</span>
-        <FontAwesomeIcon icon={faArrowRight} />
-      </EditBtn>
+      <Link to='edit' state={{ title, caption, photoUrl: photos[0], postId }}>
+        <EditBtn onClick={() => {}}>
+          <span>Edit Post</span>
+          <FontAwesomeIcon icon={faArrowRight} />
+        </EditBtn>
+      </Link>
+      {/* <AnimatePresence></AnimatePresence> */}
     </Info>
   );
 }

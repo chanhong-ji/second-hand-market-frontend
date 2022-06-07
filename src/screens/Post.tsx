@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, Outlet, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import InfoBlock from '../components/InfoBlock';
 import OwnerBlock from '../components/OwnerBlock';
@@ -31,6 +31,7 @@ function Post() {
 
   return (
     <Wrapper>
+      <Outlet />
       {id ? (
         id && !/^\d+$/.test(id) ? (
           <Navigate to='/' replace />
@@ -53,6 +54,7 @@ function Post() {
               title={data.seePost.title}
               caption={data.seePost.caption}
               category={data.seePost.category}
+              photos={data.seePost.photos}
             />
           </>
         ) : (

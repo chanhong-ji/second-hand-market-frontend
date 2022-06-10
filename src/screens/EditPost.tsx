@@ -1,8 +1,8 @@
 import { gql, useMutation } from '@apollo/client';
-import { motion } from 'framer-motion';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Modal from '../components/Modal';
 import { editPost, editPostVariables } from '../__generated__/editPost';
 
 interface IFormOfPost {
@@ -28,104 +28,41 @@ const EDIT_POST_MUTATION = gql`
   }
 `;
 
-const Overlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 2;
-`;
-
-const TopBar = styled.div``;
-const Cancel = styled.div``;
-const Title = styled.div``;
-const Complete = styled.div``;
-
 const Left = styled.div<{ url: string | null }>`
   background-image: ${(p) => (p.url ? `url('${p.url}')` : 'none')};
+  background-color: whitesmoke;
+  border-bottom-left-radius: 20px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 100%;
 `;
-const Right = styled.div``;
-const ModalDiv = styled(motion.div)`
-  width: 50%;
-  height: 80%;
-  position: absolute;
-  border-radius: 20px;
+const Right = styled.div`
   background-color: white;
-  padding-top: 40px;
-  display: grid;
-  grid-template-columns: 3fr 2fr;
-
-  ${TopBar} {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-sizing: border-box;
-    height: 40px;
-    border-bottom: 1px solid ${(p) => p.theme.color.border};
-    position: absolute;
-    top: 0;
-    padding-left: 10px;
-    padding-right: 10px;
-
-    ${Cancel} {
-      color: tomato;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    ${Title} {
-      font-size: 18px;
-      font-weight: 500;
-    }
-    ${Complete} {
-      color: blue;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-  }
-  ${Left} {
-    background-color: whitesmoke;
-    border-bottom-left-radius: 20px;
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-
+  border-bottom-right-radius: 20px;
+  form {
     height: 100%;
-  }
-  ${Right} {
-    background-color: white;
-    border-bottom-right-radius: 20px;
-    form {
-      height: 100%;
-      display: grid;
-      grid-template-rows: 1fr 3fr 1fr 2fr;
-      > div {
-        border-bottom: 1px solid ${(p) => p.theme.color.border};
-        padding: 10px;
-        label {
-          display: block;
-          margin-bottom: 4px;
-          font-size: 15px;
-          color: grey;
-          font-weight: 600;
-        }
-        textarea {
-          width: 100%;
-          border: none;
-          background: none;
-          outline: none;
-          font-size: x-large;
-        }
-        textarea:last-of-type {
-          font-size: large;
-        }
+    display: grid;
+    grid-template-rows: 1fr 3fr 1fr 2fr;
+    > div {
+      border-bottom: 1px solid ${(p) => p.theme.color.border};
+      padding: 10px;
+      label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 15px;
+        color: grey;
+        font-weight: 600;
+      }
+      textarea {
+        width: 100%;
+        border: none;
+        background: none;
+        outline: none;
+        font-size: x-large;
+      }
+      textarea:last-of-type {
+        font-size: large;
       }
     }
   }
@@ -165,15 +102,6 @@ function EditPost() {
     window.location.reload();
   };
 
-  const onCancel = () => {
-    const cancel = window.confirm('Do you want to cancel to edit this post?');
-    if (cancel) {
-      navigate(-1);
-    } else {
-      return;
-    }
-  };
-
   const location: any = useLocation();
   const navigate = useNavigate();
 
@@ -193,83 +121,59 @@ function EditPost() {
     { onCompleted }
   );
 
-  const modalVariant = {
-    initial: {
-      opacity: 0,
-      scale: 0.7,
-    },
-    final: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };
-
   return (
-    <Overlay onClick={() => onCancel()}>
-      <ModalDiv
-        onClick={(e) => e.stopPropagation()}
-        variants={modalVariant}
-        initial='initial'
-        animate='final'
-      >
-        <TopBar>
-          <Cancel onClick={onCancel}>Cancel</Cancel>
-          <Title>Edit post</Title>
-          <Complete onClick={handleSubmit(onValid, onInValid)}>
-            Complete
-          </Complete>
-        </TopBar>
-        <Left url={location.state?.photoUrl || null}></Left>
-        <Right>
-          <form onSubmit={handleSubmit(onValid, onInValid)}>
-            <div>
-              <label htmlFor='title'>Title</label>
-              <textarea
-                id='title'
-                cols={30}
-                rows={2}
-                maxLength={30}
-                {...register('title', {
-                  required: 'Title is requierd',
-                  maxLength: {
-                    value: 30,
-                    message: 'Title should be under 30',
-                  },
-                })}
-              />
-            </div>
+    <Modal
+      title='Edit'
+      completeFn={handleSubmit(onValid, onInValid)}
+      styles={{ gridTemplateColumns: '3fr 2fr' }}
+    >
+      <Left url={location.state?.photoUrl || null}></Left>
+      <Right>
+        <form onSubmit={handleSubmit(onValid, onInValid)}>
+          <div>
+            <label htmlFor='title'>Title</label>
+            <textarea
+              id='title'
+              cols={30}
+              rows={2}
+              maxLength={30}
+              {...register('title', {
+                required: 'Title is requierd',
+                maxLength: {
+                  value: 30,
+                  message: 'Title should be under 30',
+                },
+              })}
+            />
+          </div>
 
-            <div>
-              <label htmlFor='caption'>Explanation</label>
-              <textarea
-                id='caption'
-                cols={30}
-                rows={10}
-                maxLength={800}
-                {...register('caption', {
-                  maxLength: {
-                    value: 800,
-                    message: 'Explanation should be under 800',
-                  },
-                })}
-              />
-            </div>
+          <div>
+            <label htmlFor='caption'>Explanation</label>
+            <textarea
+              id='caption'
+              cols={30}
+              rows={10}
+              maxLength={800}
+              {...register('caption', {
+                maxLength: {
+                  value: 800,
+                  message: 'Explanation should be under 800',
+                },
+              })}
+            />
+          </div>
 
-            <div>
-              <label htmlFor='categoryId'>Category</label>
-              <input
-                id='categoryId'
-                placeholder='categoryId'
-                {...register('categoryId')}
-              />
-            </div>
-          </form>
-        </Right>
-      </ModalDiv>
-    </Overlay>
+          <div>
+            <label htmlFor='categoryId'>Category</label>
+            <input
+              id='categoryId'
+              placeholder='categoryId'
+              {...register('categoryId')}
+            />
+          </div>
+        </form>
+      </Right>
+    </Modal>
   );
 }
 

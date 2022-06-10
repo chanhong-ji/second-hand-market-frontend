@@ -1,5 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getUserLogout, LoggedInVar, zoneIdVar } from '../apollo';
 import getMeUser from '../hooks/getMeUser';
@@ -51,6 +51,9 @@ function Header() {
             My Profile
           </Item>
           <Item onClick={getUserLogout}>Log out</Item>
+          <Item>
+            <Link to='upload'>Upload</Link>
+          </Item>
         </Column>
       ) : (
         <Column>

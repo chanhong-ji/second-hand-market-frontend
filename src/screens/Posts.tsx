@@ -1,9 +1,11 @@
 import { gql, useQuery, useReactiveVar } from '@apollo/client';
+import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import { zoneIdVar } from '../apollo';
 import ItemBanner from '../components/ItemBanner';
 import { POST_FRAGMENT } from '../fragment';
 import { seePosts } from '../__generated__/seePosts';
+import UploadPost from './UploadPost';
 
 const Title = styled.div``;
 const Grid = styled.div``;
@@ -61,6 +63,7 @@ function Posts() {
           ) : null
         )}
       </Grid>
+      <Outlet />
     </Wrapper>
   );
 }

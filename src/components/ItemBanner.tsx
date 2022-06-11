@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { getFormatValue } from '../utils';
 
 interface IProps {
   id: number;
   title: string;
+  price: number;
   photos: (string | null)[] | null;
   dealt: boolean;
   interestsCount: number;
@@ -66,18 +68,19 @@ function ItemBanner({
   dealt,
   interestsCount,
   zone,
+  price,
 }: IProps) {
   const goToArticle = () =>
     navigate(`/posts/${id}`, { state: { photoUrls: photos } });
   const navigate = useNavigate();
+  const formatPrice = getFormatValue(price);
   return (
     <Container onClick={goToArticle}>
       {photos !== (undefined || null) && <Photo img={photos[0] || ''} />}
       <Info>
         <Title>{title}</Title>
         <Zone>{zone.name}</Zone>
-        {/* Add price data */}
-        <Price>15,000 원</Price>
+        <Price>{(formatPrice + '').slice(1)} 원</Price>
         <div>
           <InterestCount>관심 {interestsCount}</InterestCount>
           <div>∙</div>

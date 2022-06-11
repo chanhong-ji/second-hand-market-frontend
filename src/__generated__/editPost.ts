@@ -20,6 +20,7 @@ export interface editPost {
 export interface editPostVariables {
   id: number;
   title?: string | null;
+  price?: number | null;
   caption?: string | null;
   categoryId?: number | null;
 }

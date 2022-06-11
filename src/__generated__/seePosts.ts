@@ -32,6 +32,7 @@ export interface seePosts_seePosts {
   title: string;
   caption: string;
   dealt: boolean;
+  price: number;
   user: seePosts_seePosts_user;
   photos: string[];
   zone: seePosts_seePosts_zone;

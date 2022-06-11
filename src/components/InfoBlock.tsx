@@ -2,7 +2,7 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { AnimatePresence } from 'framer-motion';
+import { getFormatValue } from '../utils';
 
 const Title = styled.div``;
 const Category = styled.div``;
@@ -53,6 +53,7 @@ interface IProps {
   postId: number;
   title: string;
   caption: string;
+  price: number;
   category: {
     id: number;
     name: string;
@@ -60,22 +61,30 @@ interface IProps {
   photos: string[];
 }
 
-function InfoBlock({ postId, title, caption, category, photos }: IProps) {
-  const navigate = useNavigate();
+function InfoBlock({
+  postId,
+  title,
+  caption,
+  category,
+  photos,
+  price,
+}: IProps) {
+  const formatPrice = String(getFormatValue(price)).slice(1);
   return (
     <Info>
       <Title>{title}</Title>
       <Category>{category.name}</Category>
-      {/* <Price>{price}</Price> */}
-      <Price>15,000원</Price>
+      <Price>{formatPrice} 원</Price>
       <Exp>{`${caption}`}</Exp>
-      <Link to='edit' state={{ title, caption, photoUrl: photos[0], postId }}>
-        <EditBtn onClick={() => {}}>
+      <Link
+        to='edit'
+        state={{ title, caption, photoUrl: photos[0], postId, price }}
+      >
+        <EditBtn>
           <span>Edit Post</span>
           <FontAwesomeIcon icon={faArrowRight} />
         </EditBtn>
       </Link>
-      {/* <AnimatePresence></AnimatePresence> */}
     </Info>
   );
 }

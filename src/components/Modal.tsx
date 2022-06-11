@@ -16,6 +16,7 @@ const Overlay = styled(motion.div)`
 `;
 const ModalDiv = styled(motion.div)`
   width: 50%;
+  min-width: 700px;
   height: 80%;
   position: absolute;
   border-radius: 20px;

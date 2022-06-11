@@ -32,6 +32,7 @@ export interface PostFragment {
   title: string;
   caption: string;
   dealt: boolean;
+  price: number;
   user: PostFragment_user;
   photos: string[];
   zone: PostFragment_zone;

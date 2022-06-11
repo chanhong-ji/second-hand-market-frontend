@@ -24,6 +24,7 @@ export const POST_FRAGMENT = gql`
     title
     caption
     dealt
+    price
     user {
       id
       name

@@ -25,6 +25,7 @@ export interface seeProfile_seeProfile_posts {
   title: string;
   photos: string[];
   dealt: boolean;
+  price: number;
   interestsCount: number;
   zone: seeProfile_seeProfile_posts_zone;
 }

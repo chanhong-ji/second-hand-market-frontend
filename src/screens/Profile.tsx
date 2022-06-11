@@ -94,6 +94,7 @@ const SEE_PROFILE_QUERY = gql`
         title
         photos
         dealt
+        price
         interestsCount
         zone {
           id
@@ -146,17 +147,21 @@ function Profile() {
   const { data, loading } = useQuery<seeProfile>(SEE_PROFILE_QUERY, {
     skip: !!!/^\d+$/.test(id || ''),
     variables: { id: id ? +id : null, offset: 0 },
+    onCompleted: (data) => {
+      console.log(data);
+    },
   });
-  const [toggleFollow, { loading: toggleLoading }] = useMutation<
-    toggleFollow,
-    toggleFollowVariables
-  >(TOGGLE_FOLLOW_MUTATION, { update: onToggleUpdate });
+  const [toggleFollow] = useMutation<toggleFollow, toggleFollowVariables>(
+    TOGGLE_FOLLOW_MUTATION,
+    { update: onToggleUpdate }
+  );
 
   useEffect(() => {
     if (!!!/^\d+$/.test(id || '')) {
       navigate('/notfound', { state: { type: 'profile' }, replace: true });
     }
   }, [id]);
+
   return (
     <Wrapper>
       <PageTitle title='Profile' />

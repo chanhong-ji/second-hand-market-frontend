@@ -55,6 +55,7 @@ function Posts() {
               id={post.id}
               title={post.title}
               photos={post.photos}
+              price={post.price}
               dealt={post.dealt}
               interestsCount={post.interestsCount}
               zone={post.zone}

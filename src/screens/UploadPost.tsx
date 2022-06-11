@@ -14,6 +14,7 @@ import Modal from '../components/Modal';
 import { createPost, createPostVariables } from '../__generated__/createPost';
 import { useNavigate } from 'react-router-dom';
 import GetMeUser from '../hooks/getMeUser';
+import { getFormatValue } from '../utils';
 
 const Preview = styled.div``;
 const Left = styled.div`
@@ -72,13 +73,27 @@ const Left = styled.div`
   }
 `;
 
+const Price = styled.div``;
 const Right = styled.div`
   background-color: white;
   border-bottom-right-radius: 20px;
   form {
     height: 100%;
     display: grid;
-    grid-template-rows: 1fr 3fr 1fr 2fr;
+    grid-template-rows: 1fr 0.5fr 3fr 1fr 2fr;
+    ${Price} {
+      span {
+        display: block;
+        margin-top: 10px;
+        font-size: 18px;
+      }
+      input {
+        margin-top: 15px;
+        border: none;
+        border-bottom: 1px solid black;
+        outline: none;
+      }
+    }
     > div {
       border-bottom: 1px solid ${(p) => p.theme.color.border};
       padding: 10px;
@@ -89,6 +104,7 @@ const Right = styled.div`
         color: grey;
         font-weight: 600;
       }
+
       textarea {
         width: 100%;
         border: none;
@@ -106,12 +122,14 @@ const Right = styled.div`
 const CREATE_POST_MUTATION = gql`
   mutation createPost(
     $title: String!
+    $price: Int!
     $caption: String!
     $photos: [Upload!]!
     $categoryId: Int!
   ) {
     createPost(
       title: $title
+      price: $price
       caption: $caption
       photos: $photos
       categoryId: $categoryId
@@ -125,6 +143,7 @@ const CREATE_POST_MUTATION = gql`
 interface IUploadForm {
   add: File | null;
   change: File | null;
+  currency: string;
 }
 
 function UploadPost() {
@@ -144,6 +163,7 @@ function UploadPost() {
   const onValid: SubmitHandler<createPostVariables> = async ({
     title,
     caption,
+    price,
     categoryId,
   }) => {
     if (loading) return;
@@ -151,7 +171,9 @@ function UploadPost() {
       photoUrls.map((url) => fetch(url).then((r) => r.blob()))
     );
     // 카테고리 수정
-    createPost({ variables: { title, caption, categoryId: 1, photos: li } });
+    createPost({
+      variables: { title, caption, categoryId: 1, photos: li, price: +price },
+    });
   };
 
   const onCompleted = (data: createPost) => {
@@ -202,16 +224,25 @@ function UploadPost() {
     setValue('change', null);
   };
 
+  const onPriceData = (data: any) => {
+    const value = +String(data.target.value).replaceAll(/\D/g, '') ?? 0;
+    setPriceValue(value);
+    const formatValue = getFormatValue(value);
+    setCurrencyValue(formatValue);
+  };
+
   const [createPost, { loading }] = useMutation<
     createPost,
     createPostVariables
   >(CREATE_POST_MUTATION, { onCompleted });
-  const { register, handleSubmit, setValue } = useForm<
+  const { register, handleSubmit, setValue, getValues } = useForm<
     createPostVariables & IUploadForm
   >();
   const navigate = useNavigate();
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [photoPage, setPhotoPage] = useState(1);
+  const [currencyValue, setCurrencyValue] = useState('');
+  const [priceValue, setPriceValue] = useState(0);
   const meData = GetMeUser();
 
   return (
@@ -300,6 +331,21 @@ function UploadPost() {
               })}
             />
           </div>
+
+          <Price>
+            <label htmlFor='price'>Price</label>
+            <span>{currencyValue}</span>
+            <input
+              id='price'
+              value={priceValue}
+              type='text'
+              maxLength={10}
+              {...register('price', {
+                required: 'Price is requierd',
+                onChange: onPriceData,
+              })}
+            />
+          </Price>
 
           <div>
             <label htmlFor='caption'>Explanation</label>

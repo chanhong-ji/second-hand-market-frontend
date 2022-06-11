@@ -19,6 +19,7 @@ export interface createPost {
 
 export interface createPostVariables {
   title: string;
+  price: number;
   caption: string;
   photos: any[];
   categoryId: number;

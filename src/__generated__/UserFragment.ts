@@ -20,6 +20,7 @@ export interface UserFragment {
   avatar: string | null;
   followingCount: number;
   postsCount: number;
+  dealtCount: number;
   zone: UserFragment_zone;
   isMe: boolean;
   isFollowing: boolean;

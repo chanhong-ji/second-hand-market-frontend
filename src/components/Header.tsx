@@ -46,14 +46,14 @@ function Header() {
       </Column>
       {loggedIn ? (
         <Column>
+          <Item>
+            <Link to='upload'>Upload</Link>
+          </Item>
           <Avatar size={40} url={meData?.me?.avatar || ''} />
           <Item onClick={() => navigate(`/profiles/${meData?.me?.id}`)}>
             My Profile
           </Item>
           <Item onClick={getUserLogout}>Log out</Item>
-          <Item>
-            <Link to='upload'>Upload</Link>
-          </Item>
         </Column>
       ) : (
         <Column>

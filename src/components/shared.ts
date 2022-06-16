@@ -24,7 +24,6 @@ export const Input = styled.input`
 export const SubmitInput = styled(Input)`
   cursor: pointer;
 `;
-export const Zone = styled.div``;
 
 export interface IForm {
   passwordConfirm: string;

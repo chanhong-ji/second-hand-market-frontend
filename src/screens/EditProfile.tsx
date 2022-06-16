@@ -108,11 +108,7 @@ function EditProfile() {
           placeholder='passwordConfirm'
           {...register('passwordConfirm')}
         />
-        <ZoneBlock
-          register={register}
-          clearErrors={clearErrors}
-          defaultValue={meData?.me?.zoneId + ''}
-        />
+        <ZoneBlock register={register} defaultValue={meData?.me?.zoneId + ''} />
         <label htmlFor='avatar'>avatar</label>
         <Input
           id='avatar'

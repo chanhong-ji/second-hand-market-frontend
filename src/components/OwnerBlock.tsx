@@ -156,6 +156,12 @@ function OwnerBlock({
   const onBookmark = () => {
     toggleInterest({ variables: { id: postId } });
   };
+  const onDeletePost = async () => {
+    const answer = await window.confirm('Are you sure to delete this post?');
+    if (answer) {
+      deletePost();
+    }
+  };
 
   const navigate = useNavigate();
   const [toggleInterest] = useMutation<toggleInterest, toggleInterestVariables>(
@@ -215,7 +221,7 @@ function OwnerBlock({
               <BookmarkBtn onClick={onBookmark}>Book mark</BookmarkBtn>
             </>
           ) : dealt ? null : (
-            <DeleteBtn onClick={() => deletePost()}>Delete Post</DeleteBtn>
+            <DeleteBtn onClick={onDeletePost}>Delete Post</DeleteBtn>
           )}
         </Row>
       </Right>

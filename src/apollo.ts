@@ -25,9 +25,13 @@ export const getUserLogout = async () => {
 
 const cache = new InMemoryCache({
   typePolicies: {
+    User: {
+      fields: {
+        posts: offsetLimitPagination(),
+      },
+    },
     Query: {
       fields: {
-        seePosts: offsetLimitPagination(),
         searchZone: offsetLimitPagination(),
         searchPost: offsetLimitPagination(),
       },

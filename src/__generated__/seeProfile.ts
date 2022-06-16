@@ -37,6 +37,7 @@ export interface seeProfile_seeProfile {
   avatar: string | null;
   followingCount: number;
   postsCount: number;
+  dealtCount: number;
   zone: seeProfile_seeProfile_zone;
   isMe: boolean;
   isFollowing: boolean;

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import CategoryBlock from '../components/CategoryBlock';
 import Modal from '../components/Modal';
 import { getFormatValue } from '../utils';
 import { editPost, editPostVariables } from '../__generated__/editPost';
@@ -17,14 +18,14 @@ const EDIT_POST_MUTATION = gql`
     $title: String
     $price: Int
     $caption: String
-    $categoryId: Int
+    $categoryName: String
   ) {
     editPost(
       id: $id
       title: $title
       price: $price
       caption: $caption
-      categoryId: $categoryId
+      categoryName: $categoryName
     ) {
       ok
       error
@@ -91,20 +92,25 @@ function EditPost() {
   const onInValid: SubmitErrorHandler<editPostVariables & IFormOfPost> = ({
     title,
     caption,
+    categoryName,
   }) => {
     if (title?.message) {
       alert(title?.message);
       return;
     }
     if (caption?.message) {
-      alert(title?.message);
+      alert(caption?.message);
+      return;
+    }
+    if (categoryName?.message) {
+      alert(categoryName.message);
     }
   };
   const onValid: SubmitHandler<editPostVariables> = ({
     title,
     caption,
     price,
-    categoryId,
+    categoryName,
   }) => {
     if (loading || !isValid) return;
     editPost({
@@ -113,8 +119,8 @@ function EditPost() {
         title,
         caption,
         ...(price && { price: +price }),
+        categoryName,
       },
-      // 카테고리 추가
     });
   };
   const onCompleted = (data: editPost) => {
@@ -212,14 +218,11 @@ function EditPost() {
             />
           </div>
 
-          <div>
-            <label htmlFor='categoryId'>Category</label>
-            <input
-              id='categoryId'
-              placeholder='categoryId'
-              {...register('categoryId')}
-            />
-          </div>
+          <CategoryBlock
+            register={register}
+            defaultValue={location.state?.categoryName}
+          />
+          {/* default Value 넣기 */}
         </form>
       </Right>
     </Modal>

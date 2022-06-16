@@ -2,14 +2,9 @@ import { gql, useMutation } from '@apollo/client';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import ErrorMessage from '../components/ErrorMessage';
-import {
-  AuthForm,
-  AuthWrapper,
-  IForm,
-  Input,
-  Zone,
-} from '../components/shared';
+import { AuthForm, AuthWrapper, IForm, Input } from '../components/shared';
 import ZoneBlock from '../components/ZoneBlock';
+import { getZoneId } from '../utils';
 import {
   createAccount,
   createAccountVariables,
@@ -63,10 +58,14 @@ function SignUp() {
           shouldFocus: true,
         }
       );
-    const secondZoneCode = second.padStart(2, '0');
-    const zoneId = +(first + secondZoneCode);
+
     createAccount({
-      variables: { phone: +phone, name, password, zoneId },
+      variables: {
+        phone: +phone,
+        name,
+        password,
+        zoneId: getZoneId(first, second),
+      },
     });
   };
 
@@ -116,7 +115,8 @@ function SignUp() {
 
         <label htmlFor='zoneId'>Zone</label>
 
-        <ZoneBlock register={register} clearErrors={clearErrors} />
+        <ZoneBlock register={register} />
+
         <label htmlFor='password'>Password</label>
         <Input
           id='password'

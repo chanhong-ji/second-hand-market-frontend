@@ -1,25 +1,29 @@
 import { useState } from 'react';
-import { UseFormClearErrors, UseFormRegister } from 'react-hook-form';
-import { Zone } from './shared';
-import { zoneFirst, zoneSecond } from '../zones';
+import { UseFormRegister } from 'react-hook-form';
+import styled from 'styled-components';
+import { zoneFirst, zoneSecond } from '../dataList';
 
 interface IProps {
   register: UseFormRegister<any>;
-  clearErrors: UseFormClearErrors<any>;
   defaultValue?: string;
+  children?: any;
 }
 
-function ZoneBlock({ register, clearErrors, defaultValue }: IProps) {
+const Zone = styled.div``;
+
+function ZoneBlock({ register, defaultValue, children }: IProps) {
   const [firstZone, setFirstZone] = useState(0);
 
   return (
     <Zone>
+      {children}
       <select
-        {...register('first', { required: true })}
+        {...register('first', { required: 'Zone is required' })}
         placeholder='zone'
-        onClick={() => clearErrors()}
+        id='zone'
         onChange={(e) => setFirstZone(+e.target.value)}
         defaultValue={defaultValue ? +defaultValue.slice(0, -2) : 0}
+        style={{ marginRight: 7 }}
       >
         {zoneFirst.map((title, index) => (
           <option value={index + ''} key={index + ''}>
@@ -29,7 +33,7 @@ function ZoneBlock({ register, clearErrors, defaultValue }: IProps) {
       </select>
 
       <select
-        {...register('second')}
+        {...register('second', { required: 'Zone is required' })}
         defaultValue={defaultValue ? +defaultValue.slice(-2) : 0}
       >
         {zoneSecond[firstZone].map((title, index) => (

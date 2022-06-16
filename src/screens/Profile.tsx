@@ -1,9 +1,11 @@
 import { ApolloCache, gql, useMutation, useQuery } from '@apollo/client';
-import { useEffect } from 'react';
+import { useMotionValue, useViewportScroll } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Avatar from '../components/Avatar';
 import ItemBanner from '../components/ItemBanner';
+import Loader from '../components/Loader';
 import PageTitle from '../components/PageTitle';
 import { USER_FRAGMENT } from '../fragment';
 import { seeProfile } from '../__generated__/seeProfile';
@@ -144,12 +146,10 @@ function Profile() {
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data, loading } = useQuery<seeProfile>(SEE_PROFILE_QUERY, {
+  const { scrollYProgress } = useViewportScroll();
+  const { data, loading, fetchMore } = useQuery<seeProfile>(SEE_PROFILE_QUERY, {
     skip: !!!/^\d+$/.test(id || ''),
     variables: { id: id ? +id : null, offset: 0 },
-    onCompleted: (data) => {
-      console.log(data);
-    },
   });
   const [toggleFollow] = useMutation<toggleFollow, toggleFollowVariables>(
     TOGGLE_FOLLOW_MUTATION,
@@ -162,14 +162,27 @@ function Profile() {
     }
   }, [id]);
 
+  useEffect(() => {
+    scrollYProgress.onChange((value) => {
+      if (value > 0.95 && data?.seeProfile) {
+        scrollYProgress.clearListeners();
+        fetchMore({
+          variables: {
+            id: +data.seeProfile.id,
+            offset: data.seeProfile.posts?.length,
+          },
+        });
+      }
+    });
+  }, [data]);
+
   return (
     <Wrapper>
       <PageTitle title='Profile' />
       {/* user location */}
       {loading ? (
-        <div></div>
+        <Loader />
       ) : (
-        // loading component
         <>
           <Top>
             <Avatar url={data?.seeProfile?.avatar || ''} size={80} />
@@ -194,14 +207,7 @@ function Profile() {
                 )}
               </Row>
               <Row>
-                <Count>
-                  거래건수:{' '}
-                  {
-                    data?.seeProfile?.posts?.filter(
-                      (post) => post?.dealt === false
-                    ).length
-                  }
-                </Count>
+                <Count>거래건수: {data?.seeProfile?.dealtCount}</Count>
                 <Following>
                   팔로워 수: {data?.seeProfile?.followingCount}
                 </Following>

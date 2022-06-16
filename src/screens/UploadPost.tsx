@@ -15,6 +15,7 @@ import { createPost, createPostVariables } from '../__generated__/createPost';
 import { useNavigate } from 'react-router-dom';
 import GetMeUser from '../hooks/getMeUser';
 import { getFormatValue } from '../utils';
+import CategoryBlock from '../components/CategoryBlock';
 
 const Preview = styled.div``;
 const Left = styled.div`
@@ -86,11 +87,12 @@ const Right = styled.div`
         display: block;
         margin-top: 10px;
         font-size: 18px;
+        height: 15px;
       }
       input {
         margin-top: 15px;
         border: none;
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.3);
         outline: none;
       }
     }
@@ -125,14 +127,14 @@ const CREATE_POST_MUTATION = gql`
     $price: Int!
     $caption: String!
     $photos: [Upload!]!
-    $categoryId: Int!
+    $categoryName: String!
   ) {
     createPost(
       title: $title
       price: $price
       caption: $caption
       photos: $photos
-      categoryId: $categoryId
+      categoryName: $categoryName
     ) {
       ok
       error
@@ -150,13 +152,18 @@ function UploadPost() {
   const onInValid: SubmitErrorHandler<createPostVariables> = ({
     title,
     caption,
+    categoryName,
   }) => {
     if (title?.message) {
-      alert(title?.message);
+      alert(title.message);
       return;
     }
     if (caption?.message) {
-      alert(title?.message);
+      alert(caption.message);
+      return;
+    }
+    if (categoryName?.message) {
+      alert(categoryName.message);
     }
   };
 
@@ -164,7 +171,7 @@ function UploadPost() {
     title,
     caption,
     price,
-    categoryId,
+    categoryName,
   }) => {
     if (loading) return;
     const li = await Promise.all(
@@ -172,7 +179,7 @@ function UploadPost() {
     );
     // 카테고리 수정
     createPost({
-      variables: { title, caption, categoryId: 1, photos: li, price: +price },
+      variables: { title, caption, categoryName, photos: li, price: +price },
     });
   };
 
@@ -363,15 +370,7 @@ function UploadPost() {
             />
           </div>
 
-          <div>
-            <label htmlFor='categoryId'>Category</label>
-            <input
-              id='categoryId'
-              placeholder='categoryId'
-              {...register('categoryId')}
-              // 카테고리 수정
-            />
-          </div>
+          <CategoryBlock register={register} />
         </form>
       </Right>
     </Modal>

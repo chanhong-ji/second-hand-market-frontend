@@ -7,6 +7,7 @@ export const USER_FRAGMENT = gql`
     avatar
     followingCount
     postsCount
+    dealtCount
     zone {
       id
       name

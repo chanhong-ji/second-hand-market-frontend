@@ -5,3 +5,8 @@ export const getFormatValue = (value: number) => {
   }).format(value);
   return formatValue;
 };
+
+export const getZoneId = (first: string, second: string) => {
+  const secondZoneCode = second.padStart(2, '0');
+  return +(first + secondZoneCode);
+};

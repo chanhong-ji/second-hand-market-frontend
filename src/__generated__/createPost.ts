@@ -22,5 +22,5 @@ export interface createPostVariables {
   price: number;
   caption: string;
   photos: any[];
-  categoryId: number;
+  categoryName: string;
 }

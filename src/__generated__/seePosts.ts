@@ -7,36 +7,36 @@
 // GraphQL query operation: seePosts
 // ====================================================
 
-export interface seePosts_seePosts_user {
+export interface seePosts_seePosts_posts_user {
   __typename: "User";
   id: number;
   name: string;
   avatar: string | null;
 }
 
-export interface seePosts_seePosts_zone {
+export interface seePosts_seePosts_posts_zone {
   __typename: "Zone";
   id: number;
   name: string;
 }
 
-export interface seePosts_seePosts_category {
+export interface seePosts_seePosts_posts_category {
   __typename: "Category";
   id: number;
   name: string;
 }
 
-export interface seePosts_seePosts {
+export interface seePosts_seePosts_posts {
   __typename: "Post";
   id: number;
   title: string;
   caption: string;
   dealt: boolean;
   price: number;
-  user: seePosts_seePosts_user;
+  user: seePosts_seePosts_posts_user;
   photos: string[];
-  zone: seePosts_seePosts_zone;
-  category: seePosts_seePosts_category;
+  zone: seePosts_seePosts_posts_zone;
+  category: seePosts_seePosts_posts_category;
   isMine: boolean;
   isInterest: boolean;
   interestsCount: number;
@@ -44,12 +44,18 @@ export interface seePosts_seePosts {
   updatedAt: string;
 }
 
+export interface seePosts_seePosts {
+  __typename: "SeePostsResult";
+  posts: (seePosts_seePosts_posts | null)[];
+  totalResults: number;
+}
+
 export interface seePosts {
-  seePosts: (seePosts_seePosts | null)[] | null;
+  seePosts: seePosts_seePosts;
 }
 
 export interface seePostsVariables {
   zoneId: number;
-  categoryId?: number | null;
+  categoryName?: string | null;
   page?: number | null;
 }

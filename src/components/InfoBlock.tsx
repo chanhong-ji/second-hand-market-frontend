@@ -1,6 +1,6 @@
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { getFormatValue } from '../utils';
 
@@ -59,6 +59,7 @@ interface IProps {
     name: string;
   };
   photos: string[];
+  categoryName: string;
 }
 
 function InfoBlock({
@@ -68,6 +69,7 @@ function InfoBlock({
   category,
   photos,
   price,
+  categoryName,
 }: IProps) {
   const formatPrice = String(getFormatValue(price)).slice(1);
   return (
@@ -78,7 +80,14 @@ function InfoBlock({
       <Exp>{`${caption}`}</Exp>
       <Link
         to='edit'
-        state={{ title, caption, photoUrl: photos[0], postId, price }}
+        state={{
+          title,
+          caption,
+          photoUrl: photos[0],
+          postId,
+          price,
+          categoryName,
+        }}
       >
         <EditBtn>
           <span>Edit Post</span>

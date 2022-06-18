@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react';
 
 const PrevBtn = styled.button``;
 const NextBtn = styled.button``;
@@ -57,12 +58,22 @@ const Wrapper = styled.div`
 
 interface IProps {
   page: number;
-  curPages: number[];
   totalPage: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function Pagination({ page, curPages, totalPage, setPage }: IProps) {
+function Pagination({ page, totalPage, setPage }: IProps) {
+  const [curPages, setCurPages] = useState<number[]>([]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+    const stand = Math.floor((page - 1) / 10);
+    const paginationArray = Array.from(Array(10).keys())
+      .map((i) => stand * 10 + i + 1)
+      .filter((i) => i <= totalPage);
+    setCurPages(paginationArray);
+  }, [totalPage]);
+
   return (
     <Wrapper>
       <PrevBtn disabled={page == 1} onClick={() => setPage((prev) => prev - 1)}>
@@ -70,12 +81,11 @@ function Pagination({ page, curPages, totalPage, setPage }: IProps) {
         Previous
       </PrevBtn>
 
-      {!!curPages &&
-        curPages.map((n) => (
-          <P key={n + ''} onClick={() => setPage(n)} now={n === page}>
-            {n}
-          </P>
-        ))}
+      {curPages.map((n) => (
+        <P key={n + ''} onClick={() => setPage(n)} now={n === page}>
+          {n}
+        </P>
+      ))}
 
       <NextBtn
         disabled={page === totalPage}

@@ -6,12 +6,10 @@ import { createUploadLink } from 'apollo-upload-client';
 
 export const LoggedInVar = makeVar(Boolean(localStorage.getItem('token')));
 export const tokenVar = makeVar(localStorage.getItem('token'));
-export const zoneIdVar = makeVar(localStorage.getItem('zoneId') ?? 1);
 
 export const getUserLogin = async (token: string) => {
   LoggedInVar(true);
   tokenVar(token);
-  zoneIdVar(localStorage.getItem('zoneId') ?? 1);
   await localStorage.setItem('token', token);
 };
 
@@ -33,7 +31,6 @@ const cache = new InMemoryCache({
     Query: {
       fields: {
         searchZone: offsetLimitPagination(),
-        searchPost: offsetLimitPagination(),
       },
     },
   },

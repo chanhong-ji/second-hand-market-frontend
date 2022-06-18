@@ -1,9 +1,10 @@
 import { useReactiveVar } from '@apollo/client';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getUserLogout, LoggedInVar, zoneIdVar } from '../apollo';
+import { getUserLogout, LoggedInVar } from '../apollo';
 import getMeUser from '../hooks/getMeUser';
 import Avatar from './Avatar';
+import SearchBar from './SearchBar';
 
 const Wrapper = styled.header`
   position: fixed;
@@ -15,7 +16,6 @@ const Wrapper = styled.header`
   padding: ${(props) => props.theme.size.header.padding};
   border-bottom: 2px solid ${(p) => p.theme.color.border};
   z-index: 1;
-
   display: flex;
   justify-content: space-between;
 `;
@@ -23,6 +23,13 @@ const Wrapper = styled.header`
 const Column = styled.div`
   display: flex;
   align-items: center;
+  :first-child {
+    margin-right: 50px;
+  }
+  :nth-child(2) {
+    width: 700px;
+    min-width: 400px;
+  }
   :last-child {
     * {
       margin-left: 20px;
@@ -43,6 +50,9 @@ function Header() {
     <Wrapper>
       <Column>
         <Item onClick={() => navigate('/')}>Home</Item>
+      </Column>
+      <Column>
+        <SearchBar />
       </Column>
       {loggedIn ? (
         <Column>

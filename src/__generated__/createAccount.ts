@@ -21,5 +21,6 @@ export interface createAccountVariables {
   name: string;
   password: string;
   phone: number;
-  zoneId: number;
+  zoneFirst: number;
+  zoneSecond: number;
 }

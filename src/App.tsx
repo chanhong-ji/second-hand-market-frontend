@@ -15,6 +15,7 @@ import Post from './screens/Post';
 import NotFound from './screens/NotFound';
 import EditPost from './screens/EditPost';
 import UploadPost from './screens/UploadPost';
+import Search from './screens/Search';
 
 function App() {
   const LoggedIn = useReactiveVar(LoggedInVar);
@@ -42,6 +43,7 @@ function App() {
               />
               <Route path='profiles/:id' element={<Profile />} />
               <Route path='profiles/:id/edit' element={<EditProfile />} />
+              <Route path='search' element={<Search />} />
               <Route path='posts/:id' element={<Post />}>
                 <Route path='edit' element={<EditPost />} />
               </Route>

@@ -16,13 +16,15 @@ const EDIT_PROFILE = gql`
     $name: String
     $password: String
     $avatar: Upload
-    $zoneId: Int!
+    $zoneFirst: Int!
+    $zoneSecond: Int!
   ) {
     editProfile(
       name: $name
       password: $password
       avatar: $avatar
-      zoneId: $zoneId
+      zoneFirst: $zoneFirst
+      zoneSecond: $zoneSecond
     ) {
       ok
       error
@@ -44,25 +46,26 @@ function EditProfile() {
   const onValid = ({
     name,
     avatar,
-    first,
-    second,
     password,
     passwordConfirm,
+    zoneFirst,
+    zoneSecond,
   }: editProfileVariables & IForm) => {
+    if (loading) return;
     if (password !== passwordConfirm)
       return setError(
         'password',
         { message: 'Password confirm wrong' },
         { shouldFocus: true }
       );
-    const secondZoneCode = second.padStart(2, '0');
-    const zoneId = +(first + secondZoneCode);
+
     editProfile({
       variables: {
         name,
         ...(avatar.length > 0 && { avatar: avatar[0] }),
         password,
-        zoneId,
+        zoneFirst: +zoneFirst,
+        zoneSecond: +zoneSecond,
       },
     });
   };
@@ -80,8 +83,7 @@ function EditProfile() {
     register,
     handleSubmit,
     setError,
-    formState: { errors, isValid },
-    clearErrors,
+    formState: { errors },
   } = useForm<editProfileVariables & IForm>({ mode: 'onChange' });
 
   useEffect(() => {
@@ -108,7 +110,7 @@ function EditProfile() {
           placeholder='passwordConfirm'
           {...register('passwordConfirm')}
         />
-        <ZoneBlock register={register} defaultValue={meData?.me?.zoneId + ''} />
+        <ZoneBlock register={register} />
         <label htmlFor='avatar'>avatar</label>
         <Input
           id='avatar'

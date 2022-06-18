@@ -7,6 +7,9 @@ declare module 'styled-components' {
         layout: string;
         main: string;
       };
+      header: {
+        input: string;
+      };
       input: string;
       form: string;
       border: string;

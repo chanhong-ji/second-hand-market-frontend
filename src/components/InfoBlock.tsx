@@ -60,6 +60,7 @@ interface IProps {
   };
   photos: string[];
   categoryName: string;
+  isMine: boolean;
 }
 
 function InfoBlock({
@@ -70,6 +71,7 @@ function InfoBlock({
   photos,
   price,
   categoryName,
+  isMine,
 }: IProps) {
   const formatPrice = String(getFormatValue(price)).slice(1);
   return (
@@ -87,12 +89,15 @@ function InfoBlock({
           postId,
           price,
           categoryName,
+          isMine,
         }}
       >
-        <EditBtn>
-          <span>Edit Post</span>
-          <FontAwesomeIcon icon={faArrowRight} />
-        </EditBtn>
+        {!!isMine && (
+          <EditBtn>
+            <span>Edit Post</span>
+            <FontAwesomeIcon icon={faArrowRight} />
+          </EditBtn>
+        )}
       </Link>
     </Info>
   );

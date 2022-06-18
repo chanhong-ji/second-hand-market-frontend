@@ -7,6 +7,9 @@ export const theme: DefaultTheme = {
       layout: 'whitesmoke',
       main: 'white',
     },
+    header: {
+      input: 'white',
+    },
     input: 'rgba(0, 0, 0, 0.3)',
     form: 'rgba(0, 0, 0, 0.2)',
     border: 'rgba(0, 0, 0, 0.1)',
@@ -18,7 +21,7 @@ export const theme: DefaultTheme = {
   size: {
     header: {
       height: '80px',
-      padding: '20px',
+      padding: '17px',
     },
     main: { width: '50%' },
     arrow: '20px',

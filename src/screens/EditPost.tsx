@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -161,6 +161,13 @@ function EditPost() {
     { onCompleted }
   );
 
+  useEffect(() => {
+    if (location.state === null || !!!location.state?.isMine) {
+      alert('Wrong access');
+      navigate('/', { replace: true });
+    }
+  }, []);
+
   return (
     <Modal
       title='Edit'
@@ -222,7 +229,6 @@ function EditPost() {
             register={register}
             defaultValue={location.state?.categoryName}
           />
-          {/* default Value 넣기 */}
         </form>
       </Right>
     </Modal>

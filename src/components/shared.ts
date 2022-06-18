@@ -28,6 +28,17 @@ export const SubmitInput = styled(Input)`
 export interface IForm {
   passwordConfirm: string;
   result: string;
-  first: string;
-  second: string;
 }
+
+export const PostsWrapper = styled.div`
+  background-color: ${(p) => p.theme.color.bg.main};
+  border: 1px solid ${(p) => p.theme.color.border};
+  border-radius: 10px;
+  margin-top: 40px;
+  width: 100%;
+  min-height: 300px;
+  position: relative;
+  padding-bottom: 60px;
+`;
+
+export const PER_PAGE = 12;

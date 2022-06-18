@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import ErrorMessage from '../components/ErrorMessage';
 import { AuthForm, AuthWrapper, IForm, Input } from '../components/shared';
 import ZoneBlock from '../components/ZoneBlock';
-import { getZoneId } from '../utils';
 import {
   createAccount,
   createAccountVariables,
@@ -15,13 +14,15 @@ const CREATE_ACCOUNT_MUTATION = gql`
     $name: String!
     $password: String!
     $phone: Int!
-    $zoneId: Int!
+    $zoneFirst: Int!
+    $zoneSecond: Int!
   ) {
     createAccount(
       name: $name
       password: $password
       phone: $phone
-      zoneId: $zoneId
+      zoneFirst: $zoneFirst
+      zoneSecond: $zoneSecond
     ) {
       ok
       error
@@ -46,8 +47,8 @@ function SignUp() {
     name,
     password,
     passwordConfirm,
-    first,
-    second,
+    zoneFirst,
+    zoneSecond,
   }) => {
     if (loading) return;
     if (password !== passwordConfirm)
@@ -58,13 +59,13 @@ function SignUp() {
           shouldFocus: true,
         }
       );
-
     createAccount({
       variables: {
         phone: +phone,
         name,
         password,
-        zoneId: getZoneId(first, second),
+        zoneFirst: +zoneFirst,
+        zoneSecond: +zoneSecond,
       },
     });
   };

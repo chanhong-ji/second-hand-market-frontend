@@ -12,6 +12,8 @@ const ME_QUERY = gql`
       avatar
       followingCount
       zoneId
+      zoneFirst
+      zoneSecond
       zone {
         name
       }

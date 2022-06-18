@@ -57,6 +57,7 @@ function Post() {
               photos={data.seePost.photos}
               price={data.seePost.price}
               categoryName={data.seePost.category.name}
+              isMine={data.seePost.isMine}
             />
           </>
         ) : (

@@ -10,6 +10,7 @@ import NotFound from './NotFound';
 
 const Wrapper = styled.div`
   width: 80%;
+  min-width: 500px;
   margin: 30px auto;
 `;
 
@@ -39,7 +40,10 @@ function Post() {
           <div>loading....</div>
         ) : data?.seePost ? (
           <>
-            <PhotoBlock photos={data.seePost.photos} />
+            <PhotoBlock
+              photos={data.seePost.photos}
+              isDealt={data.seePost.dealt}
+            />
             <OwnerBlock
               postId={+id}
               user={data.seePost.user}
@@ -58,6 +62,7 @@ function Post() {
               price={data.seePost.price}
               categoryName={data.seePost.category.name}
               isMine={data.seePost.isMine}
+              isDealt={data.seePost.dealt}
             />
           </>
         ) : (

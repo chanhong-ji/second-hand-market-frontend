@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import styled, { ThemeContext } from 'styled-components';
 
 const Indicator = styled.div``;
+const Overlay = styled.div``;
 const Photos = styled.div<{ photo: string }>`
   background-color: white;
   background-image: ${(p) => `url("${p.photo}")`};
@@ -14,6 +15,23 @@ const Photos = styled.div<{ photo: string }>`
   padding-bottom: 60%;
   border-radius: 10px;
   position: relative;
+  ${Overlay} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 50px;
+    }
+  }
   ${Indicator} {
     position: absolute;
     bottom: 0;
@@ -33,9 +51,10 @@ const Dot = styled.div<{ now: boolean }>`
 
 interface IProps {
   photos: string[];
+  isDealt: boolean;
 }
 
-function PhotoBlock({ photos }: IProps) {
+function PhotoBlock({ photos, isDealt }: IProps) {
   const onClickLeftArrow = () => {
     setPhotoN((prev) => (prev == 0 ? photoUrls.length - 1 : prev - 1));
   };
@@ -57,6 +76,11 @@ function PhotoBlock({ photos }: IProps) {
 
   return (
     <Photos photo={photoUrls[photoN]}>
+      {isDealt && (
+        <Overlay>
+          <span>Dealt complete</span>
+        </Overlay>
+      )}
       {photoUrls.length > 1 && (
         <>
           <FontAwesomeIcon

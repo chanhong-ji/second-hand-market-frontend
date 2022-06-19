@@ -10,6 +10,10 @@ import {
 } from '../__generated__/toggleInterest';
 import { ApolloCache, gql, useMutation } from '@apollo/client';
 import { deletePost, deletePostVariables } from '../__generated__/deletePost';
+import {
+  getDealtPost,
+  getDealtPostVariables,
+} from '../__generated__/getDealtPost';
 
 const Container = styled.div``;
 const Left = styled.div``;
@@ -22,6 +26,7 @@ const Chat = styled.div``;
 const ChatBtn = styled.div``;
 const BookmarkBtn = styled.div``;
 const DeleteBtn = styled.div``;
+const DealtBtn = styled.div``;
 const Owner = styled.div`
   width: 100%;
   padding: 20px 0;
@@ -69,7 +74,8 @@ const Owner = styled.div`
 
       ${ChatBtn},
       ${BookmarkBtn},
-      ${DeleteBtn} {
+      ${DeleteBtn},
+      ${DealtBtn} {
         font-size: 13px;
         padding: 8px;
         background-color: ${(p) => p.theme.color.accent};
@@ -78,7 +84,8 @@ const Owner = styled.div`
         margin-left: 5px;
         cursor: pointer;
       }
-      ${DeleteBtn} {
+      ${DeleteBtn},
+      ${DealtBtn} {
         font-size: 10px;
         border-radius: 5px;
         opacity: 0.7;
@@ -102,6 +109,15 @@ const TOGGLE_INTEREST_MUTATION = gql`
 const DELETE_POST_MUTATION = gql`
   mutation deletePost($deletePostId: Int!) {
     deletePost(id: $deletePostId) {
+      ok
+      error
+    }
+  }
+`;
+
+const GET_DEALT_POST_MUTATION = gql`
+  mutation getDealtPost($getDealtPostId: Int!) {
+    getDealtPost(id: $getDealtPostId) {
       ok
       error
     }
@@ -162,6 +178,25 @@ function OwnerBlock({
       deletePost();
     }
   };
+  const onDealtBtn = async () => {
+    const answer = await window.confirm('Is this a post completed?');
+    if (answer) {
+      getDealtPost();
+    }
+  };
+  const onDealtUpdate = (cache: ApolloCache<any>, result: any) => {
+    const {
+      getDealtPost: { ok, error },
+    } = result.data;
+    if (!ok) return alert(error);
+
+    cache.modify({
+      id: `Post:${postId}`,
+      fields: {
+        dealt: () => true,
+      },
+    });
+  };
 
   const navigate = useNavigate();
   const [toggleInterest] = useMutation<toggleInterest, toggleInterestVariables>(
@@ -182,6 +217,11 @@ function OwnerBlock({
       },
     }
   );
+  const [getDealtPost] = useMutation<getDealtPost, getDealtPostVariables>(
+    GET_DEALT_POST_MUTATION,
+    { variables: { getDealtPostId: postId }, update: onDealtUpdate }
+  );
+
   return (
     <Owner>
       <Left>
@@ -220,8 +260,13 @@ function OwnerBlock({
               {/* go to chat */}
               <BookmarkBtn onClick={onBookmark}>Book mark</BookmarkBtn>
             </>
-          ) : dealt ? null : (
+          ) : dealt ? (
             <DeleteBtn onClick={onDeletePost}>Delete Post</DeleteBtn>
+          ) : (
+            <>
+              <DealtBtn onClick={onDealtBtn}>Dealt Complete</DealtBtn>
+              <DeleteBtn onClick={onDeletePost}>Delete Post</DeleteBtn>
+            </>
           )}
         </Row>
       </Right>

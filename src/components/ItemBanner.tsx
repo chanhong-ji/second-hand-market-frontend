@@ -25,6 +25,8 @@ const Container = styled.div`
     text-overflow: ellipsis;
   }
 `;
+
+const Overlay = styled.div``;
 const Photo = styled.div<{ img: string }>`
   width: 100%;
   padding-bottom: 100%;
@@ -32,6 +34,24 @@ const Photo = styled.div<{ img: string }>`
   background-position: center;
   background-size: cover;
   border-radius: 10%;
+  position: relative;
+  ${Overlay} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 30px;
+    }
+  }
 `;
 const Title = styled.div``;
 const Price = styled.div``;
@@ -41,6 +61,7 @@ const Chatcount = styled.div``;
 const Info = styled.div`
   padding: 15px 5px;
   width: 100%;
+
   ${Title} {
     font-size: 17px;
   }
@@ -76,7 +97,15 @@ function ItemBanner({
   const formatPrice = getFormatValue(price);
   return (
     <Container onClick={goToArticle}>
-      {photos !== (undefined || null) && <Photo img={photos[0] || ''} />}
+      {photos !== (undefined || null) && (
+        <Photo img={photos[0] || ''}>
+          {dealt && (
+            <Overlay>
+              <span>Dealt</span>
+            </Overlay>
+          )}
+        </Photo>
+      )}
       <Info>
         <Title>{title}</Title>
         <Zone>{zone.name}</Zone>

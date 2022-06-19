@@ -61,6 +61,7 @@ interface IProps {
   photos: string[];
   categoryName: string;
   isMine: boolean;
+  isDealt: boolean;
 }
 
 function InfoBlock({
@@ -72,6 +73,7 @@ function InfoBlock({
   price,
   categoryName,
   isMine,
+  isDealt,
 }: IProps) {
   const formatPrice = String(getFormatValue(price)).slice(1);
   return (
@@ -92,7 +94,7 @@ function InfoBlock({
           isMine,
         }}
       >
-        {!!isMine && (
+        {!!isMine && !!!isDealt && (
           <EditBtn>
             <span>Edit Post</span>
             <FontAwesomeIcon icon={faArrowRight} />

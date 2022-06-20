@@ -10,7 +10,7 @@ const ME_QUERY = gql`
       name
       phone
       avatar
-      followingCount
+      followerCount
       zoneId
       zoneFirst
       zoneSecond

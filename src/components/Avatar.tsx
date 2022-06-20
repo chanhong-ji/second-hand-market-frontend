@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 interface IProps {
   size: number;
-  url: string | null;
+  url: string | null | undefined;
   onClick?: () => any;
 }
 

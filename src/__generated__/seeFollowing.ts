@@ -4,27 +4,23 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL fragment: UserFragment
+// GraphQL query operation: seeFollowing
 // ====================================================
 
-export interface UserFragment_zone {
-  __typename: "Zone";
-  id: number;
-  name: string;
-}
-
-export interface UserFragment {
+export interface seeFollowing_seeFollowing {
   __typename: "User";
   id: number;
   name: string;
   avatar: string | null;
-  followerCount: number;
-  followingCount: number;
-  postsCount: number;
-  dealtCount: number;
-  zone: UserFragment_zone;
-  isMe: boolean;
+  zoneId: string;
   isFollowing: boolean;
-  createdAt: string;
-  updatedAt: string;
+}
+
+export interface seeFollowing {
+  seeFollowing: (seeFollowing_seeFollowing | null)[] | null;
+}
+
+export interface seeFollowingVariables {
+  userId: number;
+  offset?: number | null;
 }

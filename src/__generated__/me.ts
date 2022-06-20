@@ -18,7 +18,7 @@ export interface me_me {
   name: string;
   phone: number;
   avatar: string | null;
-  followingCount: number;
+  followerCount: number;
   zoneId: string;
   zoneFirst: number | null;
   zoneSecond: number | null;

@@ -35,6 +35,7 @@ export interface seeProfile_seeProfile {
   id: number;
   name: string;
   avatar: string | null;
+  followerCount: number;
   followingCount: number;
   postsCount: number;
   dealtCount: number;

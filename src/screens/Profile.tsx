@@ -1,13 +1,14 @@
 import { ApolloCache, gql, useMutation, useQuery } from '@apollo/client';
-import { useMotionValue, useViewportScroll } from 'framer-motion';
-import { useEffect, useRef } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useViewportScroll } from 'framer-motion';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Avatar from '../components/Avatar';
-import ItemBanner from '../components/ItemBanner';
 import Loader from '../components/Loader';
 import PageTitle from '../components/PageTitle';
+import ProfileBottom from '../components/ProfileBottom';
 import { USER_FRAGMENT } from '../fragment';
+import GetMeUser from '../hooks/getMeUser';
 import { seeProfile } from '../__generated__/seeProfile';
 import {
   toggleFollow,
@@ -22,7 +23,6 @@ const Top = styled.article`
   padding: 50px 0;
   display: flex;
 `;
-
 const Btn = styled.div`
   padding: 7px;
   border-radius: 10px;
@@ -32,7 +32,6 @@ const Btn = styled.div`
   cursor: pointer;
   background-color: ${(p) => p.theme.color.accent};
 `;
-
 const Zone = styled.div``;
 const Count = styled.div``;
 const Following = styled.div``;
@@ -68,25 +67,6 @@ const Info = styled.div`
   }
 `;
 
-const Column = styled.div``;
-const NavBar = styled.div`
-  border-bottom: 1px solid ${(p) => p.theme.color.border};
-  display: flex;
-  align-items: center;
-  ${Column} {
-    border-bottom: 3px solid tomato;
-    padding: 10px 20px;
-  }
-`;
-
-const Bottom = styled.article`
-  width: 100%;
-  padding: 50px 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 40px;
-`;
-
 const SEE_PROFILE_QUERY = gql`
   query seeProfile($id: Int!, $offset: Int) {
     seeProfile(id: $id, offset: $offset) {
@@ -108,7 +88,7 @@ const SEE_PROFILE_QUERY = gql`
   ${USER_FRAGMENT}
 `;
 
-const TOGGLE_FOLLOW_MUTATION = gql`
+export const TOGGLE_FOLLOW_MUTATION = gql`
   mutation toggleFollow($id: Int!) {
     toggleFollow(id: $id) {
       ok
@@ -122,17 +102,29 @@ function Profile() {
     const {
       toggleFollow: { ok, error },
     } = result.data;
-    if (!ok) return;
+    if (!ok) return alert(error);
+    if (!!!data?.seeProfile) return;
 
+    let follow = false;
     cache.modify({
-      id: `User:${data?.seeProfile?.id}`,
+      id: `User:${data.seeProfile.id}`,
       fields: {
         isFollowing(prev) {
           return !prev;
         },
-        followingCount(prev, { readField }) {
+        followerCount(prev, { readField }) {
           const isFollowing = readField('isFollowing');
+          follow = !isFollowing;
           return isFollowing ? prev - 1 : prev + 1;
+        },
+      },
+    });
+
+    cache.modify({
+      id: `User:${meData?.me?.id}`,
+      fields: {
+        followingCount(prev) {
+          return follow ? prev + 1 : prev - 1;
         },
       },
     });
@@ -147,6 +139,7 @@ function Profile() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { scrollYProgress } = useViewportScroll();
+  const meData = GetMeUser();
   const { data, loading, fetchMore } = useQuery<seeProfile>(SEE_PROFILE_QUERY, {
     skip: !!!/^\d+$/.test(id || ''),
     variables: { id: id ? +id : null, offset: 0 },
@@ -185,12 +178,11 @@ function Profile() {
       ) : (
         <>
           <Top>
-            <Avatar url={data?.seeProfile?.avatar || ''} size={80} />
+            <Avatar url={data?.seeProfile?.avatar} size={80} />
             <Info>
               <Row>
                 <Username>{data?.seeProfile?.name}</Username>
                 <Zone>{data?.seeProfile?.zone?.name}</Zone>
-                {/* zone 리스트로 navigate */}
                 {!!!data?.seeProfile?.isMe && (
                   <FollowBtn onClick={onToggleFollow}>
                     {data?.seeProfile?.isFollowing ? 'UnFollow' : 'Follow'}
@@ -209,21 +201,12 @@ function Profile() {
               <Row>
                 <Count>거래건수: {data?.seeProfile?.dealtCount}</Count>
                 <Following>
-                  팔로워 수: {data?.seeProfile?.followingCount}
+                  팔로워 수: {data?.seeProfile?.followerCount}
                 </Following>
               </Row>
             </Info>
           </Top>
-          <NavBar>
-            <Column>판매물품 ({data?.seeProfile?.postsCount})</Column>
-            <Column>거래 후기</Column>
-          </NavBar>
-          <Bottom>
-            {data?.seeProfile?.posts?.map((post) =>
-              post?.id ? <ItemBanner {...post} key={post.id} /> : null
-            )}
-          </Bottom>
-          {/* dealt 구분하기 */}
+          {data?.seeProfile && <ProfileBottom {...data.seeProfile} />}
         </>
       )}
     </Wrapper>

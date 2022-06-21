@@ -124,7 +124,7 @@ function FollowingBanner(user: IProps) {
 
   return (
     <Wrapper onClick={() => navigate(`/profiles/${user.id}`)}>
-      <Avatar url={user.avatar} size={60} onClick={() => {}} />
+      <Avatar url={user.avatar} size={60} />
       <Container>
         <Username>{user.name}</Username>
         <Zone>

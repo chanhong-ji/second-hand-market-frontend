@@ -14,6 +14,7 @@ import {
   toggleFollow,
   toggleFollowVariables,
 } from '../__generated__/toggleFollow';
+import NotFound from './NotFound';
 
 const Wrapper = styled.div`
   margin-top: 5px;
@@ -140,31 +141,38 @@ function Profile() {
   const navigate = useNavigate();
   const { scrollYProgress } = useViewportScroll();
   const meData = GetMeUser();
-  const { data, loading, fetchMore } = useQuery<seeProfile>(SEE_PROFILE_QUERY, {
-    skip: !!!/^\d+$/.test(id || ''),
-    variables: { id: id ? +id : null, offset: 0 },
-  });
+  const { data, loading, fetchMore, refetch } = useQuery<seeProfile>(
+    SEE_PROFILE_QUERY,
+    {
+      skip: !!!/^\d+$/.test(id || ''),
+      variables: { id: id ? +id : null, offset: 0 },
+    }
+  );
   const [toggleFollow] = useMutation<toggleFollow, toggleFollowVariables>(
     TOGGLE_FOLLOW_MUTATION,
     { update: onToggleUpdate }
   );
 
   useEffect(() => {
-    if (!!!/^\d+$/.test(id || '')) {
-      navigate('/notfound', { state: { type: 'profile' }, replace: true });
+    if (!!/^\d+$/.test(id || '')) {
+      refetch({
+        variable: {
+          id,
+        },
+      });
     }
   }, [id]);
 
   useEffect(() => {
-    scrollYProgress.onChange((value) => {
+    scrollYProgress.onChange(async (value) => {
       if (value > 0.95 && data?.seeProfile) {
-        scrollYProgress.clearListeners();
-        fetchMore({
+        await fetchMore({
           variables: {
             id: +data.seeProfile.id,
             offset: data.seeProfile.posts?.length,
           },
         });
+        scrollYProgress.clearListeners();
       }
     });
   }, [data]);
@@ -172,42 +180,47 @@ function Profile() {
   return (
     <Wrapper>
       <PageTitle title='Profile' />
-      {/* user location */}
-      {loading ? (
-        <Loader />
+      {!!/^\d+$/.test(id || '') ? (
+        loading ? (
+          <Loader />
+        ) : data?.seeProfile === null ? (
+          <NotFound>no user</NotFound>
+        ) : (
+          <>
+            <Top>
+              <Avatar url={data?.seeProfile?.avatar} size={80} />
+              <Info>
+                <Row>
+                  <Username>{data?.seeProfile?.name}</Username>
+                  <Zone>{data?.seeProfile?.zone?.name}</Zone>
+                  {!!!data?.seeProfile?.isMe && (
+                    <FollowBtn onClick={onToggleFollow}>
+                      {data?.seeProfile?.isFollowing ? 'UnFollow' : 'Follow'}
+                    </FollowBtn>
+                  )}
+                  {!!data?.seeProfile?.isMe && (
+                    <OwnerBtn
+                      onClick={() => {
+                        navigate('edit');
+                      }}
+                    >
+                      Edit Profile
+                    </OwnerBtn>
+                  )}
+                </Row>
+                <Row>
+                  <Count>거래건수: {data?.seeProfile?.dealtCount}</Count>
+                  <Following>
+                    팔로워 수: {data?.seeProfile?.followerCount}
+                  </Following>
+                </Row>
+              </Info>
+            </Top>
+            {data?.seeProfile && <ProfileBottom {...data.seeProfile} />}
+          </>
+        )
       ) : (
-        <>
-          <Top>
-            <Avatar url={data?.seeProfile?.avatar} size={80} />
-            <Info>
-              <Row>
-                <Username>{data?.seeProfile?.name}</Username>
-                <Zone>{data?.seeProfile?.zone?.name}</Zone>
-                {!!!data?.seeProfile?.isMe && (
-                  <FollowBtn onClick={onToggleFollow}>
-                    {data?.seeProfile?.isFollowing ? 'UnFollow' : 'Follow'}
-                  </FollowBtn>
-                )}
-                {!!data?.seeProfile?.isMe && (
-                  <OwnerBtn
-                    onClick={() => {
-                      navigate('edit');
-                    }}
-                  >
-                    Edit Profile
-                  </OwnerBtn>
-                )}
-              </Row>
-              <Row>
-                <Count>거래건수: {data?.seeProfile?.dealtCount}</Count>
-                <Following>
-                  팔로워 수: {data?.seeProfile?.followerCount}
-                </Following>
-              </Row>
-            </Info>
-          </Top>
-          {data?.seeProfile && <ProfileBottom {...data.seeProfile} />}
-        </>
+        <NotFound>Wrong access</NotFound>
       )}
     </Wrapper>
   );

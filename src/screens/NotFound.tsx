@@ -1,5 +1,5 @@
-function NotFound() {
-  return <div>not found page</div>;
+function NotFound({ children }: any) {
+  return <div>{children}</div>;
 }
 
 export default NotFound;

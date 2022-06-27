@@ -16,6 +16,8 @@ import NotFound from './screens/NotFound';
 import EditPost from './screens/EditPost';
 import UploadPost from './screens/UploadPost';
 import Search from './screens/Search';
+import Rooms from './screens/Rooms';
+import Room from './screens/Room';
 
 function App() {
   const LoggedIn = useReactiveVar(LoggedInVar);
@@ -46,6 +48,9 @@ function App() {
               <Route path='search' element={<Search />} />
               <Route path='posts/:id' element={<Post />}>
                 <Route path='edit' element={<EditPost />} />
+              </Route>
+              <Route path='room' element={<Rooms />}>
+                <Route path=':id' element={<Room />} />
               </Route>
               <Route path='*' element={<NotFound />} />
             </Route>

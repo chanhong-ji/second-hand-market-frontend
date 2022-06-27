@@ -1,8 +1,13 @@
-import { ApolloClient, InMemoryCache, makeVar } from '@apollo/client';
+import { ApolloClient, InMemoryCache, makeVar, split } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
-import { offsetLimitPagination } from '@apollo/client/utilities';
+import {
+  getMainDefinition,
+  offsetLimitPagination,
+} from '@apollo/client/utilities';
 import { createUploadLink } from 'apollo-upload-client';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 export const LoggedInVar = makeVar(Boolean(localStorage.getItem('token')));
 export const tokenVar = makeVar(localStorage.getItem('token'));
@@ -26,6 +31,15 @@ const cache = new InMemoryCache({
     User: {
       fields: {
         posts: offsetLimitPagination(),
+      },
+    },
+    Room: {
+      fields: {
+        messages: {
+          merge(existing = [], incoming: any[]) {
+            return [...existing, ...incoming];
+          },
+        },
       },
     },
     Query: {
@@ -55,8 +69,28 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+const wsLink = new WebSocketLink(
+  new SubscriptionClient('ws://localhost:4000/graphql', {
+    connectionParams: () => ({
+      token: localStorage.getItem('token'),
+    }),
+  })
+);
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  authLink.concat(errorLink).concat(httpLink)
+);
+
 const client = new ApolloClient({
-  link: authLink.concat(errorLink).concat(httpLink),
+  link: splitLink,
   cache,
 });
 

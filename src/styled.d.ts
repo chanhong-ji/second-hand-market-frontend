@@ -14,6 +14,8 @@ declare module 'styled-components' {
       form: string;
       border: string;
       accent: string;
+      blue: string;
+      main: string;
       font: {
         exp: string;
       };

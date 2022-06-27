@@ -57,6 +57,9 @@ function Header() {
       {loggedIn ? (
         <Column>
           <Item>
+            <Link to='room'>Chats</Link>
+          </Item>
+          <Item>
             <Link to='upload'>Upload</Link>
           </Item>
           <Avatar size={40} url={meData?.me?.avatar || ''} />

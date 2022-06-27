@@ -20,6 +20,24 @@ export const USER_FRAGMENT = gql`
   }
 `;
 
+export const ROOM_FRAGMENT = gql`
+  fragment RoomFragment on Room {
+    id
+    postId
+    post {
+      id
+      title
+      price
+      dealt
+    }
+    users {
+      id
+      name
+      avatar
+    }
+  }
+`;
+
 export const POST_FRAGMENT = gql`
   fragment PostFragment on Post {
     id
@@ -46,5 +64,15 @@ export const POST_FRAGMENT = gql`
     interestsCount
     createdAt
     updatedAt
+  }
+`;
+
+export const MESSAGE_FRAGMENT = gql`
+  fragment MessageFragment on Message {
+    id
+    payload
+    userId
+    read
+    createdAt
   }
 `;

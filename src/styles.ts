@@ -14,6 +14,8 @@ export const theme: DefaultTheme = {
     form: 'rgba(0, 0, 0, 0.2)',
     border: 'rgba(0, 0, 0, 0.1)',
     accent: 'tomato',
+    blue: '#1773ea',
+    main: 'whitesmoke',
     font: {
       exp: 'rgba(0, 0, 0, 0.7)',
     },

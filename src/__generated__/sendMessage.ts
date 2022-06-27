@@ -10,6 +10,7 @@
 export interface sendMessage_sendMessage {
   __typename: "MutationResult";
   ok: boolean;
+  id: number | null;
   error: string | null;
 }
 

@@ -8,6 +8,7 @@ import {
   sendMessageVariables,
 } from '../__generated__/sendMessage';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div<{ height: number }>`
   height: ${(p) => p.height}px;
@@ -104,13 +105,14 @@ const SEND_MESSAGE_MUTATION = gql`
   mutation sendMessage($postId: Int!, $payload: String!) {
     sendMessage(postId: $postId, payload: $payload) {
       ok
+      id
       error
     }
   }
 `;
 
 interface IProps {
-  messages: (seeRoom_seeRoom_messages | null)[];
+  messages?: (seeRoom_seeRoom_messages | null)[];
   postId: number;
 }
 
@@ -128,6 +130,7 @@ function Chats({ messages, postId }: IProps) {
 
   const meData = GetMeUser();
   const wrapperRef = useRef<any>();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -137,7 +140,13 @@ function Chats({ messages, postId }: IProps) {
   const [sendMessage, { loading, data }] = useMutation<
     sendMessage,
     sendMessageVariables
-  >(SEND_MESSAGE_MUTATION);
+  >(SEND_MESSAGE_MUTATION, {
+    onCompleted: (data) => {
+      if (data.sendMessage?.id) {
+        navigate(`/room/${data.sendMessage.id}`);
+      }
+    },
+  });
   const [containerHeight, setContainerHeight] = useState();
 
   useEffect(() => {
@@ -149,7 +158,7 @@ function Chats({ messages, postId }: IProps) {
   return (
     <Wrapper ref={wrapperRef}>
       <Container height={containerHeight ? containerHeight - 130 : 0}>
-        {messages.map((message) => (
+        {messages?.map((message) => (
           <Chat key={message?.id} mine={message?.userId == meData?.me?.id}>
             {message?.userId === meData?.me?.id && !message?.read && (
               <UnreadDot />

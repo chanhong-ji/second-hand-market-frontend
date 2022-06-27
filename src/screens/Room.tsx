@@ -1,7 +1,7 @@
 import { gql, useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { UpdateQueryFn } from '@apollo/client/core/watchQueryOptions';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Avatar from '../components/Avatar';
 import Chats from '../components/Chats';
@@ -115,6 +115,7 @@ function Room() {
 
   const { id: roomId } = useParams();
   const navigate = useNavigate();
+  const location: any = useLocation();
   const [subscribed, setSubscribed] = useState(false);
   const { cache } = useApolloClient();
   const meData = GetMeUser();
@@ -147,23 +148,34 @@ function Room() {
   }, [data, subscribed]);
 
   useEffect(() => {
-    if (roomId) {
+    if (roomId && data?.seeRoom?.id) {
       refetch({ roomId: +roomId });
     }
   }, []);
 
+  useEffect(() => {
+    if (data?.seeRoom == null && location.state) {
+      const fakeUser = {
+        avatar: location.state.avatar,
+        id: location.state.id,
+        name: location.state.name,
+      };
+      setTalkingTo(fakeUser);
+    }
+  }, [data]);
+
   return (
     <Wrapper>
-      {!!data && (
+      {talkingTo && (
+        <TalkingTo>
+          <Avatar size={50} url={talkingTo.avatar} />
+          <Username onClick={() => navigate(`/profiles/${talkingTo.id}/`)}>
+            {talkingTo.name}
+          </Username>
+        </TalkingTo>
+      )}
+      {!!data ? (
         <>
-          {talkingTo && (
-            <TalkingTo>
-              <Avatar size={50} url={talkingTo.avatar} />
-              <Username onClick={() => navigate(`/profiles/${talkingTo.id}/`)}>
-                {talkingTo.name}
-              </Username>
-            </TalkingTo>
-          )}
           <PostInfo onClick={() => navigate(`/posts/${data.seeRoom?.postId}`)}>
             {data.seeRoom?.post.title}
           </PostInfo>
@@ -174,7 +186,14 @@ function Room() {
             />
           )}
         </>
-      )}
+      ) : location.state?.id ? (
+        <>
+          <PostInfo onClick={() => navigate(`/posts/${location.state.postId}`)}>
+            {location.state.postTitle}
+          </PostInfo>
+          {<Chats postId={location.state.postId} />}
+        </>
+      ) : null}
     </Wrapper>
   );
 }

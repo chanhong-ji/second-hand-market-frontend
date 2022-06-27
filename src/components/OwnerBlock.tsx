@@ -139,6 +139,7 @@ interface IProps {
   isInterest: boolean;
   interestsCount: number;
   dealt: boolean;
+  postTitle: string;
 }
 
 function OwnerBlock({
@@ -149,6 +150,7 @@ function OwnerBlock({
   isInterest,
   interestsCount,
   dealt,
+  postTitle,
 }: IProps) {
   const onToggleInterestUpdate = (cache: ApolloCache<any>, result: any) => {
     const {
@@ -256,7 +258,21 @@ function OwnerBlock({
         <Row>
           {!isMine ? (
             <>
-              <ChatBtn>Send chat</ChatBtn>
+              <ChatBtn
+                onClick={() =>
+                  navigate(`/room/chat`, {
+                    state: {
+                      id: user.id,
+                      avatar: user.avatar,
+                      name: user.name,
+                      postId,
+                      postTitle,
+                    },
+                  })
+                }
+              >
+                Send chat
+              </ChatBtn>
               {/* go to chat */}
               <BookmarkBtn onClick={onBookmark}>Book mark</BookmarkBtn>
             </>

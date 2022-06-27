@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Avatar from '../components/Avatar';
 import GetMeUser from '../hooks/getMeUser';
@@ -83,10 +84,17 @@ function Rooms() {
   const dimensionHeight = window.innerHeight;
   const meData = GetMeUser();
   const navigate = useNavigate();
-  const { data } = useQuery<seeRooms>(SEE_ROOMS_QUERY, {
+  const params = useParams();
+  const { data, refetch } = useQuery<seeRooms>(SEE_ROOMS_QUERY, {
     variables: { userId: meData?.me?.id },
     skip: !!!meData?.me?.id,
   });
+
+  useEffect(() => {
+    if (params?.id && typeof +params.id === 'number') {
+      refetch({ userId: meData?.me?.id });
+    }
+  }, [params]);
 
   return (
     <Wrapper dHeight={dimensionHeight}>

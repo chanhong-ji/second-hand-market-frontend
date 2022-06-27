@@ -52,6 +52,7 @@ function Post() {
               isInterest={data.seePost.isInterest}
               isMine={data.seePost.isMine}
               dealt={data.seePost.dealt}
+              postTitle={data.seePost.title}
             />
             <InfoBlock
               postId={data.seePost.id}

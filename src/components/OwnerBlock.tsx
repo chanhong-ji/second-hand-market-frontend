@@ -14,6 +14,7 @@ import {
   getDealtPost,
   getDealtPostVariables,
 } from '../__generated__/getDealtPost';
+import { seePost_seePost } from '../__generated__/seePost';
 
 const Container = styled.div``;
 const Left = styled.div``;
@@ -124,37 +125,21 @@ const GET_DEALT_POST_MUTATION = gql`
   }
 `;
 
-interface IProps {
-  postId: number;
-  user: {
-    id: number;
-    name: string;
-    avatar: string | null;
-  };
-  zone: {
-    id: number;
-    name: string;
-  };
-  isMine: boolean;
-  isInterest: boolean;
-  interestsCount: number;
-  dealt: boolean;
-  postTitle: string;
-}
-
 function OwnerBlock({
-  postId,
+  id: postId,
+  title: postTitle,
+  dealt,
+  price: postPrice,
   user,
   zone,
   isMine,
+  hasRoom,
   isInterest,
   interestsCount,
-  dealt,
-  postTitle,
-}: IProps) {
+}: seePost_seePost) {
   const onToggleInterestUpdate = (cache: ApolloCache<any>, result: any) => {
     const {
-      toggleInterest: { ok, error },
+      toggleInterest: { ok },
     } = result.data;
 
     if (!ok) return;
@@ -214,8 +199,13 @@ function OwnerBlock({
           deletePost: { ok },
         } = data;
         if (!ok) return;
-        navigate('/');
-        window.location.reload();
+        navigate(`/profiles/${user.id}`);
+      },
+      update: (cache, result) => {
+        if (!!!result.data?.deletePost.ok) return;
+        cache.evict({
+          id: `Post:${postId}`,
+        });
       },
     }
   );
@@ -259,17 +249,22 @@ function OwnerBlock({
           {!isMine ? (
             <>
               <ChatBtn
-                onClick={() =>
-                  navigate(`/room/chat`, {
-                    state: {
-                      id: user.id,
-                      avatar: user.avatar,
-                      name: user.name,
-                      postId,
-                      postTitle,
-                    },
-                  })
-                }
+                onClick={() => {
+                  if (hasRoom == -1) {
+                    navigate(`/room/chat`, {
+                      state: {
+                        id: user.id,
+                        avatar: user.avatar,
+                        name: user.name,
+                        postId,
+                        postTitle,
+                        postPrice,
+                      },
+                    });
+                  } else {
+                    navigate(`/room/${hasRoom}`);
+                  }
+                }}
               >
                 Send chat
               </ChatBtn>

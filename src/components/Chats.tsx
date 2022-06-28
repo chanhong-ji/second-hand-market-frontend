@@ -10,9 +10,7 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Container = styled.div<{ height: number }>`
-  height: ${(p) => p.height}px;
-`;
+const Container = styled.div``;
 const Form = styled.div``;
 const UnreadDot = styled.div``;
 const Chat = styled.div<{ mine: boolean }>`
@@ -28,11 +26,10 @@ const Button = styled.div<{ isValid: boolean }>`
 `;
 const Wrapper = styled.div`
   padding: 0 20px;
-  flex-grow: 1;
   position: relative;
   padding-bottom: 130px;
   display: flex;
-  box-sizing: border-box;
+  height: ${(p) => p.theme.size.room.height.chat};
   ${Container} {
     width: 100%;
     display: flex;
@@ -43,11 +40,9 @@ const Wrapper = styled.div`
     ::-webkit-scrollbar {
       display: none; /* Chrome, Safari, Opera*/
     }
-
     ${Chat} {
       padding: 13px 15px;
       max-width: 400px;
-      /* 수정하기 */
       border-radius: 15px;
       font-size: 17px;
       line-height: 1.3;
@@ -147,17 +142,10 @@ function Chats({ messages, postId }: IProps) {
       }
     },
   });
-  const [containerHeight, setContainerHeight] = useState();
-
-  useEffect(() => {
-    if (wrapperRef?.current?.clientHeight) {
-      setContainerHeight(wrapperRef.current.clientHeight);
-    }
-  }, []);
 
   return (
     <Wrapper ref={wrapperRef}>
-      <Container height={containerHeight ? containerHeight - 130 : 0}>
+      <Container>
         {messages?.map((message) => (
           <Chat key={message?.id} mine={message?.userId == meData?.me?.id}>
             {message?.userId === meData?.me?.id && !message?.read && (

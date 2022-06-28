@@ -6,13 +6,18 @@ import Avatar from '../components/Avatar';
 import GetMeUser from '../hooks/getMeUser';
 import { seeRooms } from '../__generated__/seeRooms';
 
-const Wrapper = styled.div<{ dHeight: number }>`
+const Wrapper = styled.div`
   width: 100%;
-  height: ${(p) => p.dHeight - 110}px;
-  box-sizing: border-box;
-  padding-top: 30px;
+  min-width: 800px;
+  height: ${(p) => p.theme.size.room.height.whole};
+  margin-top: 30px;
   display: grid;
   grid-template-columns: 1fr 2fr;
+`;
+const Room = styled.div`
+  background-color: white;
+  border-left: 1px solid ${(p) => p.theme.color.border};
+  height: ${(p) => p.theme.size.room.height.whole};
 `;
 const MeName = styled.div``;
 const Mine = styled.div``;
@@ -21,6 +26,12 @@ const RoomBanner = styled.div``;
 const Username = styled.div``;
 const List = styled.div`
   background-color: white;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  ::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
   ${Mine} {
     display: flex;
     height: 70px;
@@ -59,10 +70,6 @@ const List = styled.div`
   }
 `;
 
-const Room = styled.div`
-  background-color: white;
-`;
-
 const SEE_ROOMS_QUERY = gql`
   query seeRooms($userId: Int!, $offset: Int) {
     seeRooms(userId: $userId, offset: $offset) {
@@ -81,7 +88,6 @@ const SEE_ROOMS_QUERY = gql`
 `;
 
 function Rooms() {
-  const dimensionHeight = window.innerHeight;
   const meData = GetMeUser();
   const navigate = useNavigate();
   const params = useParams();
@@ -91,13 +97,13 @@ function Rooms() {
   });
 
   useEffect(() => {
-    if (params?.id && typeof +params.id === 'number') {
-      refetch({ userId: meData?.me?.id });
+    if (params?.id && typeof +params.id === 'number' && meData?.me?.id) {
+      refetch({ userId: +meData?.me?.id });
     }
   }, [params]);
 
   return (
-    <Wrapper dHeight={dimensionHeight}>
+    <Wrapper>
       <List>
         {meData?.me && (
           <Mine>

@@ -17,6 +17,7 @@ const NavBar = styled.div`
   ${Column} {
     padding: 10px 20px;
     position: relative;
+    cursor: pointer;
     ${Indicator} {
       position: absolute;
       bottom: 0;

@@ -165,7 +165,7 @@ function Profile() {
 
   useEffect(() => {
     scrollYProgress.onChange(async (value) => {
-      if (value > 0.95 && data?.seeProfile) {
+      if (value > 0.95 && !!data?.seeProfile) {
         await fetchMore({
           variables: {
             id: +data.seeProfile.id,

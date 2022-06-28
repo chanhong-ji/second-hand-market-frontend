@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { getFormatValue } from '../utils';
+import { seePost_seePost } from '../__generated__/seePost';
 
 const Title = styled.div``;
 const Category = styled.div``;
@@ -49,32 +50,16 @@ const Info = styled.div`
   }
 `;
 
-interface IProps {
-  postId: number;
-  title: string;
-  caption: string;
-  price: number;
-  category: {
-    id: number;
-    name: string;
-  };
-  photos: string[];
-  categoryName: string;
-  isMine: boolean;
-  isDealt: boolean;
-}
-
 function InfoBlock({
-  postId,
+  id: postId,
   title,
   caption,
-  category,
-  photos,
+  dealt,
   price,
-  categoryName,
+  photos,
+  category,
   isMine,
-  isDealt,
-}: IProps) {
+}: seePost_seePost) {
   const formatPrice = String(getFormatValue(price)).slice(1);
   return (
     <Info>
@@ -90,11 +75,11 @@ function InfoBlock({
           photoUrl: photos[0],
           postId,
           price,
-          categoryName,
+          categoryName: category.name,
           isMine,
         }}
       >
-        {!!isMine && !!!isDealt && (
+        {!!isMine && !!!dealt && (
           <EditBtn>
             <span>Edit Post</span>
             <FontAwesomeIcon icon={faArrowRight} />

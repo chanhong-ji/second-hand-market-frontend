@@ -18,17 +18,14 @@ const TalkingTo = styled.div``;
 const Username = styled.div``;
 const PostInfo = styled.div``;
 const Wrapper = styled.div`
-  height: 100%;
   display: flex;
   flex-direction: column;
   ${TalkingTo} {
     border-bottom: 1px solid ${(p) => p.theme.color.border};
-    height: 70px;
+    height: ${(p) => p.theme.size.room.height.talkingTo};
     display: flex;
     align-items: center;
     padding: 10px;
-    img {
-    }
     ${Username} {
       margin-left: 10px;
       font-size: 20px;
@@ -36,9 +33,15 @@ const Wrapper = styled.div`
     }
   }
   ${PostInfo} {
+    width: 100%;
+    height: ${(p) => p.theme.size.room.height.postInfo};
     border-bottom: 1px solid ${(p) => p.theme.color.border};
-    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
     cursor: pointer;
+
     :hover {
       background-color: ${(p) => p.theme.color.border};
       transition: all 0.2s ease-in-out;
@@ -83,10 +86,6 @@ const READ_MESSAGE_MUTATION = gql`
 
 function Room() {
   const onCompleteQuery = (data: seeRoom) => {
-    setTalkingTo(
-      data.seeRoom?.users.find((user) => user?.id !== meData?.me?.id) ?? {}
-    );
-
     data.seeRoom?.messages.forEach((mes) => {
       if (!mes?.read && mes?.id && mes.userId !== meData?.me?.id) {
         readMessage({ variables: { messageId: mes?.id } });
@@ -161,6 +160,10 @@ function Room() {
         name: location.state.name,
       };
       setTalkingTo(fakeUser);
+    } else {
+      setTalkingTo(
+        data?.seeRoom?.users.find((user) => user?.id !== meData?.me?.id) ?? {}
+      );
     }
   }, [data]);
 
@@ -168,7 +171,11 @@ function Room() {
     <Wrapper>
       {talkingTo && (
         <TalkingTo>
-          <Avatar size={50} url={talkingTo.avatar} />
+          <Avatar
+            size={50}
+            url={talkingTo.avatar}
+            onClick={() => navigate(`/profiles/${talkingTo.id}/`)}
+          />
           <Username onClick={() => navigate(`/profiles/${talkingTo.id}/`)}>
             {talkingTo.name}
           </Username>
@@ -177,7 +184,8 @@ function Room() {
       {!!data ? (
         <>
           <PostInfo onClick={() => navigate(`/posts/${data.seeRoom?.postId}`)}>
-            {data.seeRoom?.post.title}
+            <span>{data.seeRoom?.post.title}</span>
+            <span>{data.seeRoom?.post.price} 원</span>
           </PostInfo>
           {data.seeRoom?.messages && (
             <Chats
@@ -189,9 +197,10 @@ function Room() {
       ) : location.state?.id ? (
         <>
           <PostInfo onClick={() => navigate(`/posts/${location.state.postId}`)}>
-            {location.state.postTitle}
+            <span>{location.state.postTitle}</span>
+            <span>{location.state.postPrice} 원</span>
           </PostInfo>
-          {<Chats postId={location.state.postId} />}
+          {<Chats postId={+location.state.postId} />}
         </>
       ) : null}
     </Wrapper>

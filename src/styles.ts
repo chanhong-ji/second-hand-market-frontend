@@ -27,6 +27,14 @@ export const theme: DefaultTheme = {
     },
     main: { width: '50%' },
     arrow: '20px',
+    room: {
+      height: {
+        whole: `${window.innerHeight - 140}px`,
+        talkingTo: `70px`,
+        postInfo: `50px`,
+        chat: `${window.innerHeight - 260}px`,
+      },
+    },
   },
 };
 

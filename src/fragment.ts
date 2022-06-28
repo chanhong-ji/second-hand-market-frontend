@@ -62,6 +62,7 @@ export const POST_FRAGMENT = gql`
     isMine
     isInterest
     interestsCount
+    hasRoom
     createdAt
     updatedAt
   }

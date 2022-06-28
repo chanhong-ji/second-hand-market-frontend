@@ -44,27 +44,8 @@ function Post() {
               photos={data.seePost.photos}
               isDealt={data.seePost.dealt}
             />
-            <OwnerBlock
-              postId={+id}
-              user={data.seePost.user}
-              zone={data.seePost.zone}
-              interestsCount={data.seePost.interestsCount}
-              isInterest={data.seePost.isInterest}
-              isMine={data.seePost.isMine}
-              dealt={data.seePost.dealt}
-              postTitle={data.seePost.title}
-            />
-            <InfoBlock
-              postId={data.seePost.id}
-              title={data.seePost.title}
-              caption={data.seePost.caption}
-              category={data.seePost.category}
-              photos={data.seePost.photos}
-              price={data.seePost.price}
-              categoryName={data.seePost.category.name}
-              isMine={data.seePost.isMine}
-              isDealt={data.seePost.dealt}
-            />
+            <OwnerBlock {...data.seePost} />
+            <InfoBlock {...data.seePost} />
           </>
         ) : (
           <NotFound />

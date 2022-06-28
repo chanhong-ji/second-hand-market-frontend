@@ -29,6 +29,14 @@ declare module 'styled-components' {
         width: string;
       };
       arrow: string;
+      room: {
+        height: {
+          whole: string;
+          talkingTo: string;
+          postInfo: string;
+          chat: string;
+        };
+      };
     };
   }
 }

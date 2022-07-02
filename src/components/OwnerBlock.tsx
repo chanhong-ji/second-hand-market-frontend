@@ -15,6 +15,8 @@ import {
   getDealtPostVariables,
 } from '../__generated__/getDealtPost';
 import { seePost_seePost } from '../__generated__/seePost';
+import { onToggleInterestUpdate } from '../shared/utils';
+import GetMeUser from '../hooks/getMeUser';
 
 const Container = styled.div``;
 const Left = styled.div``;
@@ -98,11 +100,12 @@ const Owner = styled.div`
   }
 `;
 
-const TOGGLE_INTEREST_MUTATION = gql`
+export const TOGGLE_INTEREST_MUTATION = gql`
   mutation toggleInterest($id: Int!) {
     toggleInterest(id: $id) {
       ok
       error
+      id
     }
   }
 `;
@@ -137,25 +140,6 @@ function OwnerBlock({
   isInterest,
   interestsCount,
 }: seePost_seePost) {
-  const onToggleInterestUpdate = (cache: ApolloCache<any>, result: any) => {
-    const {
-      toggleInterest: { ok },
-    } = result.data;
-
-    if (!ok) return;
-
-    cache.modify({
-      id: `Post:${postId}`,
-      fields: {
-        isInterest(prev) {
-          return !prev;
-        },
-        interestsCount(prev, { readField }) {
-          return readField('isInterest') ? prev - 1 : prev + 1;
-        },
-      },
-    });
-  };
   const onBookmark = () => {
     toggleInterest({ variables: { id: postId } });
   };
@@ -186,9 +170,13 @@ function OwnerBlock({
   };
 
   const navigate = useNavigate();
+  const meData = GetMeUser();
   const [toggleInterest] = useMutation<toggleInterest, toggleInterestVariables>(
     TOGGLE_INTEREST_MUTATION,
-    { update: onToggleInterestUpdate }
+    {
+      update: (cache, result) =>
+        onToggleInterestUpdate(cache, result, meData?.me?.id),
+    }
   );
   const [deletePost] = useMutation<deletePost, deletePostVariables>(
     DELETE_POST_MUTATION,
@@ -268,7 +256,6 @@ function OwnerBlock({
               >
                 Send chat
               </ChatBtn>
-              {/* go to chat */}
               <BookmarkBtn onClick={onBookmark}>Book mark</BookmarkBtn>
             </>
           ) : dealt ? (

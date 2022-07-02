@@ -15,15 +15,16 @@ export const getZoneId = (first: string, second: string) => {
 
 export const onToggleInterestUpdate = (
   cache: ApolloCache<any>,
-  result: any
+  result: any,
+  meDataId: number | undefined
 ) => {
+  if (!!!meDataId) return;
+
   const {
     toggleInterest: { ok, id },
   } = result.data;
-
   if (!ok) return;
 
-  let addInterest = false;
   cache.modify({
     id: `Post:${id}`,
     fields: {
@@ -31,9 +32,24 @@ export const onToggleInterestUpdate = (
         return !prev;
       },
       interestsCount(prev, { readField }) {
-        addInterest = !readField('isInterest');
-        return addInterest ? prev + 1 : prev - 1;
+        return readField('isInterest') ? prev - 1 : prev + 1;
       },
+    },
+  });
+
+  const newPost: any = cache.readFragment({
+    id: `Post:${id}`,
+    fragment: gql`
+      fragment interestFrag on Post {
+        isInterest
+      }
+    `,
+  });
+
+  cache.modify({
+    id: `User:${meDataId}`,
+    fields: {
+      interestCount: (prev) => (newPost.isInterest ? prev + 1 : prev - 1),
     },
   });
 };
@@ -62,6 +78,7 @@ export const onToggleFollowUpdate = (
       },
     },
   });
+
   const isFollowing: any = cache.readFragment({
     id: `User:${id}`,
     fragment: gql`

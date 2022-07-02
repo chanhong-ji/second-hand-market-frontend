@@ -11,6 +11,7 @@ export interface toggleInterest_toggleInterest {
   __typename: "MutationResult";
   ok: boolean;
   error: string | null;
+  id: number | null;
 }
 
 export interface toggleInterest {

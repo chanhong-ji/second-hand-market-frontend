@@ -33,7 +33,8 @@ const Bottom = styled.article<{ index: number }>`
   padding: 50px 0;
   display: grid;
   gap: 40px;
-  grid-template-columns: ${(p) => (p.index === 0 ? '1fr 1fr 1fr' : '1fr 1fr')};
+  grid-template-columns: ${(p) =>
+    p.index === 0 ? 'repeat(auto-fill, minmax(200px, 1fr))' : '1fr 1fr'};
 `;
 
 function ProfileBottom(props: seeProfile_seeProfile) {

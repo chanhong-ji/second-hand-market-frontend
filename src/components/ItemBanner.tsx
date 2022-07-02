@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getFormatValue } from '../utils';
+import { getFormatValue } from '../shared/utils';
 
 interface IProps {
   id: number;

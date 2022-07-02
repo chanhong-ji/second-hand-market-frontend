@@ -25,6 +25,7 @@ export interface UserFragment {
   zone: UserFragment_zone;
   isMe: boolean;
   isFollowing: boolean;
+  interestCount: number;
   createdAt: string;
   updatedAt: string;
 }

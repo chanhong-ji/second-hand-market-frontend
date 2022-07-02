@@ -42,6 +42,7 @@ export interface seeProfile_seeProfile {
   zone: seeProfile_seeProfile_zone;
   isMe: boolean;
   isFollowing: boolean;
+  interestCount: number;
   createdAt: string;
   updatedAt: string;
   posts: (seeProfile_seeProfile_posts | null)[] | null;

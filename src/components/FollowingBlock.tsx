@@ -14,6 +14,8 @@ import {
   toggleFollowVariables,
 } from '../__generated__/toggleFollow';
 import Avatar from './Avatar';
+import { useRecoilState } from 'recoil';
+import { followingCountState } from '../atoms';
 
 interface IProps {
   id: number;
@@ -94,6 +96,8 @@ function FollowingBlock(props: seeProfile_seeProfile) {
   const navigate = useNavigate();
   const meData = GetMeUser();
   const { scrollYProgress } = useViewportScroll();
+  const [followingCount, setFollowingCount] =
+    useRecoilState(followingCountState);
   const {
     data: followingData,
     refetch,
@@ -132,16 +136,15 @@ function FollowingBlock(props: seeProfile_seeProfile) {
     `,
   });
 
-  // useEffect(() => {
-  //   // console.log('following 카운트 변화로 인한 리페치');
-
-  //   // if (refetching?.followingCount) {
-  //   //   refetch({ variable: { userId: props.id } }).then((result) => {
-  //   //     console.log(result);
-  //   //   });
-  //   // }
-  //   console.log(refetching.followingCount);
-  // }, [refetching]);
+  useEffect(() => {
+    if (
+      refetching?.followingCount &&
+      refetching.followingCount !== followingCount
+    ) {
+      setFollowingCount(refetching.followingCount);
+      refetch({ variable: { userId: props.id } });
+    }
+  }, []);
 
   const onFollowBtn = (user: any) => {
     toggleFollow({ variables: { id: user.id } });

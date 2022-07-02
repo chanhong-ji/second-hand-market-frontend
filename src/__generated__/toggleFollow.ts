@@ -11,6 +11,7 @@ export interface toggleFollow_toggleFollow {
   __typename: "MutationResult";
   ok: boolean;
   error: string | null;
+  id: number | null;
 }
 
 export interface toggleFollow {

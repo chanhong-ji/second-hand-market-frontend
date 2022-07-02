@@ -1,11 +1,10 @@
-import { gql, useApolloClient, useQuery } from '@apollo/client';
 import { motion, useViewportScroll } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { seeFollowing } from '../__generated__/seeFollowing';
 import { seeProfile_seeProfile } from '../__generated__/seeProfile';
-import FollowingBanner from './FollowingBanner';
+import FollowingBlock from './FollowingBlock';
+import InterestBlock from './InterestBlock';
 import ItemBanner from './ItemBanner';
 
 const Column = styled.div``;
@@ -33,66 +32,17 @@ const Bottom = styled.article<{ index: number }>`
   width: 100%;
   padding: 50px 0;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
   gap: 40px;
   grid-template-columns: ${(p) => (p.index === 0 ? '1fr 1fr 1fr' : '1fr 1fr')};
-`;
-
-const SEE_FOLLOWING_QUERY = gql`
-  query seeFollowing($userId: Int!, $offset: Int) {
-    seeFollowing(userId: $userId, offset: $offset) {
-      id
-      name
-      avatar
-      zoneId
-      isFollowing
-    }
-  }
 `;
 
 function ProfileBottom(props: seeProfile_seeProfile) {
   const [index, setIndex] = useState(0);
   const { pathname } = useLocation();
-  const { scrollYProgress } = useViewportScroll();
-  const {
-    data: followingData,
-    refetch,
-    fetchMore,
-  } = useQuery<seeFollowing>(SEE_FOLLOWING_QUERY, {
-    variables: { userId: props.id },
-  });
-  const refetching: any = useApolloClient().cache.readFragment({
-    id: `User:${props.id}`,
-    fragment: gql`
-      fragment UserFragment on User {
-        followingCount
-      }
-    `,
-  });
 
   useEffect(() => {
     setIndex(0);
   }, [pathname.split('/').pop()]);
-
-  useEffect(() => {
-    if (refetching?.followingCount) {
-      refetch({ variable: { userId: props.id } });
-    }
-  }, [refetching]);
-
-  useEffect(() => {
-    scrollYProgress.onChange((value) => {
-      if (value > 0.95 && followingData?.seeFollowing) {
-        scrollYProgress.clearListeners();
-        fetchMore({
-          variables: {
-            userId: props.id,
-            offset: followingData.seeFollowing.length,
-          },
-        });
-      }
-    });
-  }, [props]);
 
   return (
     <>
@@ -102,22 +52,28 @@ function ProfileBottom(props: seeProfile_seeProfile) {
           {index === 0 && <Indicator layoutId='indexIndicator' />}
         </Column>
         {props.isMe && (
-          <Column id='1' onClick={(e) => setIndex(+e.currentTarget.id)}>
-            팔로잉 ({props.followingCount ?? ''})
-            {index === 1 && <Indicator layoutId='indexIndicator' />}
-          </Column>
+          <>
+            <Column id='1' onClick={(e) => setIndex(+e.currentTarget.id)}>
+              팔로잉 ({props.followingCount ?? ''})
+              {index === 1 && <Indicator layoutId='indexIndicator' />}
+            </Column>
+            <Column id='2' onClick={(e) => setIndex(+e.currentTarget.id)}>
+              관심 포스트 ({props.interestCount ?? ''})
+              {index === 2 && <Indicator layoutId='indexIndicator' />}
+            </Column>
+          </>
         )}
       </NavBar>
       <Bottom index={index}>
-        {index === 0
-          ? props.posts?.map((post) =>
-              post?.id ? <ItemBanner {...post} key={post.id} /> : null
-            )
-          : index === 1
-          ? followingData?.seeFollowing?.map((user) =>
-              user ? <FollowingBanner key={user.id + ''} {...user} /> : null
-            )
-          : null}
+        {index === 0 ? (
+          props.posts?.map((post) =>
+            post?.id ? <ItemBanner {...post} key={post.id} /> : null
+          )
+        ) : index === 1 ? (
+          <FollowingBlock {...props} />
+        ) : index === 2 ? (
+          <InterestBlock userId={props.id} />
+        ) : null}
       </Bottom>
     </>
   );

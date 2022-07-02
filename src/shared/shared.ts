@@ -40,5 +40,3 @@ export const PostsWrapper = styled.div`
   position: relative;
   padding-bottom: 60px;
 `;
-
-export const PER_PAGE = 12;

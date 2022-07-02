@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CategoryBlock from '../components/CategoryBlock';
 import Modal from '../components/Modal';
-import { getFormatValue } from '../utils';
+import { getFormatValue } from '../shared/utils';
 import { editPost, editPostVariables } from '../__generated__/editPost';
 
 interface IFormOfPost {

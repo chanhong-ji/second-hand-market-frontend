@@ -14,7 +14,7 @@ import Modal from '../components/Modal';
 import { createPost, createPostVariables } from '../__generated__/createPost';
 import { useNavigate } from 'react-router-dom';
 import GetMeUser from '../hooks/getMeUser';
-import { getFormatValue } from '../utils';
+import { getFormatValue } from '../shared/utils';
 import CategoryBlock from '../components/CategoryBlock';
 
 const Preview = styled.div``;

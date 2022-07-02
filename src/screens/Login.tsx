@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getUserLogin } from '../apollo';
 import ErrorMessage from '../components/ErrorMessage';
-import { AuthForm, AuthWrapper, Input } from '../components/shared';
+import { AuthForm, AuthWrapper, Input } from '../shared/shared';
 import { login, loginVariables } from '../__generated__/login';
 
 interface IForm {

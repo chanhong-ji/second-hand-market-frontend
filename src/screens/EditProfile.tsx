@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorMessage from '../components/ErrorMessage';
-import { AuthForm, AuthWrapper, IForm, Input } from '../components/shared';
+import { AuthForm, AuthWrapper, IForm, Input } from '../shared/shared';
 import ZoneBlock from '../components/ZoneBlock';
 import GetMeUser from '../hooks/getMeUser';
 import {

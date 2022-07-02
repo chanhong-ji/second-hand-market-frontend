@@ -7,11 +7,12 @@ import Grid from '../components/Grid';
 import Loader from '../components/Loader';
 import Pagination from '../components/Pagenation';
 import PostsTop from '../components/PostsTop';
-import { PER_PAGE, PostsWrapper } from '../components/shared';
+import { PostsWrapper } from '../shared/shared';
 import { categoryList } from '../dataList';
 import { POST_FRAGMENT } from '../fragment';
 import GetMeUser from '../hooks/getMeUser';
 import { seePosts, seePostsVariables } from '../__generated__/seePosts';
+import { PER_PAGE } from '../shared/constant';
 
 const Category = styled.div`
   width: 100%;

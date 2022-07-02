@@ -2,7 +2,7 @@ import { gql, useMutation } from '@apollo/client';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import ErrorMessage from '../components/ErrorMessage';
-import { AuthForm, AuthWrapper, IForm, Input } from '../components/shared';
+import { AuthForm, AuthWrapper, IForm, Input } from '../shared/shared';
 import ZoneBlock from '../components/ZoneBlock';
 import {
   createAccount,

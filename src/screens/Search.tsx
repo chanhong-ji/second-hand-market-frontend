@@ -6,10 +6,11 @@ import Grid from '../components/Grid';
 import Loader from '../components/Loader';
 import Pagination from '../components/Pagenation';
 import PostsTop from '../components/PostsTop';
-import { PER_PAGE, PostsWrapper } from '../components/shared';
+import { PostsWrapper } from '../shared/shared';
 import { POST_FRAGMENT } from '../fragment';
 import GetMeUser from '../hooks/getMeUser';
 import { searchPost, searchPostVariables } from '../__generated__/searchPost';
+import { PER_PAGE } from '../shared/constant';
 
 const SEARCH_POST_QUERY = gql`
   query searchPost(

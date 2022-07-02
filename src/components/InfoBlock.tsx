@@ -2,7 +2,7 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { getFormatValue } from '../utils';
+import { getFormatValue } from '../shared/utils';
 import { seePost_seePost } from '../__generated__/seePost';
 
 const Title = styled.div``;

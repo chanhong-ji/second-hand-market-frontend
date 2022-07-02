@@ -1,4 +1,4 @@
-import { ApolloCache, gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { useViewportScroll } from 'framer-motion';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,6 +9,7 @@ import PageTitle from '../components/PageTitle';
 import ProfileBottom from '../components/ProfileBottom';
 import { USER_FRAGMENT } from '../fragment';
 import GetMeUser from '../hooks/getMeUser';
+import { onToggleFollowUpdate } from '../shared/utils';
 import { seeProfile } from '../__generated__/seeProfile';
 import {
   toggleFollow,
@@ -94,43 +95,12 @@ export const TOGGLE_FOLLOW_MUTATION = gql`
     toggleFollow(id: $id) {
       ok
       error
+      id
     }
   }
 `;
 
 function Profile() {
-  const onToggleUpdate = (cache: ApolloCache<any>, result: any) => {
-    const {
-      toggleFollow: { ok, error },
-    } = result.data;
-    if (!ok) return alert(error);
-    if (!!!data?.seeProfile) return;
-
-    let follow = false;
-    cache.modify({
-      id: `User:${data.seeProfile.id}`,
-      fields: {
-        isFollowing(prev) {
-          return !prev;
-        },
-        followerCount(prev, { readField }) {
-          const isFollowing = readField('isFollowing');
-          follow = !isFollowing;
-          return isFollowing ? prev - 1 : prev + 1;
-        },
-      },
-    });
-
-    cache.modify({
-      id: `User:${meData?.me?.id}`,
-      fields: {
-        followingCount(prev) {
-          return follow ? prev + 1 : prev - 1;
-        },
-      },
-    });
-  };
-
   const onToggleFollow = () => {
     if (data?.seeProfile?.id) {
       toggleFollow({ variables: { id: +data.seeProfile.id } });
@@ -150,7 +120,10 @@ function Profile() {
   );
   const [toggleFollow] = useMutation<toggleFollow, toggleFollowVariables>(
     TOGGLE_FOLLOW_MUTATION,
-    { update: onToggleUpdate }
+    {
+      update: (cache, result) =>
+        onToggleFollowUpdate(cache, result, meData?.me?.id),
+    }
   );
 
   useEffect(() => {

@@ -41,6 +41,7 @@ export interface searchPost_searchPost_posts {
   isInterest: boolean;
   interestsCount: number;
   hasRoom: number;
+  roomCount: number;
   createdAt: string;
   updatedAt: string;
 }

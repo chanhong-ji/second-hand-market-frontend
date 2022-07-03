@@ -41,6 +41,7 @@ export interface seePosts_seePosts_posts {
   isInterest: boolean;
   interestsCount: number;
   hasRoom: number;
+  roomCount: number;
   createdAt: string;
   updatedAt: string;
 }

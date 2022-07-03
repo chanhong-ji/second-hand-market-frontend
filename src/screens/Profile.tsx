@@ -80,6 +80,7 @@ const SEE_PROFILE_QUERY = gql`
         dealt
         price
         interestsCount
+        roomCount
         zone {
           id
           name

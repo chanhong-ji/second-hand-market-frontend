@@ -41,6 +41,7 @@ export interface PostFragment {
   isInterest: boolean;
   interestsCount: number;
   hasRoom: number;
+  roomCount: number;
   createdAt: string;
   updatedAt: string;
 }

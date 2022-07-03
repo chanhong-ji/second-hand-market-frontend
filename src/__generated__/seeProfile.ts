@@ -27,6 +27,7 @@ export interface seeProfile_seeProfile_posts {
   dealt: boolean;
   price: number;
   interestsCount: number;
+  roomCount: number;
   zone: seeProfile_seeProfile_posts_zone;
 }
 

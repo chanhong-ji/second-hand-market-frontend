@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { seePosts_seePosts_posts } from '../__generated__/seePosts';
 import ItemBanner from './ItemBanner';
 
 const Wrapper = styled.div`
@@ -9,7 +10,7 @@ const Wrapper = styled.div`
 `;
 
 interface IProps {
-  posts: any[];
+  posts: (seePosts_seePosts_posts | null)[];
   keyword?: string;
 }
 
@@ -30,6 +31,7 @@ function Grid({ posts, keyword }: IProps) {
               interestsCount={post.interestsCount}
               zone={post.zone}
               key={post.id + ''}
+              roomCount={post.roomCount}
             />
           ) : null
         )

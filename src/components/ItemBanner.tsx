@@ -13,6 +13,7 @@ interface IProps {
     id: number;
     name: string;
   };
+  roomCount: number;
 }
 
 const Container = styled.div`
@@ -54,6 +55,7 @@ const Photo = styled.div<{ img: string }>`
 `;
 const Title = styled.div``;
 const Price = styled.div``;
+const Record = styled.div``;
 const Zone = styled.div``;
 const InterestCount = styled.div``;
 const Chatcount = styled.div``;
@@ -75,9 +77,14 @@ const Info = styled.div`
     font-size: 15px;
     color: grey;
   }
-  div + :last-child {
+  ${Record} {
     display: flex;
     font-size: 13px;
+    color: rgba(0, 0, 0, 0.8);
+    div:nth-child(2) {
+      margin-left: 4px;
+      margin-right: 4px;
+    }
   }
 `;
 
@@ -89,6 +96,7 @@ function ItemBanner({
   interestsCount,
   zone,
   price,
+  roomCount,
 }: IProps) {
   const goToArticle = () =>
     navigate(`/posts/${id}`, { state: { photoUrls: photos } });
@@ -109,12 +117,11 @@ function ItemBanner({
         <Title>{title}</Title>
         <Zone>{zone.name}</Zone>
         <Price>{(formatPrice + '').slice(1)} 원</Price>
-        <div>
+        <Record>
           <InterestCount>관심 {interestsCount}</InterestCount>
           <div>∙</div>
-          {/* 룸 개수 */}
-          <Chatcount>채팅 </Chatcount>
-        </div>
+          <Chatcount>채팅 {roomCount}</Chatcount>
+        </Record>
       </Info>
     </Container>
   );

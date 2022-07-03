@@ -142,6 +142,7 @@ function OwnerBlock({
   hasRoom,
   isInterest,
   interestsCount,
+  roomCount,
 }: seePost_seePost) {
   const onBookmark = () => {
     if (!!!meData) return;
@@ -250,8 +251,7 @@ function OwnerBlock({
           </Interest>
           <Chat>
             <FontAwesomeIcon icon={faComment} />
-            {/* chat room count */}
-            <span>18</span>
+            <span>{roomCount}</span>
           </Chat>
         </Row>
         <Row>

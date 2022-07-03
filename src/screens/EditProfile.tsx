@@ -3,7 +3,13 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorMessage from '../components/ErrorMessage';
-import { AuthForm, AuthWrapper, IForm, Input } from '../shared/shared';
+import {
+  AuthForm,
+  AuthWrapper,
+  FormTitle,
+  IForm,
+  Input,
+} from '../shared/shared';
 import ZoneBlock from '../components/ZoneBlock';
 import GetMeUser from '../hooks/getMeUser';
 import {
@@ -94,6 +100,7 @@ function EditProfile() {
   return (
     <AuthWrapper>
       <AuthForm onSubmit={handleSubmit(onValid)}>
+        <FormTitle>Edit Profile</FormTitle>
         <label htmlFor='name'>Username</label>
         <Input
           id='name'
@@ -111,7 +118,7 @@ function EditProfile() {
           {...register('passwordConfirm')}
         />
         <ZoneBlock register={register} />
-        <label htmlFor='avatar'>avatar</label>
+        <label htmlFor='avatar'>Avatar</label>
         <Input
           id='avatar'
           placeholder='avatar'

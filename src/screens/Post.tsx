@@ -2,6 +2,7 @@ import { gql, useQuery } from '@apollo/client';
 import { Navigate, Outlet, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import InfoBlock from '../components/InfoBlock';
+import Loader from '../components/Loader';
 import OwnerBlock from '../components/OwnerBlock';
 import PhotoBlock from '../components/PhotoBlock';
 import { POST_FRAGMENT } from '../fragment';
@@ -37,7 +38,7 @@ function Post() {
         id && !/^\d+$/.test(id) ? (
           <Navigate to='/' replace />
         ) : loading ? (
-          <div>loading....</div>
+          <Loader />
         ) : data?.seePost ? (
           <>
             <PhotoBlock

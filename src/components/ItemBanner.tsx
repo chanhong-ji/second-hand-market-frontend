@@ -17,7 +17,6 @@ interface IProps {
 
 const Container = styled.div`
   width: 100%;
-  /* min-width: 180px; */
   overflow: hidden;
   cursor: pointer;
   * {
@@ -33,7 +32,7 @@ const Photo = styled.div<{ img: string }>`
   background-image: ${(p) => `url('${p.img}')`};
   background-position: center;
   background-size: cover;
-  border-radius: 10%;
+  border-radius: 8%;
   position: relative;
   ${Overlay} {
     position: absolute;

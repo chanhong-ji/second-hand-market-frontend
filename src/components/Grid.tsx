@@ -10,13 +10,14 @@ const Wrapper = styled.div`
 
 interface IProps {
   posts: any[];
+  keyword?: string;
 }
 
-function Grid({ posts }: IProps) {
+function Grid({ posts, keyword }: IProps) {
   return (
     <Wrapper>
       {posts.length === 0 ? (
-        <div>no result</div>
+        <div>no result {keyword ?? <span> {keyword}</span>}</div>
       ) : (
         posts.map((post) =>
           post ? (

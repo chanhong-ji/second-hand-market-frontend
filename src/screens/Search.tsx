@@ -91,7 +91,9 @@ function Search() {
             loading={loading}
           />
 
-          {!!data?.searchPost.posts && <Grid posts={data.searchPost.posts} />}
+          {!!data?.searchPost.posts && (
+            <Grid keyword={keyword ?? ''} posts={data.searchPost.posts} />
+          )}
 
           {!!data?.searchPost.totalResults && (
             <Pagination page={page} totalPage={totalPage} setPage={setPage} />

@@ -15,7 +15,7 @@ const Wrapper = styled.header`
   background-color: ${(props) => props.theme.color.bg.layout};
   padding: ${(props) => props.theme.size.header.padding};
   border-bottom: 2px solid ${(p) => p.theme.color.border};
-  z-index: 1;
+  z-index: 3;
   display: flex;
   justify-content: space-between;
 `;

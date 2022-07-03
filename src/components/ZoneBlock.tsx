@@ -6,18 +6,30 @@ import GetMeUser from '../hooks/getMeUser';
 
 interface IProps {
   register: UseFormRegister<any>;
-  children?: any;
 }
 
-const Zone = styled.div``;
+const Zone = styled.div`
+  label {
+    display: block;
+    margin-bottom: 7px;
+    margin-top: 20px;
+  }
+  select {
+    font-size: 19px;
+    border: none;
+    padding: 5px;
+    box-shadow: rgba(0, 0, 0, 0.01) 0px 1px 3px 0px,
+      rgba(27, 31, 35, 0.1) 0px 0px 0px 1px;
+  }
+`;
 
-function ZoneBlock({ register, children }: IProps) {
+function ZoneBlock({ register }: IProps) {
   const meData = GetMeUser();
   const [firstZone, setFirstZone] = useState(meData?.me?.zoneFirst ?? 0);
 
   return (
     <Zone>
-      {children}
+      <label htmlFor='zone'>Zone</label>
       <select
         {...register('zoneFirst', { required: 'Zone is required' })}
         placeholder='zone'

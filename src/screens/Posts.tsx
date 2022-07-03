@@ -15,9 +15,18 @@ import { seePosts, seePostsVariables } from '../__generated__/seePosts';
 import { PER_PAGE } from '../shared/constant';
 
 const Category = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
+  label {
+    display: block;
+    margin-bottom: 7px;
+    margin-top: 20px;
+  }
+  select {
+    font-size: 19px;
+    border: none;
+    padding: 5px;
+    box-shadow: rgba(0, 0, 0, 0.01) 0px 1px 3px 0px,
+      rgba(27, 31, 35, 0.1) 0px 0px 0px 1px;
+  }
 `;
 
 const SEE_POSTS_QUERY = gql`

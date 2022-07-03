@@ -157,7 +157,7 @@ function Profile() {
         loading ? (
           <Loader />
         ) : data?.seeProfile === null ? (
-          <NotFound>no user</NotFound>
+          <NotFound>No User found</NotFound>
         ) : (
           <>
             <Top>

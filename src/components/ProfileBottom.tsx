@@ -34,7 +34,7 @@ const Bottom = styled.article<{ index: number }>`
   display: grid;
   gap: 40px;
   grid-template-columns: ${(p) =>
-    p.index === 0 ? 'repeat(auto-fill, minmax(200px, 1fr))' : '1fr 1fr'};
+    p.index === 0 ? 'repeat(auto-fill, minmax(250px, 1fr))' : '1fr 1fr'};
 `;
 
 function ProfileBottom(props: seeProfile_seeProfile) {

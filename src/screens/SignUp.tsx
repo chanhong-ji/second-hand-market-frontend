@@ -2,7 +2,13 @@ import { gql, useMutation } from '@apollo/client';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import ErrorMessage from '../components/ErrorMessage';
-import { AuthForm, AuthWrapper, IForm, Input } from '../shared/shared';
+import {
+  AuthForm,
+  AuthWrapper,
+  FormTitle,
+  IForm,
+  Input,
+} from '../shared/shared';
 import ZoneBlock from '../components/ZoneBlock';
 import {
   createAccount,
@@ -90,11 +96,11 @@ function SignUp() {
   return (
     <AuthWrapper>
       <AuthForm onSubmit={handleSubmit(onValid)}>
-        <label htmlFor='phone'>Phone</label>
+        <FormTitle>Sign up</FormTitle>
+        <label htmlFor='phone'>Phone number</label>
         <Input
           id='phone'
           {...register('phone', { required: 'phone is required' })}
-          placeholder='phone'
           type='number'
           onClick={() => clearErrors()}
         />
@@ -106,15 +112,12 @@ function SignUp() {
         <Input
           id='name'
           {...register('name', { required: 'name is required' })}
-          placeholder='name'
           type='text'
           onClick={() => clearErrors()}
         />
         {errors?.name?.message && (
           <ErrorMessage message={errors.name.message || ''} />
         )}
-
-        <label htmlFor='zoneId'>Zone</label>
 
         <ZoneBlock register={register} />
 
@@ -123,7 +126,6 @@ function SignUp() {
           id='password'
           {...register('password', { required: 'password is required' })}
           type='password'
-          placeholder='password'
           onClick={() => clearErrors()}
         />
         {errors?.password?.message && (
@@ -137,7 +139,6 @@ function SignUp() {
             required: 'passwordConfirm is required',
           })}
           type='password'
-          placeholder='passwordConfirm'
           onClick={() => clearErrors()}
         />
         {errors?.passwordConfirm?.message && (

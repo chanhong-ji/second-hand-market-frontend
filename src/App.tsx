@@ -49,7 +49,12 @@ function App() {
               <Route path='posts/:id' element={<Post />}>
                 <Route path='edit' element={<EditPost />} />
               </Route>
-              <Route path='room' element={<Rooms />}>
+              <Route
+                path='room'
+                element={
+                  LoggedIn ? <Rooms /> : <Navigate to='/' replace={true} />
+                }
+              >
                 <Route path=':id' element={<Room />} />
               </Route>
               <Route path='*' element={<NotFound />} />

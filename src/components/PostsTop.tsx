@@ -1,4 +1,4 @@
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -24,6 +24,11 @@ const Top = styled.div`
       color: rgba(0, 0, 0, 0.6);
     }
   }
+  .icon {
+    cursor: pointer;
+    font-size: 25px;
+    color: ${(p) => p.theme.color.blue};
+  }
   ${Options} {
     z-index: 1;
     padding: 10px;
@@ -32,26 +37,8 @@ const Top = styled.div`
     border-radius: 10px;
     border-top-right-radius: 0;
     position: absolute;
-    top: 50px;
+    top: 60px;
     right: 40px;
-    transform-origin: right top;
-    display: flex;
-    flex-direction: column;
-    label {
-      font-size: 15px;
-      color: grey;
-      font-weight: 600;
-      margin-right: 5px;
-    }
-    select {
-      border: none;
-      outline: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      background: none;
-    }
-    div:first-child {
-      margin-bottom: 5px;
-    }
     div:nth-child(2) {
       margin-bottom: 10px;
     }
@@ -61,6 +48,8 @@ const Top = styled.div`
       background-color: rgba(0, 0, 0, 0.6);
       color: white;
       border-radius: 5px;
+      font-size: 17px;
+      width: 100%;
     }
   }
 `;
@@ -79,9 +68,9 @@ function PostsTop({ handleSubmit, register, loading, children }: IProps) {
 
   useEffect(() => {
     if (menuClicked) {
-      menuAnimation.start({ opacity: 1 });
+      menuAnimation.start({ opacity: 1, display: 'block' });
     } else {
-      menuAnimation.start({ opacity: 0 });
+      menuAnimation.start({ opacity: 0, display: 'none' });
     }
   }, [menuClicked]);
 
@@ -92,19 +81,17 @@ function PostsTop({ handleSubmit, register, loading, children }: IProps) {
         {search && <span>검색어: {search.split('=').slice(-1)}</span>}
       </Title>
       <FontAwesomeIcon
-        icon={faBars}
+        icon={faFilter}
         onClick={() => setMenuClicked((prev) => !prev)}
-        style={{ cursor: 'pointer' }}
+        className='icon'
       />
       <Options
         onSubmit={handleSubmit}
         animate={menuAnimation}
-        initial={{ opacity: 0 }}
+        initial={{ opacity: 0, display: 'none' }}
         transition={{ duration: 0.2 }}
       >
-        <ZoneBlock register={register}>
-          <label htmlFor='zone'>Zone</label>
-        </ZoneBlock>
+        <ZoneBlock register={register} />
 
         {children}
 

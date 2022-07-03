@@ -10,7 +10,7 @@ export const theme: DefaultTheme = {
     header: {
       input: 'white',
     },
-    input: 'rgba(0, 0, 0, 0.3)',
+    input: 'white',
     form: 'rgba(0, 0, 0, 0.2)',
     border: 'rgba(0, 0, 0, 0.1)',
     accent: 'tomato',

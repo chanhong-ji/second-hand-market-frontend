@@ -1,10 +1,9 @@
 import { gql, useMutation } from '@apollo/client';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import { getUserLogin } from '../apollo';
 import ErrorMessage from '../components/ErrorMessage';
-import { AuthForm, AuthWrapper, Input } from '../shared/shared';
+import { AuthForm, AuthWrapper, FormTitle, Input } from '../shared/shared';
 import { login, loginVariables } from '../__generated__/login';
 
 interface IForm {
@@ -62,6 +61,7 @@ function Login() {
   return (
     <AuthWrapper>
       <AuthForm onSubmit={handleSubmit(onValid)}>
+        <FormTitle>Login</FormTitle>
         <Input
           placeholder='phone number'
           type='number'
@@ -84,6 +84,7 @@ function Login() {
           type='submit'
           disabled={!isValid}
           onClick={handleSubmit(onValid)}
+          value='Login'
         />
         {errors.result?.message && (
           <ErrorMessage message={errors.result.message || ''} />

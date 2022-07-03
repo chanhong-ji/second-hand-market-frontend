@@ -27,6 +27,7 @@ export interface seeRoom_seeRoom_messages {
   id: number;
   payload: string;
   userId: number;
+  roomId: number;
   read: boolean;
   createdAt: string;
 }

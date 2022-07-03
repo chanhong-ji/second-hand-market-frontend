@@ -90,17 +90,16 @@ const SEE_ROOMS_QUERY = gql`
 function Rooms() {
   const meData = GetMeUser();
   const navigate = useNavigate();
-  const params = useParams();
   const { data, refetch } = useQuery<seeRooms>(SEE_ROOMS_QUERY, {
     variables: { userId: meData?.me?.id },
     skip: !!!meData?.me?.id,
   });
 
   useEffect(() => {
-    if (params?.id && typeof +params.id === 'number' && meData?.me?.id) {
+    if (!!meData?.me?.id) {
       refetch({ userId: +meData?.me?.id });
     }
-  }, [params]);
+  }, []);
 
   return (
     <Wrapper>
@@ -118,7 +117,7 @@ function Rooms() {
                 key={room.id}
                 onClick={() => navigate(`/room/${room.id}`)}
               >
-                {room.unreadTotal > 0 && <UnReadMark />}
+                {room.unreadTotal !== 0 && <UnReadMark />}
                 <Avatar
                   size={40}
                   url={

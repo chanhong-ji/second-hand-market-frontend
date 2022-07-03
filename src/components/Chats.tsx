@@ -1,4 +1,4 @@
-import { gql, useMutation, useSubscription } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import GetMeUser from '../hooks/getMeUser';
@@ -7,7 +7,6 @@ import {
   sendMessage,
   sendMessageVariables,
 } from '../__generated__/sendMessage';
-import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div``;
@@ -124,7 +123,6 @@ function Chats({ messages, postId }: IProps) {
   };
 
   const meData = GetMeUser();
-  const wrapperRef = useRef<any>();
   const navigate = useNavigate();
   const {
     register,
@@ -144,7 +142,7 @@ function Chats({ messages, postId }: IProps) {
   });
 
   return (
-    <Wrapper ref={wrapperRef}>
+    <Wrapper>
       <Container>
         {messages?.map((message) => (
           <Chat key={message?.id} mine={message?.userId == meData?.me?.id}>

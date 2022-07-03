@@ -4,15 +4,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL fragment: MessageFragment
+// GraphQL fragment: interestFrag
 // ====================================================
 
-export interface MessageFragment {
-  __typename: "Message";
-  id: number;
-  payload: string;
-  userId: number;
-  roomId: number;
-  read: boolean;
-  createdAt: string;
+export interface interestFrag {
+  __typename: "Post";
+  isInterest: boolean;
 }

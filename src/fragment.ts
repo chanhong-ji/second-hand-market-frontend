@@ -74,6 +74,7 @@ export const MESSAGE_FRAGMENT = gql`
     id
     payload
     userId
+    roomId
     read
     createdAt
   }

@@ -12,6 +12,7 @@ export interface updateRoom_updateRoom_message {
   id: number;
   payload: string;
   userId: number;
+  roomId: number;
   read: boolean;
   createdAt: string;
 }

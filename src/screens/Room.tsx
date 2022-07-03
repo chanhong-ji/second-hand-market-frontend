@@ -86,6 +86,12 @@ const READ_MESSAGE_MUTATION = gql`
 
 function Room() {
   const onCompleteQuery = (data: seeRoom) => {
+    cache.modify({
+      id: `Room:${data.seeRoom?.id}`,
+      fields: {
+        unreadTotal: () => 0,
+      },
+    });
     data.seeRoom?.messages.forEach((mes) => {
       if (!mes?.read && mes?.id && mes.userId !== meData?.me?.id) {
         readMessage({ variables: { messageId: mes?.id } });
@@ -104,7 +110,7 @@ function Room() {
         data: data.updateRoom.message,
       });
       cache.modify({
-        id: `Room:${roomId}`,
+        id: `Room:${data.updateRoom.message.roomId}`,
         fields: {
           messages: (prev) => [messageFragment, ...prev],
         },
@@ -138,13 +144,13 @@ function Room() {
       subscribeToMore({
         document: UPDATE_ROOM_SUBSCRIPTION,
         variables: {
-          roomId: data.seeRoom.id,
+          roomId: +roomId,
         },
         updateQuery,
       });
       setSubscribed(true);
     }
-  }, [data, subscribed]);
+  }, [data, subscribed, roomId]);
 
   useEffect(() => {
     if (roomId && data?.seeRoom?.id) {
@@ -200,7 +206,7 @@ function Room() {
             <span>{location.state.postTitle}</span>
             <span>{location.state.postPrice} 원</span>
           </PostInfo>
-          {<Chats postId={+location.state.postId} />}
+          <Chats postId={+location.state.postId} />
         </>
       ) : null}
     </Wrapper>

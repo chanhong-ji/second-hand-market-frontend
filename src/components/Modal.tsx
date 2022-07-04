@@ -12,7 +12,7 @@ const Overlay = styled(motion.div)`
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 2;
+  z-index: 3;
 `;
 const ModalDiv = styled(motion.div)`
   width: 50%;

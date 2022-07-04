@@ -130,7 +130,7 @@ function Chats({ messages, postId }: IProps) {
     formState: { isValid },
     setValue,
   } = useForm<sendMessageVariables>({ mode: 'onChange' });
-  const [sendMessage, { loading, data }] = useMutation<
+  const [sendMessage, { loading }] = useMutation<
     sendMessage,
     sendMessageVariables
   >(SEND_MESSAGE_MUTATION, {

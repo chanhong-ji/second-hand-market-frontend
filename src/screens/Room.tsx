@@ -135,11 +135,24 @@ function Room() {
   });
 
   useEffect(() => {
+    if (data?.seeRoom === null && location.state) {
+      const fakeUser = {
+        avatar: location.state.avatar,
+        id: location.state.id,
+        name: location.state.name,
+      };
+      setTalkingTo(fakeUser);
+    } else {
+      setTalkingTo(
+        data?.seeRoom?.users.find((user) => user?.id !== meData?.me?.id) ?? {}
+      );
+    }
+
     if (
       roomId &&
       data?.seeRoom?.id &&
       !subscribed &&
-      data.seeRoom.id == +roomId
+      data.seeRoom.id === +roomId
     ) {
       subscribeToMore({
         document: UPDATE_ROOM_SUBSCRIPTION,
@@ -157,21 +170,6 @@ function Room() {
       refetch({ roomId: +roomId });
     }
   }, []);
-
-  useEffect(() => {
-    if (data?.seeRoom == null && location.state) {
-      const fakeUser = {
-        avatar: location.state.avatar,
-        id: location.state.id,
-        name: location.state.name,
-      };
-      setTalkingTo(fakeUser);
-    } else {
-      setTalkingTo(
-        data?.seeRoom?.users.find((user) => user?.id !== meData?.me?.id) ?? {}
-      );
-    }
-  }, [data]);
 
   return (
     <Wrapper>

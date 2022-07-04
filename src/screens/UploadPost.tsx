@@ -242,7 +242,7 @@ function UploadPost() {
     createPost,
     createPostVariables
   >(CREATE_POST_MUTATION, { onCompleted });
-  const { register, handleSubmit, setValue, getValues } = useForm<
+  const { register, handleSubmit, setValue } = useForm<
     createPostVariables & IUploadForm
   >();
   const navigate = useNavigate();

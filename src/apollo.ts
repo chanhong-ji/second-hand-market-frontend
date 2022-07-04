@@ -35,11 +35,7 @@ const cache = new InMemoryCache({
     },
     Room: {
       fields: {
-        messages: {
-          merge(existing = [], incoming: any[]) {
-            return [...existing, ...incoming];
-          },
-        },
+        messages: offsetLimitPagination(),
       },
     },
     Query: {

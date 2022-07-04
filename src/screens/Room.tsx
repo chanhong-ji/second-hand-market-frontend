@@ -128,11 +128,14 @@ function Room() {
   const [readMessage] = useMutation<readMessage, readMessageVariables>(
     READ_MESSAGE_MUTATION
   );
-  const { data, subscribeToMore, refetch } = useQuery<seeRoom>(SEE_ROOM_QUERY, {
-    skip: !!!roomId || !!!/^\d+$/.test(roomId),
-    variables: { roomId: roomId ? +roomId : 0 },
-    onCompleted: onCompleteQuery,
-  });
+  const { data, subscribeToMore, refetch, fetchMore } = useQuery<seeRoom>(
+    SEE_ROOM_QUERY,
+    {
+      skip: !!!roomId || !!!/^\d+$/.test(roomId),
+      variables: { roomId: roomId ? +roomId : 0 },
+      onCompleted: onCompleteQuery,
+    }
+  );
 
   useEffect(() => {
     if (data?.seeRoom === null && location.state) {
@@ -185,7 +188,7 @@ function Room() {
           </Username>
         </TalkingTo>
       )}
-      {!!data ? (
+      {data ? (
         <>
           <PostInfo onClick={() => navigate(`/posts/${data.seeRoom?.postId}`)}>
             <span>{data.seeRoom?.post.title}</span>
@@ -194,7 +197,9 @@ function Room() {
           {data.seeRoom?.messages && (
             <Chats
               postId={data.seeRoom.postId}
+              roomId={data.seeRoom.id}
               messages={data.seeRoom.messages}
+              fetchMore={fetchMore}
             />
           )}
         </>

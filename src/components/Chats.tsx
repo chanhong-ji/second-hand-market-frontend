@@ -1,15 +1,23 @@
-import { gql, useMutation } from '@apollo/client';
+import {
+  FetchMoreQueryOptions,
+  gql,
+  OperationVariables,
+  useMutation,
+} from '@apollo/client';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import GetMeUser from '../hooks/getMeUser';
-import { seeRoom_seeRoom_messages } from '../__generated__/seeRoom';
+import { seeRoom, seeRoom_seeRoom_messages } from '../__generated__/seeRoom';
 import {
   sendMessage,
   sendMessageVariables,
 } from '../__generated__/sendMessage';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
+import { useElementScroll } from 'framer-motion';
+import { useEffect } from 'react';
 
-const Container = styled.div``;
+const Container = styled.div<{ ref: React.MutableRefObject<any> }>``;
 const Form = styled.div``;
 const UnreadDot = styled.div``;
 const Chat = styled.div<{ mine: boolean }>`
@@ -106,11 +114,17 @@ const SEND_MESSAGE_MUTATION = gql`
 `;
 
 interface IProps {
-  messages?: (seeRoom_seeRoom_messages | null)[];
   postId: number;
+  roomId?: number;
+  messages?: (seeRoom_seeRoom_messages | null)[];
+  fetchMore?: <TFetchData = seeRoom, TFetchVars = OperationVariables>(
+    fetchMoreOptions: FetchMoreQueryOptions<TFetchVars, TFetchData> & {
+      updateQuery?: (previousQueryResult: seeRoom, options: any) => seeRoom;
+    }
+  ) => any;
 }
 
-function Chats({ messages, postId }: IProps) {
+function Chats({ roomId, postId, messages, fetchMore }: IProps) {
   const onValid: SubmitHandler<sendMessageVariables> = ({ payload }) => {
     if (loading) return;
     setValue('payload', '');
@@ -122,8 +136,24 @@ function Chats({ messages, postId }: IProps) {
     });
   };
 
+  const getMoreMessageWithScroll = () => {
+    if (!!!(fetchMore && roomId && messages)) return;
+    scrollYProgress.onChange(async (value) => {
+      if (value < -0.8) {
+        console.log('getmore');
+
+        fetchMore({
+          variables: { roomId, offset: messages.length },
+        });
+        scrollYProgress.clearListeners();
+      }
+    });
+  };
+
   const meData = GetMeUser();
   const navigate = useNavigate();
+  const chatsRef = useRef<any>(null);
+  const { scrollYProgress } = useElementScroll(chatsRef);
   const {
     register,
     handleSubmit,
@@ -141,9 +171,13 @@ function Chats({ messages, postId }: IProps) {
     },
   });
 
+  useEffect(() => {
+    getMoreMessageWithScroll();
+  }, [messages]);
+
   return (
     <Wrapper>
-      <Container>
+      <Container ref={chatsRef}>
         {messages?.map((message) => (
           <Chat key={message?.id} mine={message?.userId == meData?.me?.id}>
             {message?.userId === meData?.me?.id && !message?.read && (

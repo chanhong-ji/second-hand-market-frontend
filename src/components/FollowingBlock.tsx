@@ -17,13 +17,6 @@ import Avatar from './Avatar';
 import { useRecoilState } from 'recoil';
 import { followingCountState } from '../atoms';
 
-interface IProps {
-  id: number;
-  name: string;
-  avatar: string | null;
-  zoneId: string;
-  isFollowing: boolean;
-}
 const Username = styled.div``;
 const Zone = styled.div``;
 const FollowBtn = styled.div``;

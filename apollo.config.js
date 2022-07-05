@@ -4,9 +4,10 @@ module.exports = {
     tagname: 'gql',
     service: {
       name: 'newProject',
-      url: (process.env.NODE_ENV = 'production'
-        ? 'https://second-hand-market-backend.herokuapp.com/graphql'
-        : 'http://localhost:4000/graphql'),
+      url:
+        process.env.NODE_ENV === 'production'
+          ? 'https://second-hand-market-backend.herokuapp.com/graphql'
+          : 'http://localhost:4000/graphql',
     },
   },
 };

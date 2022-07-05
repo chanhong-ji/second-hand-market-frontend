@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { useEffect } from 'react';
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Avatar from '../components/Avatar';
 import GetMeUser from '../hooks/getMeUser';

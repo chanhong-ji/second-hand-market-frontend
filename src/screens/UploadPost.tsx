@@ -185,7 +185,7 @@ function UploadPost() {
 
   const onCompleted = (data: createPost) => {
     const {
-      createPost: { ok, error },
+      createPost: { ok },
     } = data;
     if (!ok) return alert('fail');
     navigate(`/profiles/${meData?.me?.id}`);

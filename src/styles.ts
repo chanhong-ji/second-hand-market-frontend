@@ -44,4 +44,12 @@ export const GlobalStyle = createGlobalStyle`
    text-decoration: none;
  }
  ${reset}
+ body {
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  ::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
+ }
 `;

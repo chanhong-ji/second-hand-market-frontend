@@ -21,6 +21,7 @@ import GetMeUser from '../hooks/getMeUser';
 const BtnForLoggedIn = styled.div<{ notLogged: boolean }>`
   opacity: ${(p) => (p.notLogged ? 0.4 : 1)};
   cursor: ${(p) => (p.notLogged ? 'default' : 'pointer')};
+  background-color: ${(p) => (p.notLogged ? 'grey' : p.theme.color.accent)};
 `;
 const Container = styled.div``;
 const Left = styled.div``;
@@ -84,7 +85,6 @@ const Owner = styled.div`
       ${DealtBtn} {
         font-size: 13px;
         padding: 8px;
-        background-color: ${(p) => p.theme.color.accent};
         color: white;
         border-radius: 10px;
         margin-left: 5px;
@@ -95,6 +95,7 @@ const Owner = styled.div`
         border-radius: 5px;
         opacity: 0.7;
         cursor: pointer;
+        background-color: ${(p) => p.theme.color.accent};
         :hover {
           opacity: 1;
         }

@@ -62,7 +62,11 @@ function Header() {
           <Item>
             <Link to='upload'>Upload</Link>
           </Item>
-          <Avatar size={40} url={meData?.me?.avatar || ''} />
+          <Avatar
+            size={40}
+            url={meData?.me?.avatar || ''}
+            onClick={() => navigate(`/profiles/${meData?.me?.id}`)}
+          />
           <Item onClick={() => navigate(`/profiles/${meData?.me?.id}`)}>
             My Profile
           </Item>

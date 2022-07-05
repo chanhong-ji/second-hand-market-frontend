@@ -46,7 +46,11 @@ const cache = new InMemoryCache({
   },
 });
 
-const httpLink = createUploadLink({ uri: 'http://localhost:4000/graphql' });
+const httpLink = createUploadLink({
+  uri: (process.env.NODE_ENV = 'production'
+    ? 'https://second-hand-market-backend.herokuapp.com/graphql'
+    : 'http://localhost:4000/graphql'),
+});
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path }) =>
@@ -66,11 +70,16 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const wsLink = new WebSocketLink(
-  new SubscriptionClient('ws://localhost:4000/graphql', {
-    connectionParams: () => ({
-      token: localStorage.getItem('token'),
-    }),
-  })
+  new SubscriptionClient(
+    (process.env.NODE_ENV = 'production'
+      ? 'ws://second-hand-market-backend.herokuapp.com/graphql'
+      : 'ws://localhost:4000/graphql'),
+    {
+      connectionParams: () => ({
+        token: localStorage.getItem('token'),
+      }),
+    }
+  )
 );
 
 const splitLink = split(

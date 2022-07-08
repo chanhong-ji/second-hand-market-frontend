@@ -7,7 +7,7 @@ import Avatar from '../components/Avatar';
 import Loader from '../components/Loader';
 import PageTitle from '../components/PageTitle';
 import ProfileBottom from '../components/ProfileBottom';
-import { USER_FRAGMENT } from '../fragment';
+import { POST_FRAGMENT_FOR_BANNER, USER_FRAGMENT } from '../fragment';
 import GetMeUser from '../hooks/getMeUser';
 import { onToggleFollowUpdate } from '../shared/utils';
 import { seeProfile } from '../__generated__/seeProfile';
@@ -74,26 +74,17 @@ const SEE_PROFILE_QUERY = gql`
     seeProfile(id: $id, offset: $offset) {
       ...UserFragment
       posts(offset: $offset) {
-        id
-        title
-        photos
-        dealt
-        price
-        interestsCount
-        roomCount
-        zone {
-          id
-          name
-        }
+        ...PostFragmentForBanner
       }
     }
   }
   ${USER_FRAGMENT}
+  ${POST_FRAGMENT_FOR_BANNER}
 `;
 
 export const TOGGLE_FOLLOW_MUTATION = gql`
   mutation toggleFollow($id: Int!) {
-    toggleFollow(id: $id) {
+    toggleFollow(userId: $id) {
       ok
       error
       id
@@ -166,7 +157,7 @@ function Profile() {
               <Info>
                 <Row>
                   <Username>{data?.seeProfile?.name}</Username>
-                  <Zone>{data?.seeProfile?.zone?.name}</Zone>
+                  <Zone>{data?.seeProfile?.zoneName}</Zone>
                   {!!!data?.seeProfile?.isMe && (
                     <FollowBtn onClick={onToggleFollow}>
                       {data?.seeProfile?.isFollowing ? 'UnFollow' : 'Follow'}

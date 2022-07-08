@@ -4,10 +4,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: seeInterests
+// GraphQL fragment: PostFragmentForBanner
 // ====================================================
 
-export interface seeInterests_seeInterests_post {
+export interface PostFragmentForBanner {
   __typename: "Post";
   id: number;
   title: string;
@@ -17,18 +17,4 @@ export interface seeInterests_seeInterests_post {
   interestsCount: number;
   roomCount: number;
   isInterest: boolean;
-}
-
-export interface seeInterests_seeInterests {
-  __typename: "Interest";
-  id: number;
-  post: seeInterests_seeInterests_post;
-}
-
-export interface seeInterests {
-  seeInterests: (seeInterests_seeInterests | null)[];
-}
-
-export interface seeInterestsVariables {
-  offset?: number | null;
 }

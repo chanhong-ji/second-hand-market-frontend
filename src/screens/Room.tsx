@@ -137,8 +137,8 @@ function Room() {
     }
   );
 
-  useEffect(() => {
-    if (data?.seeRoom === null && location.state) {
+  const onSetTalkingTo = () => {
+    if (data === undefined && location.state) {
       const fakeUser = {
         avatar: location.state.avatar,
         id: location.state.id,
@@ -150,7 +150,15 @@ function Room() {
         data?.seeRoom?.users.find((user) => user?.id !== meData?.me?.id) ?? {}
       );
     }
+  };
 
+  const onUpdateFetchedData = () => {
+    if (roomId && data?.seeRoom?.id) {
+      refetch({ roomId: +roomId });
+    }
+  };
+
+  const onSetSubscription = () => {
     if (
       roomId &&
       data?.seeRoom?.id &&
@@ -166,12 +174,15 @@ function Room() {
       });
       setSubscribed(true);
     }
+  };
+
+  useEffect(() => {
+    onSetSubscription();
   }, [data, subscribed, roomId]);
 
   useEffect(() => {
-    if (roomId && data?.seeRoom?.id) {
-      refetch({ roomId: +roomId });
-    }
+    onSetTalkingTo();
+    onUpdateFetchedData();
   }, []);
 
   return (

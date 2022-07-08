@@ -12,11 +12,7 @@ const ME_QUERY = gql`
       avatar
       followerCount
       zoneId
-      zoneFirst
-      zoneSecond
-      zone {
-        name
-      }
+      zoneName
     }
   }
 `;

@@ -138,12 +138,12 @@ function OwnerBlock({
   dealt,
   price: postPrice,
   user,
-  zone,
   isMine,
   hasRoom,
   isInterest,
   interestsCount,
   roomCount,
+  zoneName,
 }: seePost_seePost) {
   const onBookmark = () => {
     if (!!!meData) return;
@@ -237,7 +237,7 @@ function OwnerBlock({
           <Username onClick={() => navigate(`/profiles/${user.id}`)}>
             {user.name}
           </Username>
-          <Zone>{zone.name}</Zone>
+          <Zone>{zoneName}</Zone>
         </Container>
       </Left>
       <Right>

@@ -4,30 +4,22 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: seeRooms
+// GraphQL fragment: RoomFragmentForRooms
 // ====================================================
 
-export interface seeRooms_seeRooms_users {
+export interface RoomFragmentForRooms_users {
   __typename: "User";
   id: number;
   name: string;
   avatar: string | null;
 }
 
-export interface seeRooms_seeRooms {
+export interface RoomFragmentForRooms {
   __typename: "Room";
   id: number;
   postId: number;
   createdAt: string;
   updatedAt: string;
   unreadTotal: number;
-  users: (seeRooms_seeRooms_users | null)[];
-}
-
-export interface seeRooms {
-  seeRooms: (seeRooms_seeRooms | null)[];
-}
-
-export interface seeRoomsVariables {
-  offset?: number | null;
+  users: (RoomFragmentForRooms_users | null)[];
 }

@@ -14,12 +14,6 @@ export interface seePost_seePost_user {
   avatar: string | null;
 }
 
-export interface seePost_seePost_zone {
-  __typename: "Zone";
-  id: number;
-  name: string;
-}
-
 export interface seePost_seePost_category {
   __typename: "Category";
   id: number;
@@ -35,8 +29,8 @@ export interface seePost_seePost {
   price: number;
   user: seePost_seePost_user;
   photos: string[];
-  zone: seePost_seePost_zone;
   category: seePost_seePost_category;
+  zoneName: string;
   isMine: boolean;
   isInterest: boolean;
   interestsCount: number;

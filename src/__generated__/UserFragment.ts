@@ -7,12 +7,6 @@
 // GraphQL fragment: UserFragment
 // ====================================================
 
-export interface UserFragment_zone {
-  __typename: "Zone";
-  id: number;
-  name: string;
-}
-
 export interface UserFragment {
   __typename: "User";
   id: number;
@@ -22,7 +16,7 @@ export interface UserFragment {
   followingCount: number;
   postsCount: number;
   dealtCount: number;
-  zone: UserFragment_zone;
+  zoneName: string;
   isMe: boolean;
   isFollowing: boolean;
   interestCount: number;

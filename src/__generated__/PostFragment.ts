@@ -14,12 +14,6 @@ export interface PostFragment_user {
   avatar: string | null;
 }
 
-export interface PostFragment_zone {
-  __typename: "Zone";
-  id: number;
-  name: string;
-}
-
 export interface PostFragment_category {
   __typename: "Category";
   id: number;
@@ -35,8 +29,8 @@ export interface PostFragment {
   price: number;
   user: PostFragment_user;
   photos: string[];
-  zone: PostFragment_zone;
   category: PostFragment_category;
+  zoneName: string;
   isMine: boolean;
   isInterest: boolean;
   interestsCount: number;

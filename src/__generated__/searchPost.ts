@@ -14,12 +14,6 @@ export interface searchPost_searchPost_posts_user {
   avatar: string | null;
 }
 
-export interface searchPost_searchPost_posts_zone {
-  __typename: "Zone";
-  id: number;
-  name: string;
-}
-
 export interface searchPost_searchPost_posts_category {
   __typename: "Category";
   id: number;
@@ -35,8 +29,8 @@ export interface searchPost_searchPost_posts {
   price: number;
   user: searchPost_searchPost_posts_user;
   photos: string[];
-  zone: searchPost_searchPost_posts_zone;
   category: searchPost_searchPost_posts_category;
+  zoneName: string;
   isMine: boolean;
   isInterest: boolean;
   interestsCount: number;

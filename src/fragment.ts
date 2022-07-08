@@ -9,10 +9,7 @@ export const USER_FRAGMENT = gql`
     followingCount
     postsCount
     dealtCount
-    zone {
-      id
-      name
-    }
+    zoneName
     isMe
     isFollowing
     interestCount
@@ -52,14 +49,11 @@ export const POST_FRAGMENT = gql`
       avatar
     }
     photos
-    zone {
-      id
-      name
-    }
     category {
       id
       name
     }
+    zoneName
     isMine
     isInterest
     interestsCount
@@ -78,5 +72,33 @@ export const MESSAGE_FRAGMENT = gql`
     roomId
     read
     createdAt
+  }
+`;
+
+export const POST_FRAGMENT_FOR_BANNER = gql`
+  fragment PostFragmentForBanner on Post {
+    id
+    title
+    photos
+    dealt
+    price
+    interestsCount
+    roomCount
+    isInterest
+  }
+`;
+
+export const ROOM_FRAGMENT_FOR_ROOMS = gql`
+  fragment RoomFragmentForRooms on Room {
+    id
+    postId
+    createdAt
+    updatedAt
+    unreadTotal
+    users {
+      id
+      name
+      avatar
+    }
   }
 `;

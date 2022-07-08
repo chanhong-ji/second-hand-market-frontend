@@ -44,8 +44,8 @@ function Search() {
   const { data, loading, refetch } = useQuery<searchPost>(SEARCH_POST_QUERY, {
     variables: {
       keyword,
-      zoneFirst: meData?.me?.zoneFirst ?? 0,
-      zoneSecond: meData?.me?.zoneSecond ?? 0,
+      zoneFirst: meData?.me?.zoneId ? +meData.me.zoneId.slice(0, -2) : 0,
+      zoneSecond: meData?.me?.zoneId ? +meData.me.zoneId.slice(-2) : 0,
     },
     refetchWritePolicy: 'overwrite',
     onCompleted: (data) => {

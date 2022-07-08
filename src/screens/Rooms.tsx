@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Avatar from '../components/Avatar';
+import { ROOM_FRAGMENT_FOR_ROOMS } from '../fragment';
 import GetMeUser from '../hooks/getMeUser';
 import { seeRooms } from '../__generated__/seeRooms';
 
@@ -71,34 +72,23 @@ const List = styled.div`
 `;
 
 const SEE_ROOMS_QUERY = gql`
-  query seeRooms($userId: Int!, $offset: Int) {
-    seeRooms(userId: $userId, offset: $offset) {
-      id
-      postId
-      createdAt
-      updatedAt
-      unreadTotal
-      users {
-        id
-        name
-        avatar
-      }
+  query seeRooms($offset: Int) {
+    seeRooms(offset: $offset) {
+      ...RoomFragmentForRooms
     }
   }
+  ${ROOM_FRAGMENT_FOR_ROOMS}
 `;
 
 function Rooms() {
   const meData = GetMeUser();
   const navigate = useNavigate();
   const { data, refetch } = useQuery<seeRooms>(SEE_ROOMS_QUERY, {
-    variables: { userId: meData?.me?.id },
     skip: !!!meData?.me?.id,
   });
 
   useEffect(() => {
-    if (!!meData?.me?.id) {
-      refetch({ userId: +meData?.me?.id });
-    }
+    refetch();
   }, []);
 
   return (

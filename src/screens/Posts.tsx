@@ -9,7 +9,7 @@ import Pagination from '../components/Pagenation';
 import PostsTop from '../components/PostsTop';
 import { PostsWrapper } from '../shared/shared';
 import { categoryList } from '../dataList';
-import { POST_FRAGMENT } from '../fragment';
+import { POST_FRAGMENT_FOR_BANNER } from '../fragment';
 import GetMeUser from '../hooks/getMeUser';
 import { seePosts, seePostsVariables } from '../__generated__/seePosts';
 import { PER_PAGE } from '../shared/constant';
@@ -43,12 +43,12 @@ const SEE_POSTS_QUERY = gql`
       page: $page
     ) {
       posts {
-        ...PostFragment
+        ...PostFragmentForBanner
       }
       totalResults
     }
   }
-  ${POST_FRAGMENT}
+  ${POST_FRAGMENT_FOR_BANNER}
 `;
 
 function Posts() {
@@ -58,8 +58,8 @@ function Posts() {
   const meData = GetMeUser();
   const { data, loading, refetch } = useQuery<seePosts>(SEE_POSTS_QUERY, {
     variables: {
-      zoneFirst: meData?.me?.zoneFirst ?? 0,
-      zoneSecond: meData?.me?.zoneSecond ?? 0,
+      zoneFirst: meData?.me?.zoneId ? +meData.me.zoneId.slice(0, -2) : 0,
+      zoneSecond: meData?.me?.zoneId ? +meData.me.zoneId.slice(-2) : 0,
     },
     refetchWritePolicy: 'overwrite',
     onCompleted: (data) => {

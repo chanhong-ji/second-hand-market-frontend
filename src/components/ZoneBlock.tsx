@@ -25,8 +25,9 @@ const Zone = styled.div`
 
 function ZoneBlock({ register }: IProps) {
   const meData = GetMeUser();
-  const [firstZone, setFirstZone] = useState(meData?.me?.zoneFirst ?? 0);
-
+  const [firstZone, setFirstZone] = useState(
+    meData?.me?.zoneId ? +meData.me.zoneId.slice(0, -2) : 0
+  );
   return (
     <Zone>
       <label htmlFor='zone'>Zone</label>
@@ -35,7 +36,7 @@ function ZoneBlock({ register }: IProps) {
         placeholder='zone'
         id='zone'
         onChange={(e) => setFirstZone(+e.target.value)}
-        defaultValue={meData?.me?.zoneFirst ?? 0}
+        defaultValue={firstZone}
         style={{ marginRight: 7 }}
       >
         {zoneFirst.map((title, index) => (
@@ -47,9 +48,11 @@ function ZoneBlock({ register }: IProps) {
 
       <select
         {...register('zoneSecond', { required: 'Zone is required' })}
-        defaultValue={meData?.me?.zoneSecond ?? 0}
+        defaultValue={
+          meData?.me?.zoneId.slice(-2) ? +meData.me.zoneId.slice(-2) : 0
+        }
       >
-        {zoneSecond[firstZone].map((title, index) => (
+        {zoneSecond[+firstZone].map((title, index) => (
           <option value={index + ''} key={index + ''}>
             {title}
           </option>

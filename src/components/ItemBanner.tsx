@@ -2,20 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getFormatValue } from '../shared/utils';
 
-interface IProps {
-  id: number;
-  title: string;
-  price: number;
-  photos: (string | null)[] | null;
-  dealt: boolean;
-  interestsCount: number;
-  zone: {
-    id: number;
-    name: string;
-  };
-  roomCount: number;
-}
-
 const Container = styled.div`
   width: 100%;
   overflow: hidden;
@@ -88,16 +74,18 @@ const Info = styled.div`
   }
 `;
 
+// from Grid, ProfileBottom
 function ItemBanner({
   id,
   title,
   photos,
   dealt,
   interestsCount,
-  zone,
   price,
   roomCount,
-}: IProps) {
+  zoneName,
+}: any) {
+  // 임시코드
   const goToArticle = () =>
     navigate(`/posts/${id}`, { state: { photoUrls: photos } });
   const navigate = useNavigate();
@@ -115,7 +103,7 @@ function ItemBanner({
       )}
       <Info>
         <Title>{title}</Title>
-        <Zone>{zone.name}</Zone>
+        <Zone>{zoneName}</Zone>
         <Price>{(formatPrice + '').slice(1)} 원</Price>
         <Record>
           <InterestCount>관심 {interestsCount}</InterestCount>

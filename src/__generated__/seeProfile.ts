@@ -7,18 +7,6 @@
 // GraphQL query operation: seeProfile
 // ====================================================
 
-export interface seeProfile_seeProfile_zone {
-  __typename: "Zone";
-  id: number;
-  name: string;
-}
-
-export interface seeProfile_seeProfile_posts_zone {
-  __typename: "Zone";
-  id: number;
-  name: string;
-}
-
 export interface seeProfile_seeProfile_posts {
   __typename: "Post";
   id: number;
@@ -28,7 +16,7 @@ export interface seeProfile_seeProfile_posts {
   price: number;
   interestsCount: number;
   roomCount: number;
-  zone: seeProfile_seeProfile_posts_zone;
+  isInterest: boolean;
 }
 
 export interface seeProfile_seeProfile {
@@ -40,7 +28,7 @@ export interface seeProfile_seeProfile {
   followingCount: number;
   postsCount: number;
   dealtCount: number;
-  zone: seeProfile_seeProfile_zone;
+  zoneName: string;
   isMe: boolean;
   isFollowing: boolean;
   interestCount: number;

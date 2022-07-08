@@ -7,11 +7,6 @@
 // GraphQL query operation: me
 // ====================================================
 
-export interface me_me_zone {
-  __typename: "Zone";
-  name: string;
-}
-
 export interface me_me {
   __typename: "User";
   id: number;
@@ -20,9 +15,7 @@ export interface me_me {
   avatar: string | null;
   followerCount: number;
   zoneId: string;
-  zoneFirst: number | null;
-  zoneSecond: number | null;
-  zone: me_me_zone;
+  zoneName: string;
 }
 
 export interface me {

@@ -15,21 +15,18 @@ import { useEffect } from 'react';
 import { useViewportScroll } from 'framer-motion';
 import { useRecoilState } from 'recoil';
 import { interestCountState } from '../atoms';
+import { POST_FRAGMENT_FOR_BANNER } from '../fragment';
 
 const SEE_INTEREST_QUERY = gql`
   query seeInterests($offset: Int) {
     seeInterests(offset: $offset) {
       id
       post {
-        id
-        title
-        price
-        dealt
-        photos
-        isInterest
+        ...PostFragmentForBanner
       }
     }
   }
+  ${POST_FRAGMENT_FOR_BANNER}
 `;
 
 const Photo = styled.div<{ url: string }>`

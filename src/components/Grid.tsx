@@ -21,19 +21,7 @@ function Grid({ posts, keyword }: IProps) {
         <div>no result {keyword ?? <span> {keyword}</span>}</div>
       ) : (
         posts.map((post) =>
-          post ? (
-            <ItemBanner
-              id={post.id}
-              title={post.title}
-              photos={post.photos}
-              price={post.price}
-              dealt={post.dealt}
-              interestsCount={post.interestsCount}
-              zone={post.zone}
-              key={post.id + ''}
-              roomCount={post.roomCount}
-            />
-          ) : null
+          post ? <ItemBanner {...post} key={post.id} /> : null
         )
       )}
     </Wrapper>

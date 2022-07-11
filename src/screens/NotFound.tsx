@@ -12,7 +12,7 @@ function NotFound({ children }: any) {
   return (
     <Wrapper>
       <div>Not Found</div>
-      {children ? <span>{children}</span> : <span></span>}
+      {children && <span>{children}</span>}
     </Wrapper>
   );
 }

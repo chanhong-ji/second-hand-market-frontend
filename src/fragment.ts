@@ -85,6 +85,7 @@ export const POST_FRAGMENT_FOR_BANNER = gql`
     interestsCount
     roomCount
     isInterest
+    zoneName
   }
 `;
 

@@ -6,7 +6,7 @@ import Grid from '../components/Grid';
 import Loader from '../components/Loader';
 import Pagination from '../components/Pagenation';
 import PostsTop from '../components/PostsTop';
-import { PostsWrapper } from '../shared/shared';
+import { PostsWrapper } from '../shared/components';
 import { POST_FRAGMENT } from '../fragment';
 import GetMeUser from '../hooks/getMeUser';
 import { searchPost, searchPostVariables } from '../__generated__/searchPost';
@@ -35,6 +35,31 @@ const SEARCH_POST_QUERY = gql`
 `;
 
 function Search() {
+  const onValid: SubmitHandler<searchPostVariables> = ({
+    zoneFirst,
+    zoneSecond,
+  }) => {
+    setPage(1);
+    refetch({
+      keyword,
+      zoneFirst: +zoneFirst,
+      zoneSecond: +zoneSecond,
+      page: 1,
+    });
+  };
+
+  const onPageChanged = () => {
+    const { zoneFirst, zoneSecond } = getValues();
+    if (zoneFirst && zoneSecond) {
+      refetch({
+        keyword,
+        zoneFirst: +zoneFirst,
+        zoneSecond: +zoneSecond,
+        page,
+      });
+    }
+  };
+
   const { search } = useLocation();
   const keyword = new URLSearchParams(search).get('keyword');
   const meData = GetMeUser();
@@ -54,29 +79,8 @@ function Search() {
     },
   });
 
-  const onValid: SubmitHandler<searchPostVariables> = ({
-    zoneFirst,
-    zoneSecond,
-  }) => {
-    setPage(1);
-    refetch({
-      keyword,
-      zoneFirst: +zoneFirst,
-      zoneSecond: +zoneSecond,
-      page: 1,
-    });
-  };
-
   useEffect(() => {
-    const { zoneFirst, zoneSecond } = getValues();
-    if (zoneFirst && zoneSecond) {
-      refetch({
-        keyword,
-        zoneFirst: +zoneFirst,
-        zoneSecond: +zoneSecond,
-        page,
-      });
-    }
+    onPageChanged();
   }, [page]);
 
   return (

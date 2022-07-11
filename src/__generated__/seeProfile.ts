@@ -17,6 +17,7 @@ export interface seeProfile_seeProfile_posts {
   interestsCount: number;
   roomCount: number;
   isInterest: boolean;
+  zoneName: string;
 }
 
 export interface seeProfile_seeProfile {

@@ -7,9 +7,9 @@ import {
   AuthForm,
   AuthWrapper,
   FormTitle,
-  IForm,
+  IFormWithPasswordConfirm,
   Input,
-} from '../shared/shared';
+} from '../shared/components';
 import ZoneBlock from '../components/ZoneBlock';
 import GetMeUser from '../hooks/getMeUser';
 import {
@@ -56,7 +56,7 @@ function EditProfile() {
     passwordConfirm,
     zoneFirst,
     zoneSecond,
-  }: editProfileVariables & IForm) => {
+  }: editProfileVariables & IFormWithPasswordConfirm) => {
     if (loading) return;
     if (password !== passwordConfirm)
       return setError(
@@ -79,24 +79,25 @@ function EditProfile() {
   const { id } = useParams();
   const meData = GetMeUser();
   const navigate = useNavigate();
-
   const [editProfile, { loading }] = useMutation<
     editProfile,
     editProfileVariables
   >(EDIT_PROFILE, { onCompleted });
-
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<editProfileVariables & IForm>({ mode: 'onChange' });
+  } = useForm<editProfileVariables & IFormWithPasswordConfirm>({
+    mode: 'onChange',
+  });
 
   useEffect(() => {
     if (meData?.me?.id != id) {
       navigate(-1);
     }
   }, [id]);
+
   return (
     <AuthWrapper>
       <AuthForm onSubmit={handleSubmit(onValid)}>

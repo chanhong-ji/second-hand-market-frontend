@@ -85,7 +85,7 @@ const READ_MESSAGE_MUTATION = gql`
 `;
 
 function Room() {
-  const onCompleteQuery = (data: seeRoom) => {
+  const onQueryCompleted = (data: seeRoom) => {
     cache.modify({
       id: `Room:${data.seeRoom?.id}`,
       fields: {
@@ -99,10 +99,11 @@ function Room() {
     });
   };
 
-  const updateQuery: UpdateQueryFn<any, updateRoomVariables, updateRoom> = (
-    _,
-    { subscriptionData: { data } }
-  ) => {
+  const onSubscriptionUpdated: UpdateQueryFn<
+    any,
+    updateRoomVariables,
+    updateRoom
+  > = (_, { subscriptionData: { data } }) => {
     if (!data.updateRoom) return;
     if (!data.updateRoom.read) {
       const messageFragment = cache.writeFragment({
@@ -117,25 +118,6 @@ function Room() {
       });
     }
   };
-
-  const { id: roomId } = useParams();
-  const navigate = useNavigate();
-  const location: any = useLocation();
-  const [subscribed, setSubscribed] = useState(false);
-  const { cache } = useApolloClient();
-  const meData = GetMeUser();
-  const [talkingTo, setTalkingTo] = useState<any>();
-  const [readMessage] = useMutation<readMessage, readMessageVariables>(
-    READ_MESSAGE_MUTATION
-  );
-  const { data, subscribeToMore, refetch, fetchMore } = useQuery<seeRoom>(
-    SEE_ROOM_QUERY,
-    {
-      skip: !!!roomId || !!!/^\d+$/.test(roomId),
-      variables: { roomId: roomId ? +roomId : 0 },
-      onCompleted: onCompleteQuery,
-    }
-  );
 
   const onSetTalkingTo = () => {
     if (data === undefined && location.state) {
@@ -170,11 +152,30 @@ function Room() {
         variables: {
           roomId: +roomId,
         },
-        updateQuery,
+        updateQuery: onSubscriptionUpdated,
       });
       setSubscribed(true);
     }
   };
+
+  const { id: roomId } = useParams();
+  const navigate = useNavigate();
+  const location: any = useLocation();
+  const [subscribed, setSubscribed] = useState(false);
+  const { cache } = useApolloClient();
+  const meData = GetMeUser();
+  const [talkingTo, setTalkingTo] = useState<any>();
+  const [readMessage] = useMutation<readMessage, readMessageVariables>(
+    READ_MESSAGE_MUTATION
+  );
+  const { data, subscribeToMore, refetch, fetchMore } = useQuery<seeRoom>(
+    SEE_ROOM_QUERY,
+    {
+      skip: !!!roomId || !!!/^\d+$/.test(roomId),
+      variables: { roomId: roomId ? +roomId : 0 },
+      onCompleted: onQueryCompleted,
+    }
+  );
 
   useEffect(() => {
     onSetSubscription();

@@ -6,9 +6,9 @@ import {
   AuthForm,
   AuthWrapper,
   FormTitle,
-  IForm,
+  IFormWithPasswordConfirm,
   Input,
-} from '../shared/shared';
+} from '../shared/components';
 import ZoneBlock from '../components/ZoneBlock';
 import {
   createAccount,
@@ -48,14 +48,9 @@ function SignUp() {
     navigate('/login', { state: { phone, password } });
   };
 
-  const onValid: SubmitHandler<createAccountVariables & IForm> = ({
-    phone,
-    name,
-    password,
-    passwordConfirm,
-    zoneFirst,
-    zoneSecond,
-  }) => {
+  const onValid: SubmitHandler<
+    createAccountVariables & IFormWithPasswordConfirm
+  > = ({ phone, name, password, passwordConfirm, zoneFirst, zoneSecond }) => {
     if (loading) return;
     if (password !== passwordConfirm)
       return setError(
@@ -84,7 +79,9 @@ function SignUp() {
     setError,
     clearErrors,
     getValues,
-  } = useForm<createAccountVariables & IForm>({ mode: 'onChange' });
+  } = useForm<createAccountVariables & IFormWithPasswordConfirm>({
+    mode: 'onChange',
+  });
 
   const [createAccount, { loading }] = useMutation<
     createAccount,

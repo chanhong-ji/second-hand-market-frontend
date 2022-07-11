@@ -17,4 +17,5 @@ export interface PostFragmentForBanner {
   interestsCount: number;
   roomCount: number;
   isInterest: boolean;
+  zoneName: string;
 }

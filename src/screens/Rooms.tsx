@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr;
 `;
-const Room = styled.div`
+const RoomSpace = styled.div`
   background-color: white;
   border-left: 1px solid ${(p) => p.theme.color.border};
   height: ${(p) => p.theme.size.room.height.whole};
@@ -122,9 +122,9 @@ function Rooms() {
             )
         )}
       </List>
-      <Room>
+      <RoomSpace>
         <Outlet />
-      </Room>
+      </RoomSpace>
     </Wrapper>
   );
 }

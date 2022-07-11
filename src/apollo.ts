@@ -9,19 +9,20 @@ import { createUploadLink } from 'apollo-upload-client';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
-export const LoggedInVar = makeVar(Boolean(localStorage.getItem('token')));
-export const tokenVar = makeVar(localStorage.getItem('token'));
+const TOKEN = 'token';
+export const LoggedInVar = makeVar(Boolean(localStorage.getItem(TOKEN)));
+export const tokenVar = makeVar(localStorage.getItem(TOKEN));
 
 export const getUserLogin = async (token: string) => {
   LoggedInVar(true);
   tokenVar(token);
-  await localStorage.setItem('token', token);
+  await localStorage.setItem(TOKEN, token);
 };
 
 export const getUserLogout = async () => {
   LoggedInVar(false);
   tokenVar('');
-  await localStorage.removeItem('token');
+  await localStorage.removeItem(TOKEN);
   window.location.reload();
   window.location.href = '/';
 };
@@ -77,7 +78,7 @@ const wsLink = new WebSocketLink(
       : 'ws://localhost:4000/graphql',
     {
       connectionParams: () => ({
-        token: localStorage.getItem('token'),
+        token: localStorage.getItem(TOKEN),
       }),
     }
   )

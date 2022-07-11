@@ -17,6 +17,7 @@ export interface seeInterests_seeInterests_post {
   interestsCount: number;
   roomCount: number;
   isInterest: boolean;
+  zoneName: string;
 }
 
 export interface seeInterests_seeInterests {

@@ -145,11 +145,12 @@ function OwnerBlock({
   roomCount,
   zoneName,
 }: seePost_seePost) {
-  const onBookmark = () => {
+  const onClickInterest = () => {
     if (!!!meData) return;
     toggleInterest({ variables: { id: postId } });
   };
-  const onSendChat = () => {
+
+  const onClickChat = () => {
     if (!!!meData) return;
     if (hasRoom == -1) {
       navigate(`/room/chat`, {
@@ -166,18 +167,36 @@ function OwnerBlock({
       navigate(`/room/${hasRoom}`);
     }
   };
-  const onDeletePost = async () => {
+
+  const onClickDelete = async () => {
     const answer = await window.confirm('Are you sure to delete this post?');
     if (answer) {
       deletePost();
     }
   };
-  const onDealtBtn = async () => {
+
+  const onClickDealt = async () => {
     const answer = await window.confirm('Is this a post completed?');
     if (answer) {
       getDealtPost();
     }
   };
+
+  const onDeleteCompleted = (data: deletePost) => {
+    const {
+      deletePost: { ok },
+    } = data;
+    if (!ok) return;
+    navigate(`/profiles/${user.id}`);
+  };
+
+  const onDeleteUpdate = (cache: ApolloCache<any>, result: any) => {
+    if (!!!result.data?.deletePost.ok) return;
+    cache.evict({
+      id: `Post:${postId}`,
+    });
+  };
+
   const onDealtUpdate = (cache: ApolloCache<any>, result: any) => {
     const {
       getDealtPost: { ok, error },
@@ -205,19 +224,8 @@ function OwnerBlock({
     DELETE_POST_MUTATION,
     {
       variables: { deletePostId: postId },
-      onCompleted: (data) => {
-        const {
-          deletePost: { ok },
-        } = data;
-        if (!ok) return;
-        navigate(`/profiles/${user.id}`);
-      },
-      update: (cache, result) => {
-        if (!!!result.data?.deletePost.ok) return;
-        cache.evict({
-          id: `Post:${postId}`,
-        });
-      },
+      onCompleted: onDeleteCompleted,
+      update: onDeleteUpdate,
     }
   );
   const [getDealtPost] = useMutation<getDealtPost, getDealtPostVariables>(
@@ -258,22 +266,22 @@ function OwnerBlock({
         <Row>
           {!isMine ? (
             <>
-              <ChatBtn onClick={onSendChat} notLogged={meData === undefined}>
+              <ChatBtn onClick={onClickChat} notLogged={meData === undefined}>
                 Send chat
               </ChatBtn>
               <BookmarkBtn
-                onClick={onBookmark}
+                onClick={onClickInterest}
                 notLogged={meData === undefined}
               >
                 Book mark
               </BookmarkBtn>
             </>
           ) : dealt ? (
-            <DeleteBtn onClick={onDeletePost}>Delete Post</DeleteBtn>
+            <DeleteBtn onClick={onClickDelete}>Delete Post</DeleteBtn>
           ) : (
             <>
-              <DealtBtn onClick={onDealtBtn}>Dealt Complete</DealtBtn>
-              <DeleteBtn onClick={onDeletePost}>Delete Post</DeleteBtn>
+              <DealtBtn onClick={onClickDealt}>Dealt Complete</DealtBtn>
+              <DeleteBtn onClick={onClickDelete}>Delete Post</DeleteBtn>
             </>
           )}
         </Row>

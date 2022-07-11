@@ -10,6 +10,7 @@ export const AuthWrapper = styled.div`
   align-items: center;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `;
+
 export const AuthForm = styled.form`
   width: 80%;
   padding-top: 30px;
@@ -20,12 +21,14 @@ export const AuthForm = styled.form`
     }
   }
 `;
+
 export const FormTitle = styled.div`
   font-size: 25px;
   font-weight: 600;
   margin-bottom: 15px;
   text-align: center;
 `;
+
 export const Input = styled.input`
   border: none;
   background-color: ${(p) => p.theme.color.input};
@@ -42,14 +45,10 @@ export const Input = styled.input`
     color: white;
   }
 `;
+
 export const SubmitInput = styled(Input)`
   cursor: pointer;
 `;
-
-export interface IForm {
-  passwordConfirm: string;
-  result: string;
-}
 
 export const PostsWrapper = styled.div`
   background-color: ${(p) => p.theme.color.bg.main};
@@ -61,3 +60,12 @@ export const PostsWrapper = styled.div`
   position: relative;
   padding-bottom: 60px;
 `;
+
+//interface
+export interface IForm {
+  result: string;
+}
+
+export interface IFormWithPasswordConfirm extends IForm {
+  passwordConfirm: string;
+}

@@ -65,18 +65,25 @@ interface IProps {
 function Pagination({ page, totalPage, setPage }: IProps) {
   const [curPages, setCurPages] = useState<number[]>([]);
 
-  useEffect(() => {
+  const onResetPagination = () => {
     window.scrollTo({ top: 0 });
     const stand = Math.floor((page - 1) / 10);
     const paginationArray = Array.from(Array(10).keys())
       .map((i) => stand * 10 + i + 1)
       .filter((i) => i <= totalPage);
     setCurPages(paginationArray);
+  };
+
+  const onClickPrevBtn = () => setPage((prev) => prev - 1);
+  const onClickNextBtn = () => setPage((prev) => prev + 1);
+
+  useEffect(() => {
+    onResetPagination();
   }, [totalPage]);
 
   return (
     <Wrapper>
-      <PrevBtn disabled={page == 1} onClick={() => setPage((prev) => prev - 1)}>
+      <PrevBtn disabled={page == 1} onClick={onClickPrevBtn}>
         <FontAwesomeIcon style={{ marginRight: 10 }} icon={faAngleLeft} />
         Previous
       </PrevBtn>
@@ -87,10 +94,7 @@ function Pagination({ page, totalPage, setPage }: IProps) {
         </P>
       ))}
 
-      <NextBtn
-        disabled={page === totalPage}
-        onClick={() => setPage((prev) => prev + 1)}
-      >
+      <NextBtn disabled={page === totalPage} onClick={onClickNextBtn}>
         Next
         <FontAwesomeIcon style={{ marginLeft: 10 }} icon={faAngleRight} />
       </NextBtn>

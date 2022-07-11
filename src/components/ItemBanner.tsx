@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getFormatValue } from '../shared/utils';
+import { seePosts_seePosts_posts } from '../__generated__/seePosts';
 
 const Container = styled.div`
   width: 100%;
@@ -66,7 +67,8 @@ const Info = styled.div`
   ${Record} {
     display: flex;
     font-size: 13px;
-    color: rgba(0, 0, 0, 0.8);
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 600;
     div:nth-child(2) {
       margin-left: 4px;
       margin-right: 4px;
@@ -84,23 +86,22 @@ function ItemBanner({
   price,
   roomCount,
   zoneName,
-}: any) {
-  // 임시코드
-  const goToArticle = () =>
+}: seePosts_seePosts_posts) {
+  const onClickPost = () =>
     navigate(`/posts/${id}`, { state: { photoUrls: photos } });
+
   const navigate = useNavigate();
   const formatPrice = getFormatValue(price);
+
   return (
-    <Container onClick={goToArticle}>
-      {photos !== (undefined || null) && (
-        <Photo img={photos[0] || ''}>
-          {dealt && (
-            <Overlay>
-              <span>Dealt</span>
-            </Overlay>
-          )}
-        </Photo>
-      )}
+    <Container onClick={onClickPost}>
+      <Photo img={photos[0] || ''}>
+        {dealt && (
+          <Overlay>
+            <span>Dealt</span>
+          </Overlay>
+        )}
+      </Photo>
       <Info>
         <Title>{title}</Title>
         <Zone>{zoneName}</Zone>

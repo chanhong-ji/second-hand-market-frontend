@@ -55,23 +55,27 @@ interface IProps {
 }
 
 function PhotoBlock({ photos, isDealt }: IProps) {
+  const location: any = useLocation();
+  const [photoUrls, setPhotoUrls] = useState(location?.state?.photoUrls || []);
+  const [photoN, setPhotoN] = useState(0);
+  const theme = useContext(ThemeContext);
+
   const onClickLeftArrow = () => {
     setPhotoN((prev) => (prev == 0 ? photoUrls.length - 1 : prev - 1));
   };
+
   const onClickRightArrow = () => {
     setPhotoN((prev) => (prev + 1 == photoUrls.length ? 0 : prev + 1));
   };
 
-  const location: any = useLocation();
-  const [photoUrls, setPhotoUrls] = useState(location?.state?.photoUrls || []);
-  const [photoN, setPhotoN] = useState(0);
-
-  const theme = useContext(ThemeContext);
-
-  useEffect(() => {
+  const getPhotoUrlsFromData = () => {
     if (!location?.state?.photoUrls) {
       setPhotoUrls(photos);
     }
+  };
+
+  useEffect(() => {
+    getPhotoUrlsFromData();
   }, []);
 
   return (

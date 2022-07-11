@@ -5,12 +5,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CategoryBlock from '../components/CategoryBlock';
 import Modal from '../components/Modal';
+import { IForm } from '../shared/components';
 import { getFormatValue } from '../shared/utils';
 import { editPost, editPostVariables } from '../__generated__/editPost';
-
-interface IFormOfPost {
-  result: string;
-}
 
 const EDIT_POST_MUTATION = gql`
   mutation editPost(
@@ -89,7 +86,7 @@ const Right = styled.div`
 `;
 
 function EditPost() {
-  const onInValid: SubmitErrorHandler<editPostVariables & IFormOfPost> = ({
+  const onInValid: SubmitErrorHandler<editPostVariables & IForm> = ({
     title,
     caption,
     categoryName,
@@ -106,6 +103,7 @@ function EditPost() {
       alert(categoryName.message);
     }
   };
+
   const onValid: SubmitHandler<editPostVariables> = ({
     title,
     caption,
@@ -123,6 +121,7 @@ function EditPost() {
       },
     });
   };
+
   const onCompleted = (data: editPost) => {
     const { ok, error } = data.editPost;
     if (!ok) {
@@ -149,7 +148,7 @@ function EditPost() {
     register,
     handleSubmit,
     formState: { isValid },
-  } = useForm<editPostVariables & IFormOfPost>({
+  } = useForm<editPostVariables & IForm>({
     defaultValues: {
       title: location.state?.title,
       caption: location.state?.caption,

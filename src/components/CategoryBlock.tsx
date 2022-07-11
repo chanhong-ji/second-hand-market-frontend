@@ -26,7 +26,7 @@ const CategoryDiv = styled.div`
   }
 `;
 
-function CategoryBlock({ register, defaultValue }: IProps) {
+function CategoryBlock({ register }: IProps) {
   return (
     <CategoryDiv>
       <label htmlFor='categoryName'>Category</label>

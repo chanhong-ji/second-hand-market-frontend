@@ -6,9 +6,11 @@ import { UseFormRegister } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import ZoneBlock from './ZoneBlock';
+import { categoryList } from '../dataList';
 
 const Title = styled.div``;
 const Options = styled(motion.form)``;
+const CategoryOption = styled.div``;
 const OptionBtn = styled.button``;
 const Top = styled.div`
   width: 100%;
@@ -39,8 +41,19 @@ const Top = styled.div`
     position: absolute;
     top: 60px;
     right: 40px;
-    div:nth-child(2) {
-      margin-bottom: 10px;
+    ${CategoryOption} {
+      label {
+        display: block;
+        margin-bottom: 7px;
+        margin-top: 20px;
+      }
+      select {
+        font-size: 19px;
+        border: none;
+        padding: 5px;
+        box-shadow: rgba(0, 0, 0, 0.01) 0px 1px 3px 0px,
+          rgba(27, 31, 35, 0.1) 0px 0px 0px 1px;
+      }
     }
     ${OptionBtn} {
       padding: 5px;
@@ -50,18 +63,18 @@ const Top = styled.div`
       border-radius: 5px;
       font-size: 17px;
       width: 100%;
+      margin-top: 10px;
     }
   }
 `;
 
 interface IProps {
-  children?: any;
   register: UseFormRegister<any>;
   handleSubmit: any;
   loading: boolean;
 }
 
-function PostsTop({ handleSubmit, register, loading, children }: IProps) {
+function PostsTop({ handleSubmit, register, loading }: IProps) {
   const { search } = useLocation();
   const [menuClicked, setMenuClicked] = useState(false);
   const menuAnimation = useAnimation();
@@ -92,9 +105,25 @@ function PostsTop({ handleSubmit, register, loading, children }: IProps) {
         transition={{ duration: 0.2 }}
       >
         <ZoneBlock register={register} />
-
-        {children}
-
+        {!!!search && (
+          <CategoryOption>
+            <label htmlFor='category'>Category</label>
+            <select
+              {...register('categoryName', { required: true })}
+              id='category'
+              defaultValue='all'
+            >
+              <option value='all' key='all'>
+                전체
+              </option>
+              {categoryList.map((cate, index) => (
+                <option value={cate} key={index + ''}>
+                  {cate}
+                </option>
+              ))}
+            </select>
+          </CategoryOption>
+        )}
         <OptionBtn disabled={loading} onClick={handleSubmit}>
           검색
         </OptionBtn>

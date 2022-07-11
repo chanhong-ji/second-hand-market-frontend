@@ -73,7 +73,6 @@ const Left = styled.div`
     }
   }
 `;
-
 const Price = styled.div``;
 const Right = styled.div`
   background-color: white;
@@ -177,7 +176,6 @@ function UploadPost() {
     const li = await Promise.all(
       photoUrls.map((url) => fetch(url).then((r) => r.blob()))
     );
-    // 카테고리 수정
     createPost({
       variables: { title, caption, categoryName, photos: li, price: +price },
     });
@@ -191,15 +189,15 @@ function UploadPost() {
     navigate(`/profiles/${meData?.me?.id}`);
   };
 
-  const onPrevBtn = () => {
+  const onClickPrevBtn = () => {
     setPhotoPage((prev) => prev - 1);
   };
 
-  const onNextBtn = () => {
+  const onClickNextBtn = () => {
     setPhotoPage((prev) => prev + 1);
   };
 
-  const onDeleteBtn = () => {
+  const onClickDeleteBtn = () => {
     setPhotoUrls((prev) => {
       let newPhotos = [...prev];
       newPhotos.splice(photoPage - 1, 1);
@@ -231,7 +229,7 @@ function UploadPost() {
     setValue('change', null);
   };
 
-  const onPriceData = (data: any) => {
+  const onPriceDataChanged = (data: any) => {
     const value = +String(data.target.value).replaceAll(/\D/g, '') ?? 0;
     setPriceValue(value);
     const formatValue = getFormatValue(value);
@@ -299,20 +297,20 @@ function UploadPost() {
               {photoUrls.length > index + 1 && (
                 <FontAwesomeIcon
                   icon={faArrowCircleRight}
-                  onClick={onNextBtn}
+                  onClick={onClickNextBtn}
                   className='nextBtn'
                 />
               )}
               {index > 0 && (
                 <FontAwesomeIcon
                   icon={faArrowCircleLeft}
-                  onClick={onPrevBtn}
+                  onClick={onClickPrevBtn}
                   className='prevBtn'
                 />
               )}
               <FontAwesomeIcon
                 icon={faXmarkCircle}
-                onClick={onDeleteBtn}
+                onClick={onClickDeleteBtn}
                 className='deleteBtn'
               />
             </Preview>
@@ -349,7 +347,7 @@ function UploadPost() {
               maxLength={10}
               {...register('price', {
                 required: 'Price is requierd',
-                onChange: onPriceData,
+                onChange: onPriceDataChanged,
               })}
             />
           </Price>

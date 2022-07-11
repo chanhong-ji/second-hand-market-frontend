@@ -3,12 +3,14 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getUserLogin } from '../apollo';
 import ErrorMessage from '../components/ErrorMessage';
-import { AuthForm, AuthWrapper, FormTitle, Input } from '../shared/shared';
+import {
+  AuthForm,
+  AuthWrapper,
+  FormTitle,
+  IForm,
+  Input,
+} from '../shared/components';
 import { login, loginVariables } from '../__generated__/login';
-
-interface IForm {
-  result: string;
-}
 
 const LOGIN_MUTATION = gql`
   mutation login($phone: Int!, $password: String!) {

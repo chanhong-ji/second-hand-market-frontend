@@ -8,7 +8,7 @@ export const getFormatValue = (value: number) => {
   return formatValue;
 };
 
-export const getZoneId = (first: string, second: string) => {
+export const getZoneId = (first: string, second: string): number => {
   const secondZoneCode = second.padStart(2, '0');
   return +(first + secondZoneCode);
 };
@@ -18,7 +18,7 @@ export const onToggleInterestUpdate = (
   result: any,
   meDataId: number | undefined
 ) => {
-  if (!!!meDataId) return;
+  if (!meDataId) return;
 
   const {
     toggleInterest: { ok, id },
@@ -37,7 +37,7 @@ export const onToggleInterestUpdate = (
     },
   });
 
-  const newPost: any = cache.readFragment({
+  const curPost: any = cache.readFragment({
     id: `Post:${id}`,
     fragment: gql`
       fragment interestFrag on Post {
@@ -49,7 +49,7 @@ export const onToggleInterestUpdate = (
   cache.modify({
     id: `User:${meDataId}`,
     fields: {
-      interestCount: (prev) => (newPost.isInterest ? prev + 1 : prev - 1),
+      interestCount: (prev) => (curPost.isInterest ? prev + 1 : prev - 1),
     },
   });
 };
@@ -59,7 +59,7 @@ export const onToggleFollowUpdate = (
   result: any,
   meDataId: number | undefined | null
 ) => {
-  if (!!!meDataId) return;
+  if (!meDataId) return;
 
   const {
     toggleFollow: { ok, error, id },

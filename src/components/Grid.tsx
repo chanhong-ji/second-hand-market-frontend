@@ -5,7 +5,7 @@ import ItemBanner from './ItemBanner';
 const Wrapper = styled.div`
   padding: 30px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 30px;
 `;
 

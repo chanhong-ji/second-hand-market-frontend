@@ -25,7 +25,7 @@ export const theme: DefaultTheme = {
       height: '80px',
       padding: '17px',
     },
-    main: { width: '50%' },
+    main: { width: '90%' },
     arrow: '20px',
     room: {
       height: {
@@ -48,6 +48,7 @@ export const GlobalStyle = createGlobalStyle`
   overflow-y: scroll;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+  background-color: ${(props) => props.theme.color.bg.layout};
   ::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
   }

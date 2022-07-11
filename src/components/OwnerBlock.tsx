@@ -17,6 +17,7 @@ import {
 import { seePost_seePost } from '../__generated__/seePost';
 import { onToggleInterestUpdate } from '../shared/utils';
 import GetMeUser from '../hooks/getMeUser';
+import { useMediaQuery } from 'react-responsive';
 
 const BtnForLoggedIn = styled.div<{ notLogged: boolean }>`
   opacity: ${(p) => (p.notLogged ? 0.4 : 1)};
@@ -35,7 +36,7 @@ const ChatBtn = styled(BtnForLoggedIn)``;
 const BookmarkBtn = styled(BtnForLoggedIn)``;
 const DeleteBtn = styled.div``;
 const DealtBtn = styled.div``;
-const Owner = styled.div`
+const Owner = styled.div<{ isMobile: boolean }>`
   width: 100%;
   padding: 20px 0;
   padding-right: 10px;
@@ -52,7 +53,7 @@ const Owner = styled.div`
         cursor: pointer;
       }
       ${Zone} {
-        font-size: 15px;
+        font-size: ${(p) => (p.isMobile ? '12px' : '15px')};
         margin-top: 5px;
       }
     }
@@ -84,7 +85,7 @@ const Owner = styled.div`
       ${DeleteBtn},
       ${DealtBtn} {
         font-size: 13px;
-        padding: 8px;
+        padding: ${(p) => (p.isMobile ? '6px' : '8px')};
         color: white;
         border-radius: 10px;
         margin-left: 5px;
@@ -213,6 +214,7 @@ function OwnerBlock({
 
   const navigate = useNavigate();
   const meData = GetMeUser();
+  const isMobile = useMediaQuery({ maxWidth: 500 });
   const [toggleInterest] = useMutation<toggleInterest, toggleInterestVariables>(
     TOGGLE_INTEREST_MUTATION,
     {
@@ -234,7 +236,7 @@ function OwnerBlock({
   );
 
   return (
-    <Owner>
+    <Owner isMobile={isMobile}>
       <Left>
         <Avatar
           size={40}

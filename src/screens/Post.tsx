@@ -10,8 +10,8 @@ import { seePost } from '../__generated__/seePost';
 import NotFound from './NotFound';
 
 const Wrapper = styled.div`
-  width: 80%;
-  min-width: 500px;
+  width: 90%;
+  max-width: 700px;
   margin: 30px auto;
 `;
 

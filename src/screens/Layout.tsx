@@ -4,16 +4,15 @@ import Header from '../components/Header';
 
 const Wrapper = styled.div`
   position: relative;
-  min-height: 100vh;
   padding-top: ${(props) => props.theme.size.header.height};
-  background-color: ${(props) => props.theme.color.bg.layout};
 `;
 
 const Main = styled.main`
   width: ${(p) => p.theme.size.main.width};
   margin: 0 auto;
   padding-bottom: 30px;
-  min-width: 400px;
+  min-width: 350px;
+  max-width: 900px;
 `;
 
 function Layout() {

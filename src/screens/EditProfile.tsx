@@ -16,6 +16,7 @@ import {
   editProfile,
   editProfileVariables,
 } from '../__generated__/editProfile';
+import PageTitle from '../components/PageTitle';
 
 const EDIT_PROFILE = gql`
   mutation editProfile(
@@ -100,6 +101,7 @@ function EditProfile() {
 
   return (
     <AuthWrapper>
+      <PageTitle title='Edit Profile' />
       <AuthForm onSubmit={handleSubmit(onValid)}>
         <FormTitle>Edit Profile</FormTitle>
         <label htmlFor='name'>Username</label>

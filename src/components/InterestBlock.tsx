@@ -43,15 +43,15 @@ const Banner = styled.div`
   min-width: 300px;
   height: 250px;
   display: flex;
-  border-radius: 10px;
+  border-radius: 1px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   cursor: pointer;
   display: grid;
   grid-template-rows: 3fr 1fr;
   ${Photo} {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 1px;
+    border-top-right-radius: 1px;
     position: relative;
     ${BookmarkBtn} {
       position: absolute;

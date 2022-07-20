@@ -62,20 +62,22 @@ interface IProps {
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
+//from Posts.tsx
 function Pagination({ page, totalPage, setPage }: IProps) {
-  const [curPages, setCurPages] = useState<number[]>([]);
-
   const onResetPagination = () => {
     window.scrollTo({ top: 0 });
     const stand = Math.floor((page - 1) / 10);
-    const paginationArray = Array.from(Array(10).keys())
+    const newPages = Array.from(Array(10).keys())
       .map((i) => stand * 10 + i + 1)
       .filter((i) => i <= totalPage);
-    setCurPages(paginationArray);
+    setPages(newPages);
   };
 
   const onClickPrevBtn = () => setPage((prev) => prev - 1);
+
   const onClickNextBtn = () => setPage((prev) => prev + 1);
+
+  const [pages, setPages] = useState<number[]>([]);
 
   useEffect(() => {
     onResetPagination();
@@ -83,12 +85,12 @@ function Pagination({ page, totalPage, setPage }: IProps) {
 
   return (
     <Wrapper>
-      <PrevBtn disabled={page == 1} onClick={onClickPrevBtn}>
+      <PrevBtn disabled={page === 1} onClick={onClickPrevBtn}>
         <FontAwesomeIcon style={{ marginRight: 10 }} icon={faAngleLeft} />
         Previous
       </PrevBtn>
 
-      {curPages.map((n) => (
+      {pages.map((n) => (
         <P key={n + ''} onClick={() => setPage(n)} now={n === page}>
           {n}
         </P>

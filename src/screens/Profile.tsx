@@ -1,7 +1,7 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { useViewportScroll } from 'framer-motion';
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Avatar from '../components/Avatar';
 import Loader from '../components/Loader';
@@ -17,14 +17,6 @@ import {
 } from '../__generated__/toggleFollow';
 import NotFound from './NotFound';
 
-const Wrapper = styled.div`
-  margin-top: 5px;
-  min-height: 800px;
-`;
-const Top = styled.article`
-  padding: 50px 0;
-  display: flex;
-`;
 const Btn = styled.div`
   padding: 7px;
   border-radius: 10px;
@@ -41,30 +33,41 @@ const Username = styled.div``;
 const Row = styled.div``;
 const FollowBtn = styled(Btn)``;
 const OwnerBtn = styled(Btn)``;
-const Info = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 40px;
-  ${Row} {
+const Info = styled.div``;
+const Top = styled.article``;
+const Wrapper = styled.div`
+  margin-top: 5px;
+  min-height: 800px;
+  ${Top} {
+    padding: 50px 0;
+    padding-left: 20px;
     display: flex;
-    align-items: flex-end;
-    :first-child {
-      margin-bottom: 13px;
-    }
-    ${Username} {
-      font-size: 35px;
-      margin-right: 20px;
-    }
-    ${Zone} {
-      font-size: 17px;
-      color: rgba(0, 0, 0, 0.6);
-    }
-    ${Count} {
-      font-size: 15px;
-    }
-    ${Following} {
-      font-size: 15px;
-      margin-left: 10px;
+    ${Info} {
+      display: flex;
+      flex-direction: column;
+      margin-left: 40px;
+      ${Row} {
+        display: flex;
+        align-items: flex-end;
+        :first-child {
+          margin-bottom: 13px;
+        }
+        ${Username} {
+          font-size: 35px;
+          margin-right: 20px;
+        }
+        ${Zone} {
+          font-size: 17px;
+          color: rgba(0, 0, 0, 0.6);
+        }
+        ${Count} {
+          font-size: 15px;
+        }
+        ${Following} {
+          font-size: 15px;
+          margin-left: 10px;
+        }
+      }
     }
   }
 `;
@@ -103,6 +106,7 @@ function Profile() {
   const navigate = useNavigate();
   const { scrollYProgress } = useViewportScroll();
   const meData = GetMeUser();
+  const { state }: any = useLocation();
   const { data, loading, fetchMore, refetch } = useQuery<seeProfile>(
     SEE_PROFILE_QUERY,
     {
@@ -144,7 +148,7 @@ function Profile() {
 
   return (
     <Wrapper>
-      <PageTitle title='Profile' />
+      <PageTitle title={`${state?.name ?? data?.seeProfile?.name}'s Profile`} />
       {!!/^\d+$/.test(id || '') ? (
         loading ? (
           <Loader />

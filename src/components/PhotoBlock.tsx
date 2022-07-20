@@ -55,24 +55,24 @@ interface IProps {
 }
 
 function PhotoBlock({ photos, isDealt }: IProps) {
-  const location: any = useLocation();
-  const [photoUrls, setPhotoUrls] = useState(location?.state?.photoUrls || []);
-  const [photoN, setPhotoN] = useState(0);
-  const theme = useContext(ThemeContext);
-
   const onClickLeftArrow = () => {
-    setPhotoN((prev) => (prev == 0 ? photoUrls.length - 1 : prev - 1));
+    setPhotoN((prev) => (prev === 0 ? photoUrls.length - 1 : prev - 1));
   };
 
   const onClickRightArrow = () => {
-    setPhotoN((prev) => (prev + 1 == photoUrls.length ? 0 : prev + 1));
+    setPhotoN((prev) => (prev + 1 === photoUrls.length ? 0 : prev + 1));
   };
 
   const getPhotoUrlsFromData = () => {
-    if (!location?.state?.photoUrls) {
+    if (!state?.photoUrls) {
       setPhotoUrls(photos);
     }
   };
+
+  const { state }: any = useLocation();
+  const [photoUrls, setPhotoUrls] = useState(state?.photoUrls || []);
+  const [photoN, setPhotoN] = useState(0);
+  const theme = useContext(ThemeContext);
 
   useEffect(() => {
     getPhotoUrlsFromData();
@@ -115,7 +115,7 @@ function PhotoBlock({ photos, isDealt }: IProps) {
       )}
       <Indicator>
         {photoUrls.map((_: string, index: number) => (
-          <Dot now={index == photoN} key={index + ''} />
+          <Dot now={index === photoN} key={index + ''} />
         ))}
       </Indicator>
     </Photos>

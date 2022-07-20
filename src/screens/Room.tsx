@@ -41,7 +41,6 @@ const Wrapper = styled.div`
     justify-content: space-between;
     padding: 0 15px;
     cursor: pointer;
-
     :hover {
       background-color: ${(p) => p.theme.color.border};
       transition: all 0.2s ease-in-out;
@@ -86,15 +85,22 @@ const READ_MESSAGE_MUTATION = gql`
 
 function Room() {
   const onQueryCompleted = (data: seeRoom) => {
+    if (!data.seeRoom) return;
+    setTalkingTo(
+      data?.seeRoom?.users.find((user) => user?.id !== meData?.me?.id) ?? {}
+    );
+
     cache.modify({
-      id: `Room:${data.seeRoom?.id}`,
+      id: `Room:${data.seeRoom.id}`,
       fields: {
         unreadTotal: () => 0,
       },
     });
-    data.seeRoom?.messages.forEach((mes) => {
-      if (!mes?.read && mes?.id && mes.userId !== meData?.me?.id) {
-        readMessage({ variables: { messageId: mes?.id } });
+
+    data.seeRoom.messages.forEach((mes) => {
+      if (!mes) return;
+      if (!mes.read && mes.userId !== meData?.me?.id) {
+        readMessage({ variables: { messageId: mes.id } });
       }
     });
   };
@@ -105,13 +111,14 @@ function Room() {
     updateRoom
   > = (_, { subscriptionData: { data } }) => {
     if (!data.updateRoom) return;
-    if (!data.updateRoom.read) {
+    const { read, message } = data.updateRoom;
+    if (!read) {
       const messageFragment = cache.writeFragment({
         fragment: MESSAGE_FRAGMENT,
-        data: data.updateRoom.message,
+        data: message,
       });
       cache.modify({
-        id: `Room:${data.updateRoom.message.roomId}`,
+        id: `Room:${message.roomId}`,
         fields: {
           messages: (prev) => [messageFragment, ...prev],
         },
@@ -119,18 +126,33 @@ function Room() {
     }
   };
 
+  const onSetSubscription = () => {
+    if (
+      !roomId ||
+      !data?.seeRoom?.id ||
+      subscribed ||
+      data.seeRoom.id !== +roomId
+    )
+      return;
+
+    subscribeToMore({
+      document: UPDATE_ROOM_SUBSCRIPTION,
+      variables: {
+        roomId: +roomId,
+      },
+      updateQuery: onSubscriptionUpdated,
+    });
+    setSubscribed(true);
+  };
+
   const onSetTalkingTo = () => {
-    if (data === undefined && location.state) {
+    if (data === undefined && state?.id) {
       const fakeUser = {
-        avatar: location.state.avatar,
-        id: location.state.id,
-        name: location.state.name,
+        avatar: state.avatar,
+        id: state.id,
+        name: state.name,
       };
       setTalkingTo(fakeUser);
-    } else {
-      setTalkingTo(
-        data?.seeRoom?.users.find((user) => user?.id !== meData?.me?.id) ?? {}
-      );
     }
   };
 
@@ -140,27 +162,9 @@ function Room() {
     }
   };
 
-  const onSetSubscription = () => {
-    if (
-      roomId &&
-      data?.seeRoom?.id &&
-      !subscribed &&
-      data.seeRoom.id === +roomId
-    ) {
-      subscribeToMore({
-        document: UPDATE_ROOM_SUBSCRIPTION,
-        variables: {
-          roomId: +roomId,
-        },
-        updateQuery: onSubscriptionUpdated,
-      });
-      setSubscribed(true);
-    }
-  };
-
   const { id: roomId } = useParams();
   const navigate = useNavigate();
-  const location: any = useLocation();
+  const { state }: any = useLocation();
   const [subscribed, setSubscribed] = useState(false);
   const { cache } = useApolloClient();
   const meData = GetMeUser();
@@ -188,7 +192,7 @@ function Room() {
 
   return (
     <Wrapper>
-      {talkingTo && (
+      {!!talkingTo && (
         <TalkingTo>
           <Avatar
             size={50}
@@ -200,11 +204,12 @@ function Room() {
           </Username>
         </TalkingTo>
       )}
-      {data ? (
+
+      {data?.seeRoom ? (
         <>
           <PostInfo onClick={() => navigate(`/posts/${data.seeRoom?.postId}`)}>
-            <span>{data.seeRoom?.post.title}</span>
-            <span>{data.seeRoom?.post.price} 원</span>
+            <span>{data.seeRoom.post.title}</span>
+            <span>{data.seeRoom.post.price} 원</span>
           </PostInfo>
           {data.seeRoom?.messages && (
             <Chats
@@ -215,13 +220,13 @@ function Room() {
             />
           )}
         </>
-      ) : location.state?.id ? (
+      ) : state?.postId ? (
         <>
-          <PostInfo onClick={() => navigate(`/posts/${location.state.postId}`)}>
-            <span>{location.state.postTitle}</span>
-            <span>{location.state.postPrice} 원</span>
+          <PostInfo onClick={() => navigate(`/posts/${state.postId}`)}>
+            <span>{state.postTitle}</span>
+            <span>{state.postPrice} 원</span>
           </PostInfo>
-          <Chats postId={+location.state.postId} />
+          <Chats postId={+state.postId} />
         </>
       ) : null}
     </Wrapper>

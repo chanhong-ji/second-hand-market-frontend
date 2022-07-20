@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getUserLogin } from '../apollo';
 import ErrorMessage from '../components/ErrorMessage';
+import PageTitle from '../components/PageTitle';
 import {
   AuthForm,
   AuthWrapper,
@@ -23,23 +24,24 @@ const LOGIN_MUTATION = gql`
 `;
 
 function Login() {
-  const onValid: SubmitHandler<loginVariables & IForm> = ({
+  const onFormValid: SubmitHandler<loginVariables & IForm> = ({
     phone,
     password,
   }) => {
     if (loading) return;
     login({ variables: { phone: +phone, password } });
   };
-  const onCompleted = async ({ login }: login) => {
+
+  const onLoginCompleted = async ({ login }: login) => {
     const { ok, error, token } = login;
-    if (!ok)
+    if (!ok || !token)
       return setError('result', { message: error?.split(':').pop()?.trim() });
-    await getUserLogin(token || '');
+    await getUserLogin(token);
     navigate('/');
   };
 
   const navigate = useNavigate();
-  const location: any = useLocation();
+  const { state }: any = useLocation();
   const {
     register,
     handleSubmit,
@@ -49,20 +51,19 @@ function Login() {
   } = useForm<loginVariables & IForm>({
     mode: 'onChange',
     defaultValues: {
-      phone: location?.state?.phone,
-      password: location?.state?.password,
+      phone: state?.phone,
+      password: state?.password,
     },
   });
   const [login, { loading }] = useMutation<login, loginVariables>(
     LOGIN_MUTATION,
-    {
-      onCompleted,
-    }
+    { onCompleted: onLoginCompleted }
   );
 
   return (
     <AuthWrapper>
-      <AuthForm onSubmit={handleSubmit(onValid)}>
+      <AuthForm onSubmit={handleSubmit(onFormValid)}>
+        <PageTitle title='Login' />
         <FormTitle>Login</FormTitle>
         <Input
           placeholder='phone number'
@@ -70,27 +71,21 @@ function Login() {
           {...register('phone', { required: 'phone is required' })}
           onClick={() => clearErrors()}
         />
-        {errors.phone?.message && (
-          <ErrorMessage message={errors.phone.message || ''} />
-        )}
+        <ErrorMessage message={errors.phone?.message} />
         <Input
           placeholder='password'
           type='password'
           {...register('password', { required: 'password is required' })}
           onClick={() => clearErrors()}
         />
-        {errors.password?.message && (
-          <ErrorMessage message={errors.password.message || ''} />
-        )}
+        <ErrorMessage message={errors.password?.message} />
         <Input
           type='submit'
           disabled={!isValid}
-          onClick={handleSubmit(onValid)}
+          onClick={handleSubmit(onFormValid)}
           value='Login'
         />
-        {errors.result?.message && (
-          <ErrorMessage message={errors.result.message || ''} />
-        )}
+        <ErrorMessage message={errors.result?.message} />
       </AuthForm>
     </AuthWrapper>
   );

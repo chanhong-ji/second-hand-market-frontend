@@ -37,18 +37,7 @@ const CREATE_ACCOUNT_MUTATION = gql`
 `;
 
 function SignUp() {
-  const onCompleted = (data: createAccount) => {
-    const {
-      createAccount: { ok, error },
-    } = data;
-    if (!ok)
-      return setError('result', { message: error?.split(':').pop()?.trim() });
-
-    const { phone, password } = getValues();
-    navigate('/login', { state: { phone, password } });
-  };
-
-  const onValid: SubmitHandler<
+  const onFormValid: SubmitHandler<
     createAccountVariables & IFormWithPasswordConfirm
   > = ({ phone, name, password, passwordConfirm, zoneFirst, zoneSecond }) => {
     if (loading) return;
@@ -71,6 +60,17 @@ function SignUp() {
     });
   };
 
+  const onSignUpCompleted = (data: createAccount) => {
+    const {
+      createAccount: { ok, error },
+    } = data;
+    if (!ok)
+      return setError('result', { message: error?.split(':').pop()?.trim() });
+
+    const { phone, password } = getValues();
+    navigate('/login', { state: { phone, password } });
+  };
+
   const navigate = useNavigate();
   const {
     register,
@@ -82,17 +82,16 @@ function SignUp() {
   } = useForm<createAccountVariables & IFormWithPasswordConfirm>({
     mode: 'onChange',
   });
-
   const [createAccount, { loading }] = useMutation<
     createAccount,
     createAccountVariables
   >(CREATE_ACCOUNT_MUTATION, {
-    onCompleted,
+    onCompleted: onSignUpCompleted,
   });
 
   return (
     <AuthWrapper>
-      <AuthForm onSubmit={handleSubmit(onValid)}>
+      <AuthForm onSubmit={handleSubmit(onFormValid)}>
         <FormTitle>Sign up</FormTitle>
         <label htmlFor='phone'>Phone number</label>
         <Input
@@ -101,9 +100,7 @@ function SignUp() {
           type='number'
           onClick={() => clearErrors()}
         />
-        {errors?.phone?.message && (
-          <ErrorMessage message={errors.phone.message || ''} />
-        )}
+        <ErrorMessage message={errors.phone?.message} />
 
         <label htmlFor='name'>Name</label>
         <Input
@@ -112,9 +109,7 @@ function SignUp() {
           type='text'
           onClick={() => clearErrors()}
         />
-        {errors?.name?.message && (
-          <ErrorMessage message={errors.name.message || ''} />
-        )}
+        <ErrorMessage message={errors.name?.message} />
 
         <ZoneBlock register={register} />
 
@@ -125,9 +120,7 @@ function SignUp() {
           type='password'
           onClick={() => clearErrors()}
         />
-        {errors?.password?.message && (
-          <ErrorMessage message={errors.password.message || ''} />
-        )}
+        <ErrorMessage message={errors.password?.message || ''} />
 
         <label htmlFor='passwordConfirm'>Password Confirm</label>
         <Input
@@ -138,19 +131,15 @@ function SignUp() {
           type='password'
           onClick={() => clearErrors()}
         />
-        {errors?.passwordConfirm?.message && (
-          <ErrorMessage message={errors.passwordConfirm.message || ''} />
-        )}
+        <ErrorMessage message={errors.passwordConfirm?.message} />
 
         <Input
           type='submit'
           value='Sign up'
-          onClick={handleSubmit(onValid)}
+          onClick={handleSubmit(onFormValid)}
           disabled={!isValid}
         />
-        {errors?.result?.message && (
-          <ErrorMessage message={errors.result.message || ''} />
-        )}
+        <ErrorMessage message={errors.result?.message} />
       </AuthForm>
     </AuthWrapper>
   );

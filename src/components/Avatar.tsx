@@ -1,9 +1,12 @@
+import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 
 interface IProps {
   size: number;
   url: string | null | undefined;
   onClick?: () => any;
+  type?: string;
 }
 
 const Container = styled.img<{ size: number }>`
@@ -20,7 +23,12 @@ function Avatar({ size, url, onClick }: IProps) {
       {url ? (
         <Container size={size} src={url} onClick={onClick} />
       ) : (
-        <Container size={size} onClick={onClick} />
+        <FontAwesomeIcon
+          icon={faCircleUser}
+          onClick={onClick}
+          fontSize={size}
+          color='rgba(0, 0, 0, 0.5)'
+        />
       )}
     </>
   );

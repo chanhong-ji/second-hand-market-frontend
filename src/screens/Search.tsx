@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import Grid from '../components/Grid';
 import Loader from '../components/Loader';
 import Pagination from '../components/Pagenation';
-import PostsTop from '../components/PostsTop';
+import Filter from '../components/Filter';
 import { PostsWrapper } from '../shared/components';
 import { POST_FRAGMENT } from '../fragment';
 import GetMeUser from '../hooks/getMeUser';
@@ -89,7 +89,7 @@ function Search() {
         <Loader />
       ) : (
         <>
-          <PostsTop
+          <Filter
             register={register}
             handleSubmit={handleSubmit(onValid)}
             loading={loading}

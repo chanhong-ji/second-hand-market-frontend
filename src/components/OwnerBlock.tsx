@@ -146,6 +146,11 @@ function OwnerBlock({
   roomCount,
   zoneName,
 }: seePost_seePost) {
+  const onNavigateToProfile = () => {
+    navigate(`/profiles/${user.id}`, {
+      state: { id: user.id, name: user.name, avatar: user.avatar },
+    });
+  };
   const onClickInterest = () => {
     if (!!!meData) return;
     toggleInterest({ variables: { id: postId } });
@@ -188,7 +193,7 @@ function OwnerBlock({
       deletePost: { ok },
     } = data;
     if (!ok) return;
-    navigate(`/profiles/${user.id}`);
+    onNavigateToProfile();
   };
 
   const onDeleteUpdate = (cache: ApolloCache<any>, result: any) => {
@@ -241,12 +246,10 @@ function OwnerBlock({
         <Avatar
           size={40}
           url={user.avatar || null}
-          onClick={() => navigate(`/profiles/${user.id}`)}
+          onClick={onNavigateToProfile}
         />
         <Container>
-          <Username onClick={() => navigate(`/profiles/${user.id}`)}>
-            {user.name}
-          </Username>
+          <Username onClick={onNavigateToProfile}>{user.name}</Username>
           <Zone>{zoneName}</Zone>
         </Container>
       </Left>

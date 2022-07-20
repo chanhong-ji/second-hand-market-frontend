@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CategoryBlock from '../components/CategoryBlock';
 import Modal from '../components/Modal';
+import PageTitle from '../components/PageTitle';
 import { IForm } from '../shared/components';
 import { getFormatValue } from '../shared/utils';
 import { editPost, editPostVariables } from '../__generated__/editPost';
@@ -172,7 +173,9 @@ function EditPost() {
       title='Edit'
       completeFn={handleSubmit(onValid, onInValid)}
       styles={{ gridTemplateColumns: '3fr 2fr' }}
+      loading={loading}
     >
+      <PageTitle title='Edit' />
       <Left url={location.state?.photoUrl || null}></Left>
       <Right>
         <form onSubmit={handleSubmit(onValid, onInValid)}>

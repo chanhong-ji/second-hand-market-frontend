@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import InfoBlock from '../components/InfoBlock';
 import Loader from '../components/Loader';
 import OwnerBlock from '../components/OwnerBlock';
+import PageTitle from '../components/PageTitle';
 import PhotoBlock from '../components/PhotoBlock';
 import { POST_FRAGMENT } from '../fragment';
 import { seePost } from '../__generated__/seePost';
@@ -33,6 +34,7 @@ function Post() {
 
   return (
     <Wrapper>
+      <PageTitle title='Post' />
       <Outlet />
       {id ? (
         id && !/^\d+$/.test(id) ? (

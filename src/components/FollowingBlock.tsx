@@ -29,10 +29,8 @@ const Wrapper = styled.div`
   background-color: white;
   border-radius: 20px;
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  padding-left: 20px;
   cursor: pointer;
-  img {
-    margin-left: 10px;
-  }
   ${Container} {
     height: 100%;
     padding-left: 15px;
@@ -149,7 +147,11 @@ function FollowingBlock(props: seeProfile_seeProfile) {
         user ? (
           <Wrapper
             key={user.id + ''}
-            onClick={() => navigate(`/profiles/${user.id}`)}
+            onClick={() =>
+              navigate(`/profiles/${user.id}`, {
+                state: { id: user.id, name: user.name, avatar: user.avatar },
+              })
+            }
           >
             <Avatar url={user.avatar} size={60} />
             <Container>

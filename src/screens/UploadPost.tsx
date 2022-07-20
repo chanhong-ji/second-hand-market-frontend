@@ -1,13 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
-import {
-  faArrowCircleLeft,
-  faArrowCircleRight,
-  faPlusCircle,
-  faRotate,
-  faXmarkCircle,
-} from '@fortawesome/free-solid-svg-icons';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import styled from 'styled-components';
 import Modal from '../components/Modal';
@@ -16,65 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import GetMeUser from '../hooks/getMeUser';
 import { getFormatValue } from '../shared/utils';
 import CategoryBlock from '../components/CategoryBlock';
+import Preview from '../components/Preview';
 
-const Preview = styled.div``;
-const Left = styled.div`
-  background-color: whitesmoke;
-  border-bottom-left-radius: 20px;
-  height: 100%;
-  position: relative;
-  label {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: rgba(0, 0, 0, 0.3);
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    opacity: 0.5;
-    cursor: pointer;
-    :hover {
-      opacity: 1;
-    }
-    :last-of-type {
-      right: 50px;
-    }
-  }
-  input {
-    display: none;
-  }
-  ${Preview} {
-    width: 100%;
-    height: 100%;
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    * {
-      width: 20px;
-      height: 20px;
-      border-radius: 10px;
-      position: absolute;
-      cursor: pointer;
-    }
-    .nextBtn {
-      top: 50%;
-      right: 10px;
-      color: white;
-    }
-    .prevBtn {
-      top: 50%;
-      left: 10px;
-      color: white;
-    }
-    .deleteBtn {
-      top: 10px;
-      right: 10px;
-      color: rgba(0, 0, 0, 0.6);
-    }
-  }
-`;
+const Title = styled.div``;
 const Price = styled.div``;
-const Right = styled.div`
+const Explanation = styled.div``;
+const Form = styled.div`
   background-color: white;
   border-bottom-right-radius: 20px;
   form {
@@ -148,7 +87,7 @@ interface IUploadForm {
 }
 
 function UploadPost() {
-  const onInValid: SubmitErrorHandler<createPostVariables> = ({
+  const onFormInvalid: SubmitErrorHandler<createPostVariables> = ({
     title,
     caption,
     categoryName,
@@ -156,17 +95,14 @@ function UploadPost() {
     if (title?.message) {
       alert(title.message);
       return;
-    }
-    if (caption?.message) {
+    } else if (caption?.message) {
       alert(caption.message);
-      return;
-    }
-    if (categoryName?.message) {
+    } else if (categoryName?.message) {
       alert(categoryName.message);
     }
   };
 
-  const onValid: SubmitHandler<createPostVariables> = async ({
+  const onFormValid: SubmitHandler<createPostVariables> = async ({
     title,
     caption,
     price,
@@ -181,52 +117,12 @@ function UploadPost() {
     });
   };
 
-  const onCompleted = (data: createPost) => {
+  const onUploadCompleted = (data: createPost) => {
     const {
       createPost: { ok },
     } = data;
     if (!ok) return alert('fail');
     navigate(`/profiles/${meData?.me?.id}`);
-  };
-
-  const onClickPrevBtn = () => {
-    setPhotoPage((prev) => prev - 1);
-  };
-
-  const onClickNextBtn = () => {
-    setPhotoPage((prev) => prev + 1);
-  };
-
-  const onClickDeleteBtn = () => {
-    setPhotoUrls((prev) => {
-      let newPhotos = [...prev];
-      newPhotos.splice(photoPage - 1, 1);
-      return newPhotos;
-    });
-    setPhotoPage((prev) => (prev === 1 ? 1 : prev - 1));
-  };
-
-  const onAddPhoto = (input: any) => {
-    if (photoUrls.length >= 3) {
-      return;
-    }
-    if (input.target.files[0]) {
-      const photoUrl = URL.createObjectURL(input.target?.files[0]);
-      if (photoUrl) setPhotoUrls((prev) => [...prev, photoUrl]);
-    }
-    setValue('add', null);
-  };
-
-  const onChangePhoto = (input: any) => {
-    if (input.target.files[0]) {
-      const photoUrl = URL.createObjectURL(input.target?.files[0]);
-      setPhotoUrls((prev) => {
-        const newPhotos = [...prev];
-        newPhotos.splice(photoPage - 1, 1, photoUrl);
-        return newPhotos;
-      });
-    }
-    setValue('change', null);
   };
 
   const onPriceDataChanged = (data: any) => {
@@ -239,13 +135,12 @@ function UploadPost() {
   const [createPost, { loading }] = useMutation<
     createPost,
     createPostVariables
-  >(CREATE_POST_MUTATION, { onCompleted });
+  >(CREATE_POST_MUTATION, { onCompleted: onUploadCompleted });
   const { register, handleSubmit, setValue } = useForm<
     createPostVariables & IUploadForm
   >();
   const navigate = useNavigate();
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
-  const [photoPage, setPhotoPage] = useState(1);
   const [currencyValue, setCurrencyValue] = useState('');
   const [priceValue, setPriceValue] = useState(0);
   const meData = GetMeUser();
@@ -253,74 +148,19 @@ function UploadPost() {
   return (
     <Modal
       title='Upload'
-      completeFn={handleSubmit(onValid, onInValid)}
+      completeFn={handleSubmit(onFormValid, onFormInvalid)}
       styles={{ gridTemplateColumns: '3fr 2fr' }}
+      loading={loading}
     >
-      <Left>
-        <label
-          htmlFor='add'
-          style={{
-            ...(photoUrls.length >= 3 && { opacity: 0.2, cursor: 'default' }),
-          }}
-        >
-          <FontAwesomeIcon icon={faPlusCircle} />
-        </label>
-        <input
-          {...register('add', {
-            onChange: onAddPhoto,
-          })}
-          type='file'
-          id='add'
-          accept='image/png, image/jpeg'
-          disabled={photoUrls.length >= 3}
-        />
-
-        <label htmlFor='change'>
-          <FontAwesomeIcon icon={faRotate} />
-        </label>
-        <input
-          {...register('change', {
-            onChange: onChangePhoto,
-          })}
-          type='file'
-          id='change'
-          accept='image/png, image/jpeg'
-          disabled={photoUrls.length < photoPage}
-        />
-
-        {photoUrls.map((photoUrl, index) =>
-          index + 1 === photoPage ? (
-            <Preview
-              style={{ backgroundImage: `url(${photoUrl})` }}
-              key={index}
-            >
-              {photoUrls.length > index + 1 && (
-                <FontAwesomeIcon
-                  icon={faArrowCircleRight}
-                  onClick={onClickNextBtn}
-                  className='nextBtn'
-                />
-              )}
-              {index > 0 && (
-                <FontAwesomeIcon
-                  icon={faArrowCircleLeft}
-                  onClick={onClickPrevBtn}
-                  className='prevBtn'
-                />
-              )}
-              <FontAwesomeIcon
-                icon={faXmarkCircle}
-                onClick={onClickDeleteBtn}
-                className='deleteBtn'
-              />
-            </Preview>
-          ) : null
-        )}
-      </Left>
-
-      <Right>
-        <form onSubmit={handleSubmit(onValid, onInValid)}>
-          <div>
+      <Preview
+        register={register}
+        setValue={setValue}
+        photoUrls={photoUrls}
+        setPhotoUrls={setPhotoUrls}
+      />
+      <Form>
+        <form onSubmit={handleSubmit(onFormValid, onFormInvalid)}>
+          <Title>
             <label htmlFor='title'>Title</label>
             <textarea
               id='title'
@@ -335,7 +175,7 @@ function UploadPost() {
                 },
               })}
             />
-          </div>
+          </Title>
 
           <Price>
             <label htmlFor='price'>Price</label>
@@ -352,7 +192,7 @@ function UploadPost() {
             />
           </Price>
 
-          <div>
+          <Explanation>
             <label htmlFor='caption'>Explanation</label>
             <textarea
               id='caption'
@@ -366,11 +206,11 @@ function UploadPost() {
                 },
               })}
             />
-          </div>
+          </Explanation>
 
           <CategoryBlock register={register} />
         </form>
-      </Right>
+      </Form>
     </Modal>
   );
 }

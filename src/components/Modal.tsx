@@ -2,6 +2,11 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+const ModalDiv = styled(motion.div)``;
+const TopBar = styled.div``;
+const Cancel = styled.div``;
+const Title = styled.div``;
+const Complete = styled.button``;
 const Overlay = styled(motion.div)`
   position: fixed;
   top: 0;
@@ -13,48 +18,45 @@ const Overlay = styled(motion.div)`
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 3;
-`;
-const ModalDiv = styled(motion.div)`
-  width: 50%;
-  min-width: 700px;
-  height: 80%;
-  position: absolute;
-  border-radius: 20px;
-  background-color: white;
-  padding-top: 40px;
-  display: grid;
-`;
-const Cancel = styled.div``;
-const Title = styled.div``;
-const Complete = styled.div``;
-const TopBar = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  height: 40px;
-  border-bottom: 1px solid ${(p) => p.theme.color.border};
-  position: absolute;
-  top: 0;
-  padding-left: 10px;
-  padding-right: 10px;
+  ${ModalDiv} {
+    width: 50%;
+    min-width: 700px;
+    height: 80%;
+    position: absolute;
+    border-radius: 20px;
+    background-color: white;
+    padding-top: 40px;
+    display: grid;
+    ${TopBar} {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+      height: 40px;
+      border-bottom: 1px solid ${(p) => p.theme.color.border};
+      position: absolute;
+      top: 0;
+      padding-left: 10px;
+      padding-right: 10px;
 
-  ${Cancel} {
-    color: tomato;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  ${Title} {
-    font-size: 18px;
-    font-weight: 500;
-  }
-  ${Complete} {
-    color: blue;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
+      ${Cancel} {
+        color: tomato;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      ${Title} {
+        font-size: 18px;
+        font-weight: 500;
+      }
+      ${Complete} {
+        color: blue;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+    }
   }
 `;
 
@@ -63,10 +65,11 @@ interface IProps {
   children: any;
   title: string;
   styles?: object;
+  loading: boolean;
 }
 
-function Modal({ completeFn, children, title, styles }: IProps) {
-  const onCancel = () => {
+function Modal({ completeFn, children, title, styles, loading }: IProps) {
+  const onClickCancel = () => {
     const cancel = window.confirm('Do you want to cancel to edit this post?');
     if (cancel) {
       navigate(-1);
@@ -91,7 +94,7 @@ function Modal({ completeFn, children, title, styles }: IProps) {
   };
 
   return (
-    <Overlay onClick={() => onCancel()}>
+    <Overlay onClick={() => onClickCancel()}>
       <ModalDiv
         onClick={(e) => e.stopPropagation()}
         variants={modalVariant}
@@ -100,9 +103,11 @@ function Modal({ completeFn, children, title, styles }: IProps) {
         style={styles}
       >
         <TopBar>
-          <Cancel onClick={onCancel}>Cancel</Cancel>
+          <Cancel onClick={onClickCancel}>Cancel</Cancel>
           <Title>{title}</Title>
-          <Complete onClick={completeFn}>Complete</Complete>
+          <Complete onClick={completeFn} disabled={loading}>
+            Complete
+          </Complete>
         </TopBar>
         {children}
       </ModalDiv>

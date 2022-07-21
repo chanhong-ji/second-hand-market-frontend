@@ -40,17 +40,16 @@ const EDIT_PROFILE = gql`
 `;
 
 function EditProfile() {
-  const onCompleted = (data: editProfile) => {
+  const onEditCompleted = (data: editProfile) => {
     const { ok } = data.editProfile;
     if (!ok) {
       alert('error');
     }
     alert('success');
     navigate(`/profiles/${id}`);
-    window.location.reload();
   };
 
-  const onValid = ({
+  const onFormValid = ({
     name,
     avatar,
     password,
@@ -83,7 +82,7 @@ function EditProfile() {
   const [editProfile, { loading }] = useMutation<
     editProfile,
     editProfileVariables
-  >(EDIT_PROFILE, { onCompleted });
+  >(EDIT_PROFILE, { onCompleted: onEditCompleted });
   const {
     register,
     handleSubmit,
@@ -102,7 +101,7 @@ function EditProfile() {
   return (
     <AuthWrapper>
       <PageTitle title='Edit Profile' />
-      <AuthForm onSubmit={handleSubmit(onValid)}>
+      <AuthForm onSubmit={handleSubmit(onFormValid)}>
         <FormTitle>Edit Profile</FormTitle>
         <label htmlFor='name'>Username</label>
         <Input
@@ -128,7 +127,7 @@ function EditProfile() {
           {...register('avatar')}
           type='file'
         />
-        <Input type='submit' value='Save' onClick={handleSubmit(onValid)} />
+        <Input type='submit' value='Save' onClick={handleSubmit(onFormValid)} />
       </AuthForm>
     </AuthWrapper>
   );

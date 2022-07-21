@@ -11,6 +11,7 @@ export interface editPost_editPost {
   __typename: "MutationResult";
   ok: boolean;
   error: string | null;
+  id: number | null;
 }
 
 export interface editPost {

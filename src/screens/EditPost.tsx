@@ -1,4 +1,4 @@
-import { gql, useMutation } from '@apollo/client';
+import { ApolloCache, FetchResult, gql, useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -10,27 +10,6 @@ import { IForm } from '../shared/components';
 import { getFormatValue } from '../shared/utils';
 import { editPost, editPostVariables } from '../__generated__/editPost';
 
-const EDIT_POST_MUTATION = gql`
-  mutation editPost(
-    $id: Int!
-    $title: String
-    $price: Int
-    $caption: String
-    $categoryName: String
-  ) {
-    editPost(
-      id: $id
-      title: $title
-      price: $price
-      caption: $caption
-      categoryName: $categoryName
-    ) {
-      ok
-      error
-    }
-  }
-`;
-
 const Left = styled.div<{ url: string | null }>`
   background-image: ${(p) => (p.url ? `url('${p.url}')` : 'none')};
   background-color: whitesmoke;
@@ -40,7 +19,9 @@ const Left = styled.div<{ url: string | null }>`
   background-repeat: no-repeat;
   height: 100%;
 `;
+const Title = styled.div``;
 const Price = styled.div``;
+const Exp = styled.div``;
 const Right = styled.div`
   background-color: white;
   border-bottom-right-radius: 20px;
@@ -86,8 +67,30 @@ const Right = styled.div`
   }
 `;
 
+const EDIT_POST_MUTATION = gql`
+  mutation editPost(
+    $id: Int!
+    $title: String
+    $price: Int
+    $caption: String
+    $categoryName: String
+  ) {
+    editPost(
+      id: $id
+      title: $title
+      price: $price
+      caption: $caption
+      categoryName: $categoryName
+    ) {
+      ok
+      error
+      id
+    }
+  }
+`;
+
 function EditPost() {
-  const onInValid: SubmitErrorHandler<editPostVariables & IForm> = ({
+  const onFormInvalid: SubmitErrorHandler<editPostVariables & IForm> = ({
     title,
     caption,
     categoryName,
@@ -105,13 +108,14 @@ function EditPost() {
     }
   };
 
-  const onValid: SubmitHandler<editPostVariables> = ({
+  const onFormValid: SubmitHandler<editPostVariables> = ({
     title,
     caption,
     price,
     categoryName,
   }) => {
     if (loading || !isValid) return;
+
     editPost({
       variables: {
         id: location.state?.postId,
@@ -123,21 +127,55 @@ function EditPost() {
     });
   };
 
-  const onCompleted = (data: editPost) => {
+  const onEditCompleted = (data: editPost) => {
     const { ok, error } = data.editPost;
     if (!ok) {
       return alert(error);
     }
     alert('Success to edit post');
     navigate(`/posts/${location.state.postId}`);
-    window.location.reload();
   };
 
-  const onPriceData = (data: any) => {
+  const onPriceChanged = (data: any) => {
     const value = +String(data.target.value).replaceAll(/\D/g, '') ?? 0;
     setPriceValue(value);
     const formatValue = getFormatValue(value);
     setCurrencyValue(formatValue);
+  };
+
+  const onUpdateEdit = (
+    cache: ApolloCache<any>,
+    result: Omit<
+      FetchResult<editPost, Record<string, any>, Record<string, any>>,
+      'context'
+    >
+  ) => {
+    if (!result.data?.editPost) return;
+    if (result.data.editPost.ok === false) {
+      return alert(result.data.editPost.error);
+    }
+
+    const { title, price, caption, categoryName } = getValues();
+    cache.modify({
+      id: `Post:${result.data.editPost.id}`,
+      fields: {
+        ...(title && {
+          title: () => title,
+        }),
+
+        ...(price && {
+          price: () => +price,
+        }),
+
+        ...(caption && {
+          caption: () => caption,
+        }),
+
+        ...(categoryName && {
+          categoryName: () => categoryName,
+        }),
+      },
+    });
   };
 
   const location: any = useLocation();
@@ -149,6 +187,7 @@ function EditPost() {
     register,
     handleSubmit,
     formState: { isValid },
+    getValues,
   } = useForm<editPostVariables & IForm>({
     defaultValues: {
       title: location.state?.title,
@@ -158,7 +197,10 @@ function EditPost() {
 
   const [editPost, { loading }] = useMutation<editPost, editPostVariables>(
     EDIT_POST_MUTATION,
-    { onCompleted }
+    {
+      onCompleted: onEditCompleted,
+      update: onUpdateEdit,
+    }
   );
 
   useEffect(() => {
@@ -171,15 +213,15 @@ function EditPost() {
   return (
     <Modal
       title='Edit'
-      completeFn={handleSubmit(onValid, onInValid)}
+      completeFn={handleSubmit(onFormValid, onFormInvalid)}
       styles={{ gridTemplateColumns: '3fr 2fr' }}
       loading={loading}
     >
       <PageTitle title='Edit' />
       <Left url={location.state?.photoUrl || null}></Left>
       <Right>
-        <form onSubmit={handleSubmit(onValid, onInValid)}>
-          <div>
+        <form onSubmit={handleSubmit(onFormValid, onFormInvalid)}>
+          <Title>
             <label htmlFor='title'>Title</label>
             <textarea
               id='title'
@@ -194,7 +236,7 @@ function EditPost() {
                 },
               })}
             />
-          </div>
+          </Title>
 
           <Price>
             <label htmlFor='price'>Price</label>
@@ -206,12 +248,12 @@ function EditPost() {
               maxLength={10}
               {...register('price', {
                 required: 'Price is requierd',
-                onChange: onPriceData,
+                onChange: onPriceChanged,
               })}
             />
           </Price>
 
-          <div>
+          <Exp>
             <label htmlFor='caption'>Explanation</label>
             <textarea
               id='caption'
@@ -225,7 +267,7 @@ function EditPost() {
                 },
               })}
             />
-          </div>
+          </Exp>
 
           <CategoryBlock
             register={register}

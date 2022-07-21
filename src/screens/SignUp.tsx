@@ -14,6 +14,7 @@ import {
   createAccount,
   createAccountVariables,
 } from '../__generated__/createAccount';
+import PageTitle from '../components/PageTitle';
 
 const CREATE_ACCOUNT_MUTATION = gql`
   mutation createAccount(
@@ -91,6 +92,7 @@ function SignUp() {
 
   return (
     <AuthWrapper>
+      <PageTitle title='Sign up' />
       <AuthForm onSubmit={handleSubmit(onFormValid)}>
         <FormTitle>Sign up</FormTitle>
         <label htmlFor='phone'>Phone number</label>

@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Avatar from '../components/Avatar';
+import PageTitle from '../components/PageTitle';
 import { ROOM_FRAGMENT_FOR_ROOMS } from '../fragment';
 import GetMeUser from '../hooks/getMeUser';
 import { seeRooms } from '../__generated__/seeRooms';
@@ -96,6 +97,7 @@ function Rooms() {
 
   return (
     <Wrapper>
+      <PageTitle title='Chat' />
       <List>
         {meData?.me && (
           <Mine>

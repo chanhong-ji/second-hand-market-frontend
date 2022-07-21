@@ -9,6 +9,7 @@ import GetMeUser from '../hooks/getMeUser';
 import { getFormatValue } from '../shared/utils';
 import CategoryBlock from '../components/CategoryBlock';
 import Preview from '../components/Preview';
+import PageTitle from '../components/PageTitle';
 
 const Title = styled.div``;
 const Price = styled.div``;
@@ -109,6 +110,7 @@ function UploadPost() {
     categoryName,
   }) => {
     if (loading) return;
+    if (photoUrls.length < 1) return alert('Photo is required');
     const li = await Promise.all(
       photoUrls.map((url) => fetch(url).then((r) => r.blob()))
     );
@@ -132,18 +134,18 @@ function UploadPost() {
     setCurrencyValue(formatValue);
   };
 
-  const [createPost, { loading }] = useMutation<
-    createPost,
-    createPostVariables
-  >(CREATE_POST_MUTATION, { onCompleted: onUploadCompleted });
-  const { register, handleSubmit, setValue } = useForm<
-    createPostVariables & IUploadForm
-  >();
   const navigate = useNavigate();
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [currencyValue, setCurrencyValue] = useState('');
   const [priceValue, setPriceValue] = useState(0);
   const meData = GetMeUser();
+  const { register, handleSubmit, setValue } = useForm<
+    createPostVariables & IUploadForm
+  >();
+  const [createPost, { loading }] = useMutation<
+    createPost,
+    createPostVariables
+  >(CREATE_POST_MUTATION, { onCompleted: onUploadCompleted });
 
   return (
     <Modal
@@ -152,6 +154,7 @@ function UploadPost() {
       styles={{ gridTemplateColumns: '3fr 2fr' }}
       loading={loading}
     >
+      <PageTitle title='Upload' />
       <Preview
         register={register}
         setValue={setValue}

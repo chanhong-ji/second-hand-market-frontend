@@ -122,7 +122,6 @@ function Preview({ register, setValue, photoUrls, setPhotoUrls }: IProps) {
   };
 
   const [photoPage, setPhotoPage] = useState(1);
-  //   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
 
   return (
     <Left>

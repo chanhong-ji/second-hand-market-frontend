@@ -11,6 +11,7 @@ import { POST_FRAGMENT } from '../fragment';
 import GetMeUser from '../hooks/getMeUser';
 import { searchPost, searchPostVariables } from '../__generated__/searchPost';
 import { PER_PAGE } from '../shared/constant';
+import PageTitle from '../components/PageTitle';
 
 const SEARCH_POST_QUERY = gql`
   query searchPost(
@@ -85,6 +86,7 @@ function Search() {
 
   return (
     <PostsWrapper>
+      <PageTitle title='Search' />
       {loading ? (
         <Loader />
       ) : (

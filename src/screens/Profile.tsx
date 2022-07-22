@@ -96,10 +96,24 @@ export const TOGGLE_FOLLOW_MUTATION = gql`
 `;
 
 function Profile() {
-  const onToggleFollow = () => {
+  const onFollowBtnClicked = () => {
     if (data?.seeProfile?.id) {
       toggleFollow({ variables: { id: +data.seeProfile.id } });
     }
+  };
+
+  const getMoreDataWithScroll = () => {
+    scrollYProgress.onChange(async (value) => {
+      if (value > 0.95 && !!data?.seeProfile) {
+        await fetchMore({
+          variables: {
+            id: +data.seeProfile.id,
+            offset: data.seeProfile.posts?.length,
+          },
+        });
+        scrollYProgress.clearListeners();
+      }
+    });
   };
 
   const { id } = useParams();
@@ -110,8 +124,8 @@ function Profile() {
   const { data, loading, fetchMore, refetch } = useQuery<seeProfile>(
     SEE_PROFILE_QUERY,
     {
-      skip: !!!/^\d+$/.test(id || ''),
-      variables: { id: id ? +id : null, offset: 0 },
+      skip: !id || !!!/^\d+$/.test(id),
+      variables: { id: id ? +id : 0, offset: 0 },
     }
   );
   const [toggleFollow] = useMutation<toggleFollow, toggleFollowVariables>(
@@ -133,17 +147,9 @@ function Profile() {
   }, [id]);
 
   useEffect(() => {
-    scrollYProgress.onChange(async (value) => {
-      if (value > 0.95 && !!data?.seeProfile) {
-        await fetchMore({
-          variables: {
-            id: +data.seeProfile.id,
-            offset: data.seeProfile.posts?.length,
-          },
-        });
-        scrollYProgress.clearListeners();
-      }
-    });
+    if (data?.seeProfile) {
+      getMoreDataWithScroll();
+    }
   }, [data]);
 
   return (
@@ -162,8 +168,8 @@ function Profile() {
                 <Row>
                   <Username>{data?.seeProfile?.name}</Username>
                   <Zone>{data?.seeProfile?.zoneName}</Zone>
-                  {!!!data?.seeProfile?.isMe && (
-                    <FollowBtn onClick={onToggleFollow}>
+                  {!data?.seeProfile?.isMe && !!meData?.me && (
+                    <FollowBtn onClick={onFollowBtnClicked}>
                       {data?.seeProfile?.isFollowing ? 'UnFollow' : 'Follow'}
                     </FollowBtn>
                   )}

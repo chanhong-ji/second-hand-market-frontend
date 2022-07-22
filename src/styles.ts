@@ -39,11 +39,11 @@ export const theme: DefaultTheme = {
 };
 
 export const GlobalStyle = createGlobalStyle`
+ ${reset}
  * {
    box-sizing: border-box;
    text-decoration: none;
  }
- ${reset}
  body {
   overflow-y: scroll;
   -ms-overflow-style: none; /* IE and Edge */
@@ -55,6 +55,12 @@ export const GlobalStyle = createGlobalStyle`
   button {
     background: none;
     border: none;
+  }
+  a:visited {
+    color: inherit;
+  }
+  * {
+  font-family: 'Rubik', sans-serif;
   }
  }
 `;

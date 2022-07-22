@@ -61,6 +61,23 @@ export const PostsWrapper = styled.div`
   padding-bottom: 60px;
 `;
 
+export const Title = styled.div``;
+export const Top = styled.div`
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 40px 0px 40px;
+  ${Title} {
+    font-size: 17px;
+    font-weight: 600;
+    span {
+      margin-left: 10px;
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+`;
+
 //interface
 export interface IForm {
   result: string;

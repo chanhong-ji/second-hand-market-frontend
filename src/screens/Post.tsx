@@ -28,7 +28,7 @@ const SEE_POST_QUERY = gql`
 function Post() {
   const { id } = useParams();
   const { data, loading } = useQuery<seePost>(SEE_POST_QUERY, {
-    skip: !!!id || !!!/^\d+$/.test(id),
+    skip: !id || !/^\d+$/.test(id),
     variables: { id: id ? +id : 0 },
   });
 
@@ -36,24 +36,22 @@ function Post() {
     <Wrapper>
       <PageTitle title='Post' />
       <Outlet />
-      {id ? (
-        id && !/^\d+$/.test(id) ? (
-          <Navigate to='/' replace />
-        ) : loading ? (
-          <Loader />
-        ) : data?.seePost ? (
-          <>
-            <PhotoBlock
-              photos={data.seePost.photos}
-              isDealt={data.seePost.dealt}
-            />
-            <OwnerBlock {...data.seePost} />
-            <InfoBlock {...data.seePost} />
-          </>
-        ) : (
-          <NotFound />
-        )
-      ) : null}
+      {!!!id || !/^\d+$/.test(id) ? (
+        <NotFound />
+      ) : loading ? (
+        <Loader />
+      ) : data?.seePost ? (
+        <>
+          <PhotoBlock
+            photos={data.seePost.photos}
+            isDealt={data.seePost.dealt}
+          />
+          <OwnerBlock {...data.seePost} />
+          <InfoBlock {...data.seePost} />
+        </>
+      ) : (
+        <NotFound />
+      )}
     </Wrapper>
   );
 }

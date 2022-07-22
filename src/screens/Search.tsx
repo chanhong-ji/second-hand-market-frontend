@@ -6,7 +6,7 @@ import Grid from '../components/Grid';
 import Loader from '../components/Loader';
 import Pagination from '../components/Pagenation';
 import Filter from '../components/Filter';
-import { PostsWrapper } from '../shared/components';
+import { PostsWrapper, Title, Top } from '../shared/components';
 import { POST_FRAGMENT } from '../fragment';
 import GetMeUser from '../hooks/getMeUser';
 import { searchPost, searchPostVariables } from '../__generated__/searchPost';
@@ -36,7 +36,7 @@ const SEARCH_POST_QUERY = gql`
 `;
 
 function Search() {
-  const onValid: SubmitHandler<searchPostVariables> = ({
+  const onOptionValid: SubmitHandler<searchPostVariables> = ({
     zoneFirst,
     zoneSecond,
   }) => {
@@ -91,11 +91,17 @@ function Search() {
         <Loader />
       ) : (
         <>
-          <Filter
-            register={register}
-            handleSubmit={handleSubmit(onValid)}
-            loading={loading}
-          />
+          <Top>
+            <Title>
+              중고거래
+              {search && <span>검색어: {keyword}</span>}
+            </Title>
+            <Filter
+              register={register}
+              handleSubmit={handleSubmit(onOptionValid)}
+              loading={loading}
+            />
+          </Top>
 
           {!!data?.searchPost.posts && (
             <Grid keyword={keyword ?? ''} posts={data.searchPost.posts} />

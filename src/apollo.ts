@@ -8,6 +8,7 @@ import {
 import { createUploadLink } from 'apollo-upload-client';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
+import config from './config';
 
 const TOKEN = 'token';
 export const LoggedInVar = makeVar(Boolean(localStorage.getItem(TOKEN)));
@@ -48,10 +49,7 @@ const cache = new InMemoryCache({
 });
 
 const httpLink = createUploadLink({
-  uri:
-    process.env.NODE_ENV === 'production'
-      ? 'https://second-hand-market-backend.herokuapp.com/graphql'
-      : 'http://localhost:4000/graphql',
+  uri: config.service.host,
 });
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
@@ -72,16 +70,11 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const wsLink = new WebSocketLink(
-  new SubscriptionClient(
-    process.env.NODE_ENV === 'production'
-      ? 'wss://second-hand-market-backend.herokuapp.com/graphql'
-      : 'ws://localhost:4000/graphql',
-    {
-      connectionParams: () => ({
-        token: localStorage.getItem(TOKEN),
-      }),
-    }
-  )
+  new SubscriptionClient(config.service.subscriptionHost, {
+    connectionParams: () => ({
+      token: localStorage.getItem(TOKEN),
+    }),
+  })
 );
 
 const splitLink = split(

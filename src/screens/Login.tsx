@@ -14,7 +14,7 @@ import {
 import { login, loginVariables } from '../__generated__/login';
 
 const LOGIN_MUTATION = gql`
-  mutation login($phone: Int!, $password: String!) {
+  mutation login($phone: String!, $password: String!) {
     login(phone: $phone, password: $password) {
       ok
       error
@@ -29,7 +29,7 @@ function Login() {
     password,
   }) => {
     if (loading) return;
-    login({ variables: { phone: +phone, password } });
+    login({ variables: { phone, password } });
   };
 
   const onLoginCompleted = async ({ login }: login) => {
@@ -67,7 +67,7 @@ function Login() {
         <FormTitle>Login</FormTitle>
         <Input
           placeholder='phone number'
-          type='number'
+          type='string'
           {...register('phone', { required: 'phone is required' })}
           onClick={() => clearErrors()}
         />

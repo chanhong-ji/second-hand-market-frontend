@@ -20,7 +20,7 @@ const CREATE_ACCOUNT_MUTATION = gql`
   mutation createAccount(
     $name: String!
     $password: String!
-    $phone: Int!
+    $phone: String!
     $zoneFirst: Int!
     $zoneSecond: Int!
   ) {
@@ -52,7 +52,7 @@ function SignUp() {
       );
     createAccount({
       variables: {
-        phone: +phone,
+        phone,
         name,
         password,
         zoneFirst: +zoneFirst,
@@ -99,7 +99,7 @@ function SignUp() {
         <Input
           id='phone'
           {...register('phone', { required: 'phone is required' })}
-          type='number'
+          type='string'
           onClick={() => clearErrors()}
         />
         <ErrorMessage message={errors.phone?.message} />

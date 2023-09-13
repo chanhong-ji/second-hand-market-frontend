@@ -20,7 +20,7 @@ export interface createAccount {
 export interface createAccountVariables {
   name: string;
   password: string;
-  phone: number;
+  phone: string;
   zoneFirst: number;
   zoneSecond: number;
 }

@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import Grid from '../components/Grid';
 import Loader from '../components/Loader';
 import Pagination from '../components/Pagenation';
@@ -11,7 +11,6 @@ import { PostsWrapper, Title, Top } from '../shared/components';
 import { seePosts, seePostsVariables } from '../__generated__/seePosts';
 import { POST_FRAGMENT_FOR_BANNER } from '../fragment';
 import { PER_PAGE } from '../shared/constant';
-import styled from 'styled-components';
 import PageTitle from '../components/PageTitle';
 
 const SEE_POSTS_QUERY = gql`

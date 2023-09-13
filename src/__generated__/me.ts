@@ -11,7 +11,7 @@ export interface me_me {
   __typename: "User";
   id: number;
   name: string;
-  phone: number;
+  phone: string;
   avatar: string | null;
   followerCount: number;
   zoneId: string;

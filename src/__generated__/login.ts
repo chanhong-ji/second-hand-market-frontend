@@ -19,6 +19,6 @@ export interface login {
 }
 
 export interface loginVariables {
-  phone: number;
+  phone: string;
   password: string;
 }

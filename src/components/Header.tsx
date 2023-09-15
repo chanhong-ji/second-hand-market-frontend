@@ -88,7 +88,7 @@ function Header() {
       ) : (
         <>
           <Column>
-            <Item onClick={() => navigate('/')}>Home</Item>
+            <Item onClick={() => navigate('/')}>당큰 마켓</Item>
           </Column>
           <Column>
             <SearchBar />
